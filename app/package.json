@@ -1,0 +1,46 @@
+{
+  "name": "chhat",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Chhat: the independent AI solar advisor for Indian homes",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/build-log.mjs && tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/geist-mono": "^5.3.0",
+    "@fontsource/tiro-devanagari-hindi": "^5.3.0",
+    "@phosphor-icons/react": "^2.1.7",
+    "@radix-ui/react-dialog": "^1.2.0",
+    "@radix-ui/react-slider": "^1.5.0",
+    "@radix-ui/react-tabs": "^1.1.22",
+    "@radix-ui/react-toggle-group": "^1.1.20",
+    "@radix-ui/react-tooltip": "^1.3.0",
+    "@react-three/drei": "^9.117.3",
+    "@react-three/fiber": "^8.17.10",
+    "gsap": "^3.13.0",
+    "lenis": "^1.1.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "tesseract.js": "^5.1.1",
+    "three": "^0.170.0",
+    "@anthropic-ai/sdk": "^0.132.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.170.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "playwright-core": "^1.64.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
+  }
+}
