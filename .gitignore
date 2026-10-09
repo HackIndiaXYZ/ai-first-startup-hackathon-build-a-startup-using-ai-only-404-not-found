@@ -6,3 +6,4 @@ app/dist/
 .env.local
 .vercel
 .vercel/
+*.tsbuildinfo
