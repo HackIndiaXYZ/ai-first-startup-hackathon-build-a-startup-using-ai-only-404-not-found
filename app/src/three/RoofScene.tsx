@@ -1,5 +1,5 @@
-import { OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { sunPosition } from "../engine/solar";
@@ -615,6 +615,30 @@ function HeroCamera({ state, roof }: { state: MutableRefObject<SceneState>; roof
   return null;
 }
 
+/** Orbit controls straight from three's examples, so the scene needs no helper library. */
+function Orbit({ target }: { target: [number, number, number] }) {
+  const { camera, gl } = useThree();
+  const ref = useRef<ThreeOrbitControls | null>(null);
+  useEffect(() => {
+    const c = new ThreeOrbitControls(camera, gl.domElement);
+    Object.assign(c, {
+      enableDamping: true,
+      dampingFactor: 0.08,
+      minDistance: 12,
+      maxDistance: 48,
+      minPolarAngle: 0.35,
+      maxPolarAngle: 1.32,
+      enablePan: false,
+    });
+    c.target.set(...target);
+    c.update();
+    ref.current = c;
+    return () => c.dispose();
+  }, [camera, gl, target]);
+  useFrame(() => ref.current?.update());
+  return null;
+}
+
 function Ready({ onReady }: { onReady?: () => void }) {
   const done = useRef(false);
   useFrame(() => {
@@ -630,6 +654,7 @@ function Ready({ onReady }: { onReady?: () => void }) {
 
 export default function RoofScene({ state, roof, interactive, panelsKey, lowPower, className, onReady, cameraPosition }: Props) {
   const H = roof.floors * FLOOR_H;
+  const orbitTarget = useMemo<[number, number, number]>(() => [0, H + 1, 0], [H]);
   return (
     <Canvas
       className={className}
@@ -644,16 +669,7 @@ export default function RoofScene({ state, roof, interactive, panelsKey, lowPowe
       <City lowPower={lowPower} />
       <Kites />
       {interactive ? (
-        <OrbitControls
-          target={[0, H + 1, 0]}
-          enableDamping
-          dampingFactor={0.08}
-          minDistance={12}
-          maxDistance={48}
-          minPolarAngle={0.35}
-          maxPolarAngle={1.32}
-          enablePan={false}
-        />
+        <Orbit target={orbitTarget} />
       ) : (
         <HeroCamera state={state} roof={roof} />
       )}

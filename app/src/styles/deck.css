@@ -8,16 +8,17 @@
   z-index: 70;
 }
 .deck__stage {
-  display: grid;
-  place-items: center;
+  position: relative;
   overflow: hidden;
 }
 .deck__canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   width: 1600px;
   height: 900px;
-  transform: scale(var(--deck-scale));
+  transform: translate(-50%, -50%) scale(var(--deck-scale));
   transform-origin: center;
-  flex: none;
   box-shadow: 0 30px 80px -30px #000;
 }
 .deck__bar {
