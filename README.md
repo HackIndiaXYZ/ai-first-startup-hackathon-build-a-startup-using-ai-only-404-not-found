@@ -81,13 +81,26 @@ Live AI mode locally: `ANTHROPIC_API_KEY=... npm run dev` (the dev server serves
 
 ## Deploy
 
-**Vercel (recommended, enables live AI):** import the repo, set **Root Directory = `app`**, add the environment variable `ANTHROPIC_API_KEY`, deploy. `app/vercel.json` runs `npm run build:vercel`, which packages the site and three bundled serverless functions in Vercel's Build Output format.
+**Vercel (recommended, enables live AI):**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FHackIndiaXYZ%2Fai-first-startup-hackathon-build-a-startup-using-ai-only-404-not-found&root-directory=app&env=ANTHROPIC_API_KEY&envDescription=Optional.%20Enables%20live%20Claude%20mode%3B%20without%20it%20Chhat%20runs%20on-device.)
+
+Or by hand: import the repo, set **Root Directory = `app`**, add the environment variable `ANTHROPIC_API_KEY`, deploy. `app/vercel.json` runs `npm run build:vercel`, which packages the site and three bundled serverless functions in Vercel's Build Output format. Without the key the deploy still works, fully on-device.
 
 **GitHub Pages (static, on-device mode):** Settings → Pages → Source: GitHub Actions. `.github/workflows/pages.yml` tests, builds and deploys on every push to `main`.
 
 **Netlify (static):** `netlify.toml` is included.
 
 The app uses hash routing, so any static host works without rewrite rules.
+
+**Push to the HackIndia submission repo:**
+
+```bash
+git remote add hackindia https://github.com/HackIndiaXYZ/ai-first-startup-hackathon-build-a-startup-using-ai-only-404-not-found.git
+git push hackindia HEAD:main
+```
+
+Links on the Built-with-AI page point at that repo (`app/src/config.ts`).
 
 ## Repository layout
 

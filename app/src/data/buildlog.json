@@ -1,10 +1,10 @@
 {
- "generated": "2026-10-09T16:43:40.962Z",
+ "generated": "2026-10-09T16:48:45.898Z",
  "stats": {
-  "commits": 7,
+  "commits": 9,
   "files": 66,
-  "linesAdded": 14516,
-  "loc": 12448,
+  "linesAdded": 14550,
+  "loc": 12474,
   "tests": 34,
   "docs": 6,
   "docWords": 14213
@@ -113,6 +113,33 @@
    "areas": [
     "app/package.json",
     "app/scripts/artifact-entry.mjs"
+   ]
+  },
+  {
+   "hash": "30d915b",
+   "date": "2026-10-09T16:44:08+00:00",
+   "subject": "Refresh build log and deck with final stats",
+   "author": "Claude",
+   "added": 0,
+   "deleted": 0,
+   "files": 2,
+   "areas": [
+    "pitch"
+   ]
+  },
+  {
+   "hash": "9392e07",
+   "date": "2026-10-09T16:47:37+00:00",
+   "subject": "Lazy-load three.js with the 3D scene, drop drei, fix deck centring and 404 layout",
+   "author": "Claude",
+   "added": 34,
+   "deleted": 18,
+   "files": 5,
+   "areas": [
+    "app/package.json",
+    "app/src/styles",
+    "app/src/three",
+    "app/vite.config.ts"
    ]
   }
  ]

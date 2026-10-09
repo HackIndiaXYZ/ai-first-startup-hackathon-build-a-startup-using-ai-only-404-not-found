@@ -17,6 +17,14 @@ function git(cmd) {
   }
 }
 
+// CI and hosting platforms often clone with --depth 1. With partial history the
+// log would shrink to one commit, so keep the committed file in that case.
+const shallow = git("rev-parse --is-shallow-repository").trim();
+if (shallow !== "false") {
+  console.log(`buildlog: git history ${shallow === "true" ? "is shallow" : "unavailable"}; keeping committed src/data/buildlog.json`);
+  process.exit(0);
+}
+
 const raw = git(`log --reverse --date=iso-strict --pretty=format:"@@%H|%ad|%s|%an" --numstat`);
 const commits = [];
 let cur = null;
