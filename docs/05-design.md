@@ -86,7 +86,18 @@ Rendering:
 - Quality tiers (high / medium / low) are picked from the device and stepped down automatically when frames run slow (`PerfGuard`). Rendering stops when the scene is scrolled out of view.
 - three.js loads in its own chunk after the preloader has painted.
 
-## 6. Sources of patterns
+## 6. Awwwards reference board
+
+awwwards.com could not be loaded from the build sandbox's browser, so these entries were read through web search and page fetches (titles, tags, jury scores and element lists), not watched. What each one contributed:
+
+| Entry | What it is | What Chhat took from it |
+|---|---|---|
+| [REFIRE](https://www.awwwards.com/sites/refire) (CUSP, Salt and Pepper) | Site of the Day, 12 Feb 2024; hydrogen-electric energy; tagged Scrolling, 3D; Dev Award animations 7.60, accessibility 6.60 | Confirmed that energy brands win on scroll-led 3D and masked scroll reveals. Its weakest score (accessibility) became a hard requirement here: axe in CI, contrast tests, a full reduced-motion path |
+| [Volta Solar](https://www.awwwards.com/inspiration/mobile-loading-volta-solar) (studio&more) | Solar site whose elements include a mobile loader, a calculator, a 404 and cursor interaction | The same set of moments got Chhat's own treatment: a preloader tied to real load progress, the on-landing quick Roof Report, a designed 404, the sun cursor |
+| [Climanova, "Solar Energy"](https://www.awwwards.com/inspiration/solar-energy-climanova) (Persee) | Clean, responsive solar landing with animated vector motion | Restraint on the tool pages: motion only where it explains a change |
+| [ON Energy, "Energy Stream Interaction"](https://www.awwwards.com/inspiration/energy-stream-interaction-on-energy) (Studio 28K) | WebGL interaction showing energy flow | Making energy visible: the live roof-output readout in the HUD and on the Report's 3D stage |
+
+## 7. Sources of patterns
 
 | Pattern | Where it came from |
 |---|---|

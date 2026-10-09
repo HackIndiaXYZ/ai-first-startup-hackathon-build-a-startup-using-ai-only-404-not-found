@@ -53,6 +53,7 @@ class Director {
     this.n = 0;
     this.ema = 1000;
     this.last = Date.now();
+    this.captions = [];
   }
   async frame() {
     await this.page.evaluate((ms) => window.__vt.step(ms), 1000 / FPS);
@@ -108,6 +109,7 @@ class Director {
     }, OVERLAY_CSS);
   }
   async cap(text) {
+    if (text) this.captions.push({ t: +(this.n / FPS).toFixed(2), text });
     await this.css();
     await this.page.evaluate((t) => {
       let el = document.getElementById("demo-cap");
@@ -151,6 +153,7 @@ async function session(name, url, fn) {
   const t0 = Date.now();
   await fn(d, page);
   await browser.close();
+  writeFileSync(`${TMP}/${name}.captions.json`, JSON.stringify({ frames: d.n, seconds: d.n / FPS, captions: d.captions }, null, 1));
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(FPS), "-i", `${dir}/f%06d.jpg`, "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", `${TMP}/${name}.mp4`]);
   console.log(`${name}: ${d.n} frames, ${(d.n / FPS).toFixed(1)} s of video in ${((Date.now() - t0) / 60000).toFixed(1)} min`);
 }
@@ -259,6 +262,10 @@ const SEGMENTS = {
     await d.wheel(900, 2);
     await page.getByRole("radio", { name: "हिंदी" }).click().catch(() => {});
     await d.hold(3.5);
+    await d.wheel(-2400, 1.6);
+    await d.cap("The fair deal passes. Chhat isn't against installers, only against bad quotes.");
+    await page.getByRole("button", { name: /The fair deal/ }).click().catch(() => {});
+    await d.hold(4.5);
     await d.cap("Bill Audit next: this DISCOM billed 410 import units and ignored 236 units of export.");
     await page.evaluate(() => (location.hash = "#/bill?sample=import-billed"));
     await d.hold(0.5);
@@ -268,7 +275,11 @@ const SEGMENTS = {
     await d.cap("Chhat flags it, plus an unexplained ₹1,180 charge, and drafts the correction letter.");
     await d.hold(3);
     await d.wheel(800, 2);
-    await d.hold(2);
+    await d.hold(2.5);
+    await d.wheel(-1300, 1.4);
+    await d.cap("A correct bill gets a clean pass, with the arithmetic shown.");
+    await page.getByRole("button", { name: /Correct bill/ }).click().catch(() => {});
+    await d.hold(4);
     await d.cap("");
   },
 
@@ -290,6 +301,11 @@ const SEGMENTS = {
     await page.locator(".trace summary").last().click().catch(() => {});
     await d.cap("Open the trace: the model decides, the tested engine computes. Nothing is invented.");
     await d.hold(4);
+    await input.click();
+    await d.type("Do I need a battery?", 18);
+    await page.keyboard.press("Enter");
+    await d.cap("Questions outside the calculator come from a sourced knowledge base, in the same voice.");
+    await d.hold(4.5);
     await d.cap("Claude Code built all of it from two briefs. Zero lines of code written by hand.");
     await page.evaluate(() => (location.hash = "#/built-with-ai"));
     await d.hold(0.5);
@@ -301,15 +317,37 @@ const SEGMENTS = {
     await d.wheel(1600, 3);
     await d.hold(1.5);
     await d.cap("");
+  },
+
+  async deck(d, page) {
+    await d.hold(1.5);
+    const notes = {
+      1: "The pitch deck is a route in the app (/deck) and exports to PDF.",
+      2: "The problem: rooftop solar is subsidised, but the homeowner has no one on their side.",
+      4: "The product: an independent second opinion at every step, from first bill to every bill after.",
+      6: "How the AI works: Claude decides, the tested engine computes.",
+      8: "Free for homes. Paid by installers, lenders and states.",
+      10: "A formula-driven five-year model: EBITDA positive in FY29 in the base case.",
+      11: "The moat: real quotes and real bills from real roofs.",
+      14: "Two briefs in. A startup out.",
+      15: "The ask: ₹6 crore seed for 15%.",
+    };
+    for (let n = 1; n <= 15; n++) {
+      await d.cap(notes[n] ?? "");
+      await d.hold(notes[n] ? 3.6 : 2.4);
+      if (n < 15) await page.keyboard.press("ArrowRight");
+    }
+    await d.cap("");
     await d.card(`<div class="d">छत</div><h1>Read your roof.</h1><p>Free for homes · paid by installers, lenders and states · raising ₹6 crore seed</p>`, 4.5);
   },
 };
 
 const START = {
-  landing: "#/",
+  landing: "#/?quality=medium",
   report: "#/report?city=Delhi&units=476&month=5&roof=1100&sample=delhi-may",
   quote: "#/quote?sample=overcharger",
   ask: "#/ask",
+  deck: "#/deck",
 };
 
 function join() {

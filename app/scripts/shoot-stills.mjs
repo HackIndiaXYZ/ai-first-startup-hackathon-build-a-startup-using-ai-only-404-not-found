@@ -4,12 +4,16 @@
 //   public/og.png           the social share card
 //   public/deck/report.jpg  Roof Report screenshot for the deck
 //   public/deck/quote.jpg   Quote Check screenshot for the deck
-// Usage: node scripts/shoot-stills.mjs [baseUrl]   (needs `vite preview` on :4173)
+// Usage: node scripts/shoot-stills.mjs [baseUrl] [poster|og|report|quote ...]
+//        (needs `vite preview`; with no names, renders all four)
 
+import { writeFileSync } from "node:fs";
 import { chromium } from "playwright-core";
 import { VIRTUAL_TIME } from "./lib/virtual-time.mjs";
 
 const BASE = process.argv[2] ?? "http://localhost:4173/";
+const ONLY = process.argv.slice(3);
+const want = (name) => !ONLY.length || ONLY.includes(name);
 const PUB = new URL("../public/", import.meta.url).pathname;
 const CHROME = process.env.PW_CHROMIUM ?? "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 
@@ -25,28 +29,37 @@ async function page(width, height, hash) {
     for (let i = 0; i < sec * 30; i++) await p.evaluate(() => window.__vt.step(1000 / 30));
   };
   // Run the clock until the preloader (if any) has gone and things have settled.
-  for (let i = 0; i < 900 && (await p.evaluate(() => !!document.querySelector(".pre"))); i++) await p.evaluate(() => window.__vt.step(1000 / 30));
+  // (The route must have mounted first, or "no preloader" is true immediately.)
+  for (let i = 0; i < 900 && !(await p.evaluate(() => !!document.querySelector("main h1") && !document.querySelector(".pre"))); i++) await p.evaluate(() => window.__vt.step(1000 / 30));
   await step(2.5);
   await p.addStyleTag({ content: ".grain,.cursor{display:none!important}" });
-  return { p, step, ctx };
+  // Playwright's own screenshot waits for an animation frame that the frozen
+  // clock never delivers, so capture through DevTools directly.
+  const cdp = await ctx.newCDPSession(p);
+  const shot = async (path) => {
+    const format = path.endsWith(".png") ? "png" : "jpeg";
+    const { data } = await cdp.send("Page.captureScreenshot", format === "png" ? { format } : { format, quality: 84 });
+    writeFileSync(path, Buffer.from(data, "base64"));
+  };
+  return { p, step, ctx, shot };
 }
 
 // Poster: the dawn rooftop alone, no text.
-{
-  const { p, step, ctx } = await page(1600, 1000, "#/");
+if (want("poster")) {
+  const { p, step, ctx, shot } = await page(1600, 1000, "#/");
   await p.addStyleTag({ content: ".story__scrim,.hud,.chapters,.story__foot,.story__dial,.nav{visibility:hidden!important}" });
   await p.evaluate(() => window.scrollTo(0, 260));
   await step(2);
-  await p.locator(".story__stage").screenshot({ path: `${PUB}poster.jpg`, type: "jpeg", quality: 82 });
+  await shot(`${PUB}poster.jpg`);
   await ctx.close();
   console.log("poster.jpg");
 }
 
 // Social card: the hero as people first see it.
-{
-  const { p, ctx } = await page(1200, 630, "#/");
+if (want("og")) {
+  const { p, ctx, shot } = await page(1200, 630, "#/");
   await p.addStyleTag({ content: ".story__foot,.story__dial{visibility:hidden!important} .hero__lede,.hero__ctas,.hero__fact{display:none!important}" });
-  await p.screenshot({ path: `${PUB}og.png` });
+  await shot(`${PUB}og.png`);
   await ctx.close();
   console.log("og.png");
 }
@@ -55,11 +68,11 @@ async function page(width, height, hash) {
 for (const [file, hash, y] of [
   ["deck/report.jpg", "#/report?city=Delhi&units=476&month=5&roof=1100&sample=delhi-may", 0],
   ["deck/quote.jpg", "#/quote?sample=overcharger", 0],
-]) {
-  const { p, step, ctx } = await page(1440, 900, hash);
+].filter(([f]) => want(f.split("/")[1].split(".")[0]))) {
+  const { p, step, ctx, shot } = await page(1440, 900, hash);
   if (y) await p.evaluate((v) => window.scrollTo(0, v), y);
   await step(1.5);
-  await p.screenshot({ path: `${PUB}${file}`, type: "jpeg", quality: 84 });
+  await shot(`${PUB}${file}`);
   await ctx.close();
   console.log(file);
 }

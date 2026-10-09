@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useNavigationType } from "react-router-dom";
 import { prefersReducedMotion } from "../lib/env";
 import { EASE, gsap } from "../lib/motion";
 
@@ -24,8 +24,10 @@ export function RouteCurtain() {
   const deva = useRef<HTMLSpanElement>(null);
   const navigate = useNavigate();
   const loc = useLocation();
+  const navType = useNavigationType();
   const busy = useRef(false);
   const first = useRef(true);
+  const prevPath = useRef(loc.pathname);
 
   const setLabel = (path: string) => {
     const [en, hi] = NAMES[path] ?? ["Chhat", "छत"];
@@ -70,10 +72,15 @@ export function RouteCurtain() {
 
   // After any route change: lift the curtain (covering first if needed).
   useEffect(() => {
+    const samePage = prevPath.current === loc.pathname;
+    prevPath.current = loc.pathname;
     if (first.current) {
       first.current = false;
       return;
     }
+    // A page rewriting its own URL (loading a sample, replace navigations)
+    // is not a page change; only lift a curtain this component drew.
+    if (!busy.current && (samePage || navType === "REPLACE")) return;
     const c = el.current;
     if (!c || prefersReducedMotion() || loc.pathname === "/deck") {
       busy.current = false;
@@ -98,6 +105,8 @@ export function RouteCurtain() {
     return () => {
       tl.kill();
     };
+    // navType is read with the location it belongs to.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loc.pathname, loc.search]);
 
   return (

@@ -17,7 +17,7 @@ interface Commit {
   files: number;
   areas: string[];
 }
-const LOG = buildlog as { generated: string; stats: { commits: number; files: number; linesAdded: number; loc: number; tests: number; docs: number; docWords: number }; commits: Commit[] };
+const LOG = buildlog as { generated: string; stats: { commits: number; files: number; linesAdded: number; loc: number; tests: number; e2e?: number; docs: number; docWords: number }; commits: Commit[] };
 
 const STAGES = [
   {
@@ -125,9 +125,9 @@ export default function BuiltWithAI() {
     <div className="page built-page" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">AI usage report · live</p>
-        <h1 className="page__title">One brief in. A startup out.</h1>
+        <h1 className="page__title">Two briefs in. A startup out.</h1>
         <p className="page__lede">
-          Claude Code (Anthropic) did the research, ran the idea tournament, wrote every line of code and copy, designed the 3D world, built the financial model and the deck, and tested its own output in a headless browser. A person wrote the brief and reviewed the result.
+          Claude Code (Anthropic) did the research, ran the idea tournament, wrote every line of code and copy, designed the 3D world, built the financial model and the deck, and tested its own output in a headless browser. A person wrote two briefs and reviewed the result.
         </p>
       </header>
 
@@ -135,7 +135,7 @@ export default function BuiltWithAI() {
         <div className="built-stats">
           <Stat label="Product commits" value={num(s.commits)} />
           <Stat label="Lines of source" value={num(s.loc)} />
-          <Stat label="Unit tests" value={num(s.tests)} />
+          <Stat label="Unit + end-to-end tests" value={s.e2e ? `${num(s.tests)} + ${num(s.e2e)}` : num(s.tests)} />
           <Stat label="Words of research & planning" value={num(s.docWords)} />
           <Stat label="Code written by a human" value="0 lines" />
         </div>

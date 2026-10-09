@@ -76,7 +76,7 @@ function FinChart() {
 export default function Deck() {
   const [i, setI] = useState(0);
   const root = useRef<HTMLDivElement>(null);
-  const log = buildlog as { stats: { commits: number; loc: number; tests: number; docWords: number } };
+  const log = buildlog as { stats: { commits: number; loc: number; tests: number; e2e?: number; docWords: number } };
 
   const slides: ReactNode[] = [
     <Slide n={1} tone="ink" key="title">
@@ -410,15 +410,15 @@ export default function Deck() {
 
     <Slide n={14} tone="ink" key="built">
       <p className="eyebrow">AI-first execution</p>
-      <h2 className="s-h2">One brief in. A startup out.</h2>
+      <h2 className="s-h2">Two briefs in. A startup out.</h2>
       <div className="s-stats s-stats--4 s-stats--inv">
         <div>
           <b>{num(log.stats.loc)}</b>
           <span>lines of source, all written by Claude Code</span>
         </div>
         <div>
-          <b>{num(log.stats.tests)}</b>
-          <span>unit tests on the engine and parsers</span>
+          <b>{num(log.stats.tests + (log.stats.e2e ?? 0))}</b>
+          <span>automated tests: unit, plus end-to-end in a real browser</span>
         </div>
         <div>
           <b>25</b>
@@ -429,7 +429,7 @@ export default function Deck() {
           <span>lines of code written by a human</span>
         </div>
       </div>
-      <p className="s-note">Research, idea tournament, plan, PV model, 3D world, copy, financial model, this deck: AI. The brief and the review: human. Receipts at /built-with-ai.</p>
+      <p className="s-note">Research, idea tournament, plan, PV model, 3D world, copy, financial model, this deck: AI. The two briefs and the review: human. Receipts at /built-with-ai.</p>
     </Slide>,
 
     <Slide n={15} tone="haldi" key="ask">

@@ -53,13 +53,25 @@ function walk(dir, acc = []) {
   }
   return acc;
 }
-const srcFiles = [...walk(join(root, "src")), ...walk(join(root, "server")), ...walk(join(root, "api")), ...walk(join(root, "tests")), ...walk(join(root, "scripts"))].filter(
+const srcFiles = [...walk(join(root, "src")), ...walk(join(root, "server")), ...walk(join(root, "api")), ...walk(join(root, "tests")), ...walk(join(root, "e2e")), ...walk(join(root, "scripts"))].filter(
   (f) => /\.(tsx?|css|mjs)$/.test(f) && !/buildlog\.json/.test(f),
 );
 const loc = srcFiles.reduce((a, f) => a + readFileSync(f, "utf8").split("\n").length, 0);
-const tests = walk(join(root, "tests"))
-  .filter((f) => f.endsWith(".test.ts"))
-  .reduce((a, f) => a + (readFileSync(f, "utf8").match(/\bit\(/g) ?? []).length, 0);
+// Ask the runners for their real counts (parameterised tests included);
+// fall back to a source count if a runner is unavailable.
+function listCount(cmd, parse) {
+  try {
+    return parse(execSync(cmd, { cwd: root, stdio: ["ignore", "pipe", "ignore"], timeout: 120000 }).toString());
+  } catch {
+    return null;
+  }
+}
+const tests =
+  listCount("npx vitest list", (out) => out.split("\n").filter((l) => l.includes(".test.ts")).length) ??
+  walk(join(root, "tests"))
+    .filter((f) => f.endsWith(".test.ts"))
+    .reduce((a, f) => a + (readFileSync(f, "utf8").match(/\bit\(/g) ?? []).length, 0);
+const e2e = listCount("npx playwright test --list", (out) => Number(out.match(/Total: (\d+) tests?/)?.[1] ?? 0)) ?? 0;
 const docs = walk(join(repo, "docs")).filter((f) => f.endsWith(".md"));
 const docWords = docs.reduce((a, f) => a + readFileSync(f, "utf8").split(/\s+/).length, 0);
 
@@ -71,10 +83,11 @@ const data = {
     linesAdded: product.reduce((a, c) => a + c.added, 0),
     loc,
     tests,
+    e2e,
     docs: docs.length,
     docWords,
   },
   commits: product,
 };
 writeFileSync(OUT, JSON.stringify(data, null, 1));
-console.log(`buildlog: ${product.length} commits, ${loc} lines of source, ${tests} tests`);
+console.log(`buildlog: ${product.length} commits, ${loc} lines of source, ${tests} unit + ${e2e} end-to-end tests`);

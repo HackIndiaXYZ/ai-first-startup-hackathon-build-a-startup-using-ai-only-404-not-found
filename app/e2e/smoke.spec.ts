@@ -6,7 +6,7 @@ const ROUTES: [string, RegExp][] = [
   ["/quote", /Is this quote fair/],
   ["/bill", /Is your DISCOM billing you right/],
   ["/ask", /Ask anything about going solar/],
-  ["/built-with-ai", /One brief in/],
+  ["/built-with-ai", /Two briefs in/],
   ["/deck", /Solar, without the sales pitch/],
   ["/no-such-page", /Nothing on this roof/],
 ];

@@ -85,3 +85,16 @@ test.describe("Pitch deck", () => {
     await expect(counter).toHaveText(/^1 \/ \d+$/);
   });
 });
+
+test.describe("route curtain", () => {
+  test("loading a tool with a sample does not flash the curtain", async ({ page, problems }) => {
+    void problems;
+    await page.goto("/#/quote?sample=overcharger");
+    // Sample loading rewrites the page's own URL; that is not a page change.
+    for (let i = 0; i < 10; i++) {
+      expect(await page.locator(".curtain").evaluate((el) => getComputedStyle(el).display)).toBe("none");
+      await page.waitForTimeout(150);
+    }
+    await expect(page.locator(".verdict .grade")).toHaveText("F");
+  });
+});

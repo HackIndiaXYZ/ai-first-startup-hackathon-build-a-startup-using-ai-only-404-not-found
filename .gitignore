@@ -9,3 +9,4 @@ app/dist/
 *.tsbuildinfo
 app/test-results/
 app/playwright-report/
+pitch/.video-tmp/

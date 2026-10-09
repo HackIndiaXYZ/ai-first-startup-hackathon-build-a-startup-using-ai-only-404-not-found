@@ -849,7 +849,7 @@ function Proof() {
 function BuiltTeaser() {
   const root = useRef<HTMLElement>(null);
   useReveals(root);
-  const log = buildlog as { stats: { commits: number; files: number; linesAdded: number; tests: number }; commits: { hash: string; subject: string; added: number }[] };
+  const log = buildlog as { stats: { commits: number; files: number; linesAdded: number; tests: number; e2e?: number }; commits: { hash: string; subject: string; added: number }[] };
   return (
     <section ref={root} className="built wrap" aria-labelledby="built-title">
       <div className="built__card">
@@ -859,7 +859,7 @@ function BuiltTeaser() {
             Claude did the research, the code and this sentence.
           </h2>
           <p className="section-lede" data-reveal="up">
-            Research, a 25-idea tournament, the PV model, the 3D roof, the tests, the deck and the financial model were all produced by Claude Code from one brief. A person set the goal and reviewed the result.
+            Research, a 25-idea tournament, the PV model, the 3D roof, the tests, the deck and the financial model were all produced by Claude Code from two briefs. A person set the goals and reviewed the result.
           </p>
           <LinkButton to="/built-with-ai" variant="accent" data-cursor="Read">
             See the build log <ArrowRight size={16} weight="bold" />
@@ -886,7 +886,7 @@ function BuiltTeaser() {
           <div className="built__stats">
             <Stat label="Commits" value={num(log.stats.commits)} />
             <Stat label="Lines written" value={num(log.stats.linesAdded)} />
-            <Stat label="Unit tests" value={num(log.stats.tests)} />
+            <Stat label="Automated tests" value={num(log.stats.tests + (log.stats.e2e ?? 0))} />
           </div>
         </div>
       </div>
