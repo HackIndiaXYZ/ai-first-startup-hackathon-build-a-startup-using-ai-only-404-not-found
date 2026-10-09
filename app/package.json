@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc -b",
-    "build:vercel": "npm run build && node scripts/vercel-output.mjs"
+    "build:vercel": "npm run build && node scripts/vercel-output.mjs",
+    "build:artifact": "npm run build && node scripts/artifact-entry.mjs",
+    "export:deck": "node scripts/export-deck.mjs",
+    "record:demo": "node scripts/record-demo.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.1",
