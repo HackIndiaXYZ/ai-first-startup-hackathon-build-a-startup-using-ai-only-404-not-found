@@ -82,3 +82,26 @@ export function mulberry32(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+// Camera keyframes along the story: [t, azimuth°, polar°, radius, target lift]
+// Azimuth 0 = south of the house, 90 = east. Dawn looks east into the sunrise,
+// noon looks down on the panels, dusk looks west into the sunset.
+export const CAM_KEYS: [number, number, number, number, number][] = [
+  [0, -62, 74, 44, 4.2],
+  [0.16, -40, 66, 37, 2.6],
+  [0.32, -14, 58, 32, 1.4],
+  [0.5, 26, 47, 25, 0.5],
+  [0.66, 50, 52, 25, 0.6],
+  [0.84, 96, 66, 33, 2.4],
+  [1, 116, 72, 44, 3.6],
+];
+
+export function camAt(t: number) {
+  let i = 1;
+  while (i < CAM_KEYS.length - 1 && t > CAM_KEYS[i][0]) i++;
+  const a = CAM_KEYS[i - 1];
+  const b = CAM_KEYS[i];
+  const k = Math.max(0, Math.min(1, (t - a[0]) / (b[0] - a[0])));
+  const e = k * k * (3 - 2 * k);
+  return a.map((v, j) => (j === 0 ? 0 : v + (b[j] - v) * e)) as typeof a;
+}

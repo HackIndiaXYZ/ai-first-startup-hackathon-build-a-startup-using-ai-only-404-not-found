@@ -1,13 +1,13 @@
 {
- "generated": "2026-10-09T16:50:55.297Z",
+ "generated": "2026-10-09T20:42:13.619Z",
  "stats": {
-  "commits": 10,
-  "files": 66,
-  "linesAdded": 14572,
-  "loc": 12474,
-  "tests": 34,
-  "docs": 6,
-  "docWords": 14213
+  "commits": 12,
+  "files": 84,
+  "linesAdded": 17955,
+  "loc": 15453,
+  "tests": 50,
+  "docs": 8,
+  "docWords": 17099
  },
  "commits": [
   {
@@ -153,6 +153,35 @@
    "areas": [
     "README.md",
     "app/scripts/build-log.mjs"
+   ]
+  },
+  {
+   "hash": "3e64e93",
+   "date": "2026-10-09T16:49:02+00:00",
+   "subject": "Align selection doc with the shipped tool set",
+   "author": "Claude",
+   "added": 1,
+   "deleted": 1,
+   "files": 1,
+   "areas": [
+    "docs"
+   ]
+  },
+  {
+   "hash": "f25d38a",
+   "date": "2026-10-09T19:52:53+00:00",
+   "subject": "Awwwards-tier redesign: CC0 3D props, post-processing, preloader, route curtain, cursor",
+   "author": "Claude",
+   "added": 3382,
+   "deleted": 808,
+   "files": 38,
+   "areas": [
+    "app/package.json",
+    "app/public/models",
+    "app/public/textures",
+    "app/scripts/fetch-assets.mjs",
+    "app/scripts/shoot.mjs",
+    "app/src/App.tsx"
    ]
   }
  ]

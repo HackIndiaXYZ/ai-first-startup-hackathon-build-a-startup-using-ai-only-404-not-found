@@ -14,7 +14,7 @@ import { hasWebGL, isLowPower, prefersReducedMotion } from "../lib/env";
 import { countUp, EASE, gsap, ScrollTrigger, SplitText, useMagnetic, useReveals } from "../lib/motion";
 import { CHAPTERS, chapterAt, colorsAt, dialPoint, HOUR_KEYS, interp, smoothstep, STEPS } from "../lib/story";
 import { useLenis } from "../lib/smooth";
-import { onAssetProgress, preloadSceneAssets } from "../three/assets";
+import { MODEL_NAMES, TEXTURE_NAMES } from "../three/manifest";
 import type { SceneState } from "../three/RoofScene";
 import "../styles/landing.css";
 
@@ -403,8 +403,11 @@ function Manifesto() {
     let dead = false;
     document.fonts.ready.then(() => {
       if (dead) return;
-      split = SplitText.create(el, { type: "words", wordsClass: "mf-word" });
-      const tween = gsap.fromTo(split.words, { opacity: 0.14 }, { opacity: 1, ease: "none", stagger: 0.12, scrollTrigger: { trigger: el, start: "top 78%", end: "bottom 45%", scrub: 0.4 } });
+      // The words stay plain text in the paragraph, so no ARIA rewrite is needed
+      // (aria-label is not allowed on a <p>).
+      split = SplitText.create(el, { type: "words", wordsClass: "mf-word", aria: "none" });
+      // Unread words are a grey that still passes WCAG AA, so the effect never hides text.
+      const tween = gsap.fromTo(split.words, { color: "#5f6676" }, { color: "#161c36", ease: "none", stagger: 0.12, scrollTrigger: { trigger: el, start: "top 78%", end: "bottom 45%", scrub: 0.4 } });
       st = tween.scrollTrigger;
     });
     return () => {
@@ -942,13 +945,18 @@ export default function Landing() {
     const id = requestAnimationFrame(() => ScrollTrigger.refresh());
     let live = true;
     document.fonts.ready.then(() => live && setParts((p) => ({ ...p, fonts: 1 })));
+    // three.js arrives with these chunks, after the preloader has painted.
+    let off = () => {};
     if (gl) {
       sceneModule().then(() => live && setParts((p) => ({ ...p, scene: 1 })));
-      preloadSceneAssets(["aircon", "drum", "planter", "plant", "chair", "lantern"], ["plaster_normal", "plaster_rough", "slab_diff", "slab_normal", "lane_diff"]);
+      import("../three/assets").then((a) => {
+        if (!live) return;
+        a.preloadSceneAssets([...MODEL_NAMES], [...TEXTURE_NAMES]);
+        off = a.onAssetProgress((v) => live && setParts((p) => ({ ...p, assets: v })));
+      });
     } else {
       setParts((p) => ({ ...p, scene: 1, assets: 1 }));
     }
-    const off = onAssetProgress((a) => live && setParts((p) => ({ ...p, assets: a })));
     // Never hold anyone hostage to a slow network or GPU.
     const bail = window.setTimeout(() => setReady(true), 12000);
     return () => {

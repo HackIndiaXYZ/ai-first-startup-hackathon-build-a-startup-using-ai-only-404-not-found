@@ -5,8 +5,9 @@ import * as THREE from "three";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 
-export type ModelName = "aircon" | "drum" | "planter" | "plant" | "chair" | "lantern";
-export type TextureName = "plaster_normal" | "plaster_rough" | "slab_diff" | "slab_normal" | "lane_diff";
+import type { ModelName, TextureName } from "./manifest";
+
+export type { ModelName, TextureName };
 
 const BASE = import.meta.env.BASE_URL ?? "./";
 

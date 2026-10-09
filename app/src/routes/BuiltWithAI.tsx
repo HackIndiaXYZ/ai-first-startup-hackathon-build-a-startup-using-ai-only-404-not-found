@@ -63,6 +63,18 @@ const STAGES = [
     doc: "app/src/three",
   },
   {
+    k: "Design overhaul",
+    ai: "From a second brief: re-read the Awwwards, taste and GSAP skills, wrote a design brief, pulled six CC0 models from Poly Haven through its API and packed them to 738 KB with glTF-Transform. Rebuilt the renderer (sky-baked reflections, ambient occlusion, bloom, adaptive quality) and the landing (preloader, SplitText chapters, velocity marquee, stacking cards, route curtain).",
+    human: "Wrote the second brief.",
+    doc: "docs/05-design.md",
+  },
+  {
+    k: "Test phase",
+    ai: "Added design-system unit tests (including a WCAG contrast check across the whole day, which caught a real dusk-contrast bug) and a Playwright suite: every route, every tool flow, axe-core accessibility, keyboard, reduced motion, no-WebGL, phones and a four-width viewport sweep.",
+    human: "None.",
+    doc: "docs/test-report.md",
+  },
+  {
     k: "Business",
     ai: "Built the business plan and a formula-driven financial model: unit economics, 5-year P&L, cash flow, funding ask, sensitivity.",
     human: "None.",

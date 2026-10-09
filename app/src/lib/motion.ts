@@ -10,6 +10,7 @@ import { CustomEase } from "gsap/CustomEase";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
+import { formatCount, parseCount } from "./count";
 import { prefersReducedMotion } from "./env";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
@@ -124,28 +125,17 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.32) {
  */
 export function countUp(el: HTMLElement): () => void {
   const final = el.textContent ?? "";
-  const m = final.match(/^(\D*)([\d,]+(?:\.\d+)?)(.*)$/);
-  if (!m || prefersReducedMotion()) return () => {};
-  const [, pre, digits, post] = m;
-  const target = Number(digits.replace(/,/g, ""));
-  const decimals = (digits.split(".")[1] ?? "").length;
-  const grouped = digits.includes(",");
-  const fmt = (v: number) => {
-    const s = v.toFixed(decimals);
-    if (!grouped) return s;
-    const [int, dec] = s.split(".");
-    const g = Number(int).toLocaleString("en-IN");
-    return dec ? `${g}.${dec}` : g;
-  };
+  const spec = parseCount(final);
+  if (!spec || prefersReducedMotion()) return () => {};
   const obj = { v: 0 };
-  el.textContent = `${pre}${fmt(0)}${post}`;
+  el.textContent = formatCount(spec, 0);
   const tween = gsap.to(obj, {
-    v: target,
+    v: spec.target,
     duration: 1.6,
     ease: "power3.out",
     scrollTrigger: { trigger: el, start: "top 92%", once: true },
     onUpdate: () => {
-      el.textContent = `${pre}${fmt(obj.v)}${post}`;
+      el.textContent = formatCount(spec, obj.v);
     },
     onComplete: () => {
       el.textContent = final;

@@ -7,3 +7,5 @@ app/dist/
 .vercel
 .vercel/
 *.tsbuildinfo
+app/test-results/
+app/playwright-report/

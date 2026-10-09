@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { LinkButton } from "../components/ui";
 import { usePageIntro } from "../lib/motion";
+import "../styles/notfound.css";
 
 export default function NotFound() {
   const intro = usePageIntro<HTMLDivElement>();

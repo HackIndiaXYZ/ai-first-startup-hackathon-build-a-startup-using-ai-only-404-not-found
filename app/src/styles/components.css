@@ -113,7 +113,7 @@
 }
 .input-wrap:focus-within {
   border-color: var(--neel);
-  box-shadow: 0 0 0 3px oklch(0.52 0.135 257 / 0.18);
+  box-shadow: 0 0 0 3px oklch(0.52 0.135 257 / 0.38);
 }
 .input-wrap input,
 .input-wrap select,

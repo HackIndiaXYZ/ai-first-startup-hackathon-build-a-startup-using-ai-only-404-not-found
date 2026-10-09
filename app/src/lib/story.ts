@@ -50,6 +50,31 @@ function mix(a: string, b: string, t: number): [number, number, number] {
   return A.map((v, i) => Math.round(v + (B[i] - v) * t)) as [number, number, number];
 }
 
+const INK = "#161c36";
+const LIMEWASH = "#f1eee7";
+
+/** WCAG relative luminance of an sRGB triple. */
+export function luminance([r, g, b]: [number, number, number]): number {
+  const lin = (v: number) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+export function contrastRatio(a: [number, number, number], b: [number, number, number]): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+const isDark = (h: string) => contrastRatio(hex(h) as [number, number, number], hex(LIMEWASH) as [number, number, number]) > contrastRatio(hex(h) as [number, number, number], hex(INK) as [number, number, number]);
+
+/**
+ * Background and text colour at progress p. Within the day or within the
+ * night the background blends; across sunset it switches at the midpoint
+ * instead, because every colour halfway between turmeric and indigo fails
+ * 4.5:1 with both ink and limewash text. CSS eases the switch.
+ */
 export function colorsAt(p: number): { bg: string; fg: string; dark: boolean } {
   const q = Math.max(0, Math.min(1, p));
   let rgb = hex(COLOR_KEYS[COLOR_KEYS.length - 1][1]) as [number, number, number];
@@ -57,14 +82,15 @@ export function colorsAt(p: number): { bg: string; fg: string; dark: boolean } {
     if (q <= COLOR_KEYS[i][0]) {
       const [p0, b0] = COLOR_KEYS[i - 1];
       const [p1, b1] = COLOR_KEYS[i];
-      rgb = mix(b0, b1, (q - p0) / (p1 - p0));
+      const t = (q - p0) / (p1 - p0);
+      rgb = isDark(b0) === isDark(b1) ? mix(b0, b1, t) : (hex(t < 0.5 ? b0 : b1) as [number, number, number]);
       break;
     }
   }
-  const [r, g, b] = rgb;
-  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-  const dark = lum < 0.45;
-  return { bg: `rgb(${r},${g},${b})`, fg: dark ? "#f1eee7" : "#161c36", dark };
+  const ink = hex(INK) as [number, number, number];
+  const lime = hex(LIMEWASH) as [number, number, number];
+  const dark = contrastRatio(rgb, lime) > contrastRatio(rgb, ink);
+  return { bg: `rgb(${rgb.join(",")})`, fg: dark ? LIMEWASH : INK, dark };
 }
 
 export function smoothstep(a: number, b: number, x: number): number {

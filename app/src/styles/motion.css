@@ -67,7 +67,7 @@
   font-size: 12px;
 }
 .pre__steps li {
-  opacity: 0.3;
+  opacity: 0.55;
   transition: opacity 300ms ease;
 }
 .pre__steps li[data-on="true"] {

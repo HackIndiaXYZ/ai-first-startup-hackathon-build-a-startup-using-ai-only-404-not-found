@@ -4,6 +4,17 @@
    ====================================================================== */
 
 /* ---------- Story: a pinned, full-bleed day ---------- */
+/* Registered so the sunset colour switch can ease instead of cutting. */
+@property --alm-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f6e3da;
+}
+@property --alm-fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #161c36;
+}
 .story {
   position: relative;
   height: 760vh;
@@ -38,6 +49,9 @@
   overflow: hidden;
   color: var(--alm-fg);
   background: var(--alm-bg);
+  transition:
+    --alm-bg 450ms ease,
+    --alm-fg 450ms ease;
 }
 .story__canvas {
   position: absolute;
@@ -91,7 +105,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 10.5px;
-  opacity: 0.62;
+  opacity: 0.8;
 }
 .hud__v {
   font-size: 15px;
@@ -136,7 +150,7 @@
 .step .eyebrow,
 .step__eyebrow {
   color: currentColor;
-  opacity: 0.66;
+  opacity: 0.8;
 }
 .hero__title {
   width: min(66vw, 1180px);
@@ -174,7 +188,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  opacity: 0.75;
+  opacity: 0.8;
 }
 .step__title {
   font-size: clamp(2.3rem, 1.1rem + 3.2vw, 5rem);
@@ -195,7 +209,7 @@
 }
 .step__src {
   font-size: 12px;
-  opacity: 0.62;
+  opacity: 0.8;
 }
 .step__chips {
   display: flex;
@@ -221,7 +235,7 @@
 .step__grid .stat__label,
 .step__grid .stat__hi {
   color: inherit;
-  opacity: 0.65;
+  opacity: 0.8;
 }
 
 /* The quote gets stamped */
@@ -294,7 +308,7 @@
   line-height: 1;
 }
 .step__bill-label {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 /* Foot: ticks, chapter, hint */
@@ -328,7 +342,7 @@
   font-weight: 600;
 }
 .story__scroll {
-  opacity: 0.55;
+  opacity: 0.8;
 }
 .story__scroll::after {
   content: " ↓";
@@ -390,7 +404,7 @@
 }
 .story__dial-cap {
   font-size: 11px;
-  opacity: 0.7;
+  opacity: 0.8;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -579,7 +593,7 @@
   background: linear-gradient(var(--haldi), var(--haldi)) 0 92% / 100% 0.16em no-repeat;
 }
 .mf-word {
-  will-change: opacity;
+  color: #5f6676;
 }
 
 /* ---------- Velocity marquee ---------- */
@@ -693,7 +707,7 @@
 }
 .stack-card__k {
   font-size: 13px;
-  opacity: 0.6;
+  font-weight: 600;
 }
 .stack-card__title {
   font-size: clamp(2.6rem, 1.2rem + 4.2vw, 6.2rem);
@@ -709,13 +723,12 @@
   font-weight: 400;
   letter-spacing: 0;
   margin-top: 0.35em;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 .stack-card__body {
   font-size: var(--step-1);
   line-height: 1.42;
   max-width: 34ch;
-  opacity: 0.85;
 }
 .stack-card__icon {
   position: absolute;
