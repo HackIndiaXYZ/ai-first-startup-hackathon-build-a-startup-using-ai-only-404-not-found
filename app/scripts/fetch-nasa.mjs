@@ -15,7 +15,7 @@ for (const [name, state, lat, lon] of seed) {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       json = await res.json();
       break;
-    } catch (err) {
+    } catch {
       await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
     }
   }

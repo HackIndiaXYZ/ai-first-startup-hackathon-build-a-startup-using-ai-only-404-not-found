@@ -9,7 +9,7 @@ import { buildReport } from "../engine/report";
 import { formatClock } from "../engine/solar";
 import { hasWebGL, isLowPower, prefersReducedMotion } from "../lib/env";
 import { gsap, ScrollTrigger } from "../lib/smooth";
-import { makeSceneState } from "../three/RoofScene";
+import { makeSceneState } from "../three/state";
 import { LinkButton, Select, Stat } from "../components/ui";
 import { useAsk } from "../components/AskChhat";
 import "../styles/landing.css";

@@ -37,9 +37,9 @@ export default function Bill() {
   const c = cityByName(city) ?? CITIES[0];
   const month = bill.billMonth ?? new Date().getMonth();
   const expected = useMemo(() => monthlyEnergy(climateFromCity(c), kwp)[month], [c, kwp, month]);
-  const ctx = { systemKwp: kwp, expectedGeneration: expected, tariff: stateInfo(c.state).tariff };
-  const a = useMemo(() => auditBill(bill, ctx), [bill, ctx.systemKwp, ctx.expectedGeneration, ctx.tariff]); // eslint-disable-line react-hooks/exhaustive-deps
-  const letter = useMemo(() => complaintLetter(bill, a, ctx), [bill, a]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ctx = useMemo(() => ({ systemKwp: kwp, expectedGeneration: expected, tariff: stateInfo(c.state).tariff }), [kwp, expected, c.state]);
+  const a = useMemo(() => auditBill(bill, ctx), [bill, ctx]);
+  const letter = useMemo(() => complaintLetter(bill, a, ctx), [bill, a, ctx]);
   const set = <K extends keyof SolarBill>(k: K) => (v: SolarBill[K]) => setBill((p) => ({ ...p, [k]: v }));
   const billedBad = a.expectedNetUnits !== null && bill.netUnitsBilled !== null && bill.netUnitsBilled > a.expectedNetUnits + 2;
 
@@ -154,8 +154,8 @@ export default function Bill() {
 
         <div className="audit__results" aria-live="polite">
           <section className="verdict">
-            <div className="grade" data-g={a.findings.some((f) => f.severity === "critical") ? "F" : a.findings.some((f) => f.severity === "warn") ? "C" : "A"} aria-hidden="true">
-              {a.findings.some((f) => f.severity === "critical") ? "✕" : a.findings.some((f) => f.severity === "warn") ? "?" : "✓"}
+            <div className="grade" data-g={a.findings.some((f) => f.severity === "critical") ? "F" : a.findings.some((f) => f.severity === "warn") ? "C" : a.incomplete ? "none" : "A"} aria-hidden="true">
+              {a.findings.some((f) => f.severity === "critical") ? "✕" : a.findings.some((f) => f.severity === "warn") || a.incomplete ? "?" : "✓"}
             </div>
             <div>
               <h2 className="verdict__title">{a.verdict}</h2>

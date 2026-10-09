@@ -83,6 +83,8 @@ export interface QuoteAudit {
   moneyAtRisk: number;
   subsidyAtRisk: number;
   verdict: string;
+  /** Size or price missing: the price check could not run. */
+  incomplete: boolean;
 }
 
 export function auditQuote(q: Quote): QuoteAudit {
@@ -141,6 +143,22 @@ export function auditQuote(q: Quote): QuoteAudit {
         source: SRC.price,
       });
     }
+  } else if (q.totalPrice) {
+    f.push({
+      id: "size",
+      severity: "warn",
+      title: "The quote doesn't say how big the system is",
+      detail: "Without the kW size, or the panel count and wattage, nobody can tell whether the price is fair, and the subsidy is paid per kW. Ask for all three in writing.",
+      source: SRC.price,
+    });
+  } else if (kwp) {
+    f.push({
+      id: "price",
+      severity: "warn",
+      title: "No total price found",
+      detail: "Ask for one all-inclusive price with GST, net meter and DISCOM fees, so you can compare quotes like for like.",
+      source: SRC.price,
+    });
   }
 
   // 3. DCR and ALMM List-II cells: the subsidy gate
@@ -278,14 +296,17 @@ export function auditQuote(q: Quote): QuoteAudit {
   f.sort((a, b) => order[a.severity] - order[b.severity]);
 
   const criticals = f.filter((x) => x.severity === "critical").length;
+  const incomplete = !kwp || !q.totalPrice;
   const verdict =
     criticals > 0
       ? "Don't sign this yet."
-      : grade === "A" || grade === "B"
-        ? "This looks like a fair deal."
-        : "Negotiate before you sign.";
+      : incomplete
+        ? "Add the size and price to finish the check."
+        : grade === "A" || grade === "B"
+          ? "This looks like a fair deal."
+          : "Negotiate before you sign.";
 
-  return { findings: f, score, grade, actualKwp, band, pricePerKw, overcharge, moneyAtRisk, subsidyAtRisk, verdict };
+  return { findings: f, score, grade, actualKwp, band, pricePerKw, overcharge, moneyAtRisk, subsidyAtRisk, verdict, incomplete };
 }
 
 /** A message the homeowner can send the vendor, in English or Hindi. */
@@ -295,6 +316,8 @@ export function negotiationMessage(q: Quote, a: QuoteAudit, lang: "en" | "hi"): 
   const sev = (id: string) => a.findings.find((x) => x.id === id)?.severity;
   if (lang === "en") {
     if (a.overcharge > 0 && a.band) asks.push(`Your price works out to ${rupees(a.pricePerKw ?? 0)}/kW. Comparable DCR systems are ${rupees(a.band.low)} to ${rupees(a.band.high)}. Can you match ${rupees(a.band.mid)}?`);
+    if (has("size")) asks.push("Please state the system size in kW, with the panel count and wattage.");
+    if (has("price")) asks.push("Please share one all-inclusive price, with GST, net meter and DISCOM fees.");
     if (has("capacity")) asks.push(`The quote says ${q.systemKw} kW but ${q.panelCount} × ${q.panelWatt} W is ${a.actualKwp?.toFixed(2)} kWp. Please add panels or reduce the price.`);
     if (has("dcr")) asks.push("Please confirm in writing that the panels are DCR, and share the DCR certificate with module serial numbers.");
     if (has("almm")) asks.push("Please name the cell manufacturer and confirm it is on ALMM List-II.");
@@ -307,6 +330,8 @@ export function negotiationMessage(q: Quote, a: QuoteAudit, lang: "en" | "hi"): 
     return `Hi${q.vendorName ? ` ${q.vendorName}` : ""}, thanks for the quote. Before I sign:\n\n${asks.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nHappy to go ahead once these are sorted.`;
   }
   if (a.overcharge > 0 && a.band) asks.push(`आपका रेट ${rupees(a.pricePerKw ?? 0)}/kW आ रहा है। इसी तरह के DCR सिस्टम ${rupees(a.band.low)} से ${rupees(a.band.high)} में लग रहे हैं। क्या आप ${rupees(a.band.mid)} कर सकते हैं?`);
+  if (has("size")) asks.push("सिस्टम का साइज़ kW में लिखिए, पैनल की संख्या और वॉट के साथ।");
+  if (has("price")) asks.push("GST, नेट मीटर और DISCOM फीस समेत एक कुल कीमत बताइए।");
   if (has("capacity")) asks.push(`कोटेशन में ${q.systemKw} kW लिखा है, पर ${q.panelCount} × ${q.panelWatt} W = ${a.actualKwp?.toFixed(2)} kWp ही बनता है। पैनल बढ़ाइए या दाम कम कीजिए।`);
   if (has("dcr")) asks.push("लिखकर दीजिए कि पैनल DCR हैं, और मॉड्यूल सीरियल नंबर के साथ DCR सर्टिफिकेट भेजिए।");
   if (has("almm")) asks.push("सेल बनाने वाली कंपनी का नाम बताइए और पुष्टि कीजिए कि वह ALMM List-II में है।");

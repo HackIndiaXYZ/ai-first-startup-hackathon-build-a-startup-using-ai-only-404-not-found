@@ -47,12 +47,29 @@ export interface AgentResult {
 
 const tools = TOOL_SCHEMAS.map((t) => ({ ...t, strict: true })) as unknown as Anthropic.Beta.BetaTool[];
 
-export async function runAgent(history: { role: "user" | "assistant"; text: string }[]): Promise<AgentResult> {
-  const messages: Anthropic.Beta.BetaMessageParam[] = history
-    .filter((h) => h.text.trim())
-    .slice(-12)
-    .map((h) => ({ role: h.role, content: h.text }));
-  if (!messages.length || messages[0].role !== "user") messages.shift();
+export type ChatTurn = { role: "user" | "assistant"; text: string };
+
+/**
+ * Turn chat history into a valid Messages API conversation: the last 12 turns,
+ * starting with the user (the UI opens with an assistant greeting), ending with
+ * the user (no prefill), and with consecutive same-role turns merged.
+ */
+export function toMessages(history: ChatTurn[]): Anthropic.Beta.BetaMessageParam[] {
+  const turns = history.filter((h) => h.text.trim()).slice(-12);
+  while (turns.length && turns[0].role !== "user") turns.shift();
+  while (turns.length && turns[turns.length - 1].role !== "user") turns.pop();
+  const out: { role: "user" | "assistant"; content: string }[] = [];
+  for (const t of turns) {
+    const last = out[out.length - 1];
+    if (last && last.role === t.role) last.content += `\n\n${t.text}`;
+    else out.push({ role: t.role, content: t.text });
+  }
+  return out;
+}
+
+export async function runAgent(history: ChatTurn[]): Promise<AgentResult> {
+  const messages = toMessages(history);
+  if (!messages.length) throw new Error("empty_conversation");
 
   const trace: TraceStep[] = [];
   let model = MODEL;
@@ -138,6 +155,7 @@ export const EXTRACT_SCHEMAS = {
     consumer_number: nStr,
     state_code: nStr,
     bill_month: nInt,
+    system_kwp: { ...nNum, description: "Rooftop solar capacity in kWp, if the bill prints it" },
     import_units: nNum,
     export_units: nNum,
     previous_credit: { ...nNum, description: "Banked/carried-forward export units from the previous bill" },

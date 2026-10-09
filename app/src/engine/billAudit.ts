@@ -49,6 +49,8 @@ export interface BillAudit {
   expectedNetUnits: number | null;
   effectiveRate: number;
   verdict: string;
+  /** Import or export reading missing: the meter arithmetic could not run. */
+  incomplete: boolean;
 }
 
 const SRC = {
@@ -164,15 +166,33 @@ export function auditBill(b: SolarBill, ctx: BillContext): BillAudit {
     }
   }
 
+  const incomplete = b.importUnits === null || b.exportUnits === null;
+  if (incomplete) {
+    f.push({
+      id: "readings",
+      severity: "info",
+      title: "Import or export reading missing",
+      detail: "A net-metered bill lists both: units you took from the grid (import) and units your roof sent back (export). Add them from the bill's meter-reading table to check the arithmetic.",
+    });
+  }
+
   const order = { critical: 0, warn: 1, info: 2, ok: 3 } as const;
   f.sort((a, b2) => order[a.severity] - order[b2.severity]);
   const crit = f.some((x) => x.severity === "critical");
+  const warn = f.some((x) => x.severity === "warn");
   return {
     findings: f,
     overbilled: Math.round(overbilled),
     expectedNetUnits: expectedNet,
     effectiveRate: rate,
-    verdict: crit ? "This bill looks wrong. File a correction." : f.some((x) => x.severity === "warn") ? "Mostly right, with questions to ask." : "This bill checks out.",
+    verdict: crit
+      ? "This bill looks wrong. File a correction."
+      : warn
+        ? "Mostly right, with questions to ask."
+        : incomplete
+          ? "Add the meter readings to check this bill."
+          : "This bill checks out.",
+    incomplete,
   };
 }
 

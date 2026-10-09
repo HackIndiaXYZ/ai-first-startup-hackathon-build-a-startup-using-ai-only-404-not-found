@@ -3,25 +3,12 @@ import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls
 import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { sunPosition } from "../engine/solar";
-import { FLOOR_H, layoutArray, MODULE, mulberry32, type RoofDims } from "./layout";
+import { FLOOR_H, layoutArray, MAX_PANELS, MAX_POSTS, MAX_RAILS, MODULE, mulberry32, type RoofDims } from "./layout";
 import { skyFragment, skyLook, skyVertex, sunVector } from "./sky";
 import { panelTexture, windowTextures } from "./textures";
+import type { SceneState } from "./state";
 
-export interface SceneState {
-  lat: number;
-  lon: number;
-  doy: number;
-  hour: number;
-  panels: number;
-  /** 0 = panels in the air, 1 = installed */
-  drop: number;
-  /** Hero camera path, 0..1 */
-  camT: number;
-}
-
-export function makeSceneState(partial: Partial<SceneState> = {}): SceneState {
-  return { lat: 28.61, lon: 77.21, doy: 105, hour: 12.5, panels: 6, drop: 1, camT: 0, ...partial };
-}
+export { makeSceneState, type SceneState } from "./state";
 
 interface Props {
   state: MutableRefObject<SceneState>;
@@ -256,8 +243,6 @@ function House({ roof }: { roof: RoofDims }) {
 /* Solar array on an elevated structure                                */
 /* ------------------------------------------------------------------ */
 
-const MAX_PANELS = 40;
-
 function SolarArray({ state, roof, panelsKey }: { state: MutableRefObject<SceneState>; roof: RoofDims; panelsKey?: number }) {
   const panels = useRef<THREE.InstancedMesh>(null);
   const posts = useRef<THREE.InstancedMesh>(null);
@@ -304,7 +289,7 @@ function SolarArray({ state, roof, panelsKey }: { state: MutableRefObject<SceneS
           dummy.rotation.set(0, 0, 0);
           dummy.scale.set(1, h, 1);
           dummy.updateMatrix();
-          postMesh.setMatrixAt(pi++, dummy.matrix);
+          if (pi < MAX_POSTS) postMesh.setMatrixAt(pi++, dummy.matrix);
         }
       }
       for (const [zz, y] of [
@@ -314,7 +299,7 @@ function SolarArray({ state, roof, panelsKey }: { state: MutableRefObject<SceneS
         dummy.position.set((xa + xb) / 2, y, zz);
         dummy.scale.set(xb - xa, 1, 1);
         dummy.updateMatrix();
-        railMesh.setMatrixAt(ri++, dummy.matrix);
+        if (ri < MAX_RAILS) railMesh.setMatrixAt(ri++, dummy.matrix);
       }
     });
     postMesh.count = pi;
@@ -356,10 +341,10 @@ function SolarArray({ state, roof, panelsKey }: { state: MutableRefObject<SceneS
       <instancedMesh ref={panels} args={[undefined, undefined, MAX_PANELS]} material={mats} castShadow receiveShadow frustumCulled={false}>
         <boxGeometry args={[MODULE.w, MODULE.t, MODULE.d]} />
       </instancedMesh>
-      <instancedMesh ref={posts} args={[undefined, steel, 64]} castShadow>
+      <instancedMesh ref={posts} args={[undefined, steel, MAX_POSTS]} castShadow>
         <boxGeometry args={[0.07, 1, 0.07]} />
       </instancedMesh>
-      <instancedMesh ref={rails} args={[undefined, steel, 32]} castShadow>
+      <instancedMesh ref={rails} args={[undefined, steel, MAX_RAILS]} castShadow>
         <boxGeometry args={[1, 0.06, 0.06]} />
       </instancedMesh>
     </group>

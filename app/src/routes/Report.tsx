@@ -17,8 +17,10 @@ import { formatClock, REP_DAY, sunPosition, sunTimes } from "../engine/solar";
 import { SUBSIDY_SOURCE } from "../engine/subsidy";
 import { MONTHS, type Climate } from "../engine/types";
 import { hasWebGL, isLowPower } from "../lib/env";
+import { numParam, oneOf } from "../lib/params";
 import { roofFromArea } from "../three/layout";
-import { makeSceneState } from "../three/RoofScene";
+import { makeSceneState } from "../three/state";
+import { MAX_PANELS } from "../three/layout";
 import "../styles/tools.css";
 
 const RoofScene = lazy(() => import("../three/RoofScene"));
@@ -40,15 +42,15 @@ export default function Report() {
   const [cityClimate, setCityClimate] = useState<Climate>(climateFromCity(initialCity));
   const [exact, setExact] = useState<Climate | null>(null);
   const climate = exact ?? cityClimate;
-  const [units, setUnits] = useState<number>(Number(params.get("units")) || 450);
-  const [billMonth, setBillMonth] = useState<number>(params.get("month") ? Number(params.get("month")) - 1 : new Date().getMonth());
+  const [units, setUnits] = useState<number>(numParam(params, "units", 10, 20000, true) ?? 450);
+  const [billMonth, setBillMonth] = useState<number>((numParam(params, "month", 1, 12, true) ?? new Date().getMonth() + 1) - 1);
   const [periodMonths, setPeriodMonths] = useState<1 | 2>(params.get("period") === "2" ? 2 : 1);
-  const [tariff, setTariff] = useState<number | null>(params.get("tariff") ? Number(params.get("tariff")) : null);
-  const [load, setLoad] = useState<number | null>(params.get("load") ? Number(params.get("load")) : null);
-  const [roofArea, setRoofArea] = useState<number>(Number(params.get("roof")) || 900);
-  const [shading, setShading] = useState<Shading>((params.get("shade") as Shading) || "none");
-  const [panels, setPanels] = useState<number | null>(params.get("panels") ? Number(params.get("panels")) : null);
-  const [price, setPrice] = useState<number | null>(params.get("price") ? Number(params.get("price")) : null);
+  const [tariff, setTariff] = useState<number | null>(numParam(params, "tariff", 1, 30));
+  const [load, setLoad] = useState<number | null>(numParam(params, "load", 0.5, 100));
+  const [roofArea, setRoofArea] = useState<number>(numParam(params, "roof", 200, 3000, true) ?? 900);
+  const [shading, setShading] = useState<Shading>(oneOf(params.get("shade"), ["none", "some", "heavy"] as const) ?? "none");
+  const [panels, setPanels] = useState<number | null>(numParam(params, "panels", 2, MAX_PANELS, true));
+  const [price, setPrice] = useState<number | null>(numParam(params, "price", 10000, 5000000));
   const [mode, setMode] = useState<Mode | null>(null);
   const [intakeNote, setIntakeNote] = useState<string | null>(null);
   const [locating, setLocating] = useState(false);
@@ -117,7 +119,7 @@ export default function Report() {
         shading,
         sanctionedLoadKw: load ?? undefined,
         overridePanels: panels ?? undefined,
-        grossCost: price ?? undefined,
+        grossCost: price && price >= 10000 ? price : undefined,
       }),
     [climate, units, billMonth, periodMonths, tariff, roofArea, shading, load, panels, price],
   );
@@ -163,7 +165,7 @@ export default function Report() {
   const times = sunTimes(climate.lat, climate.lon, REP_DAY[simMonth]);
   const liveKw = instantOutput(climate, report.kwp, simMonth, sunNow.elevation, times.sunset - times.sunrise);
 
-  const maxPanels = Math.max(report.sizing.panels + 4, Math.min(36, Math.floor((report.sizing.roofMaxKw * 1000) / 545) + 1));
+  const maxPanels = Math.min(MAX_PANELS, Math.max(report.panels, report.sizing.panels + 4, Math.min(36, Math.floor((report.sizing.roofMaxKw * 1000) / 545) + 1)));
   const s = report;
   const st = s.state;
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";

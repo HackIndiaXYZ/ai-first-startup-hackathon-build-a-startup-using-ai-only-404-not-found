@@ -91,11 +91,15 @@ const parseNum = (s: string) => Number(s.replace(/,/g, ""));
 
 export function extractEntities(text: string) {
   const t = text.toLowerCase();
-  const kw = t.match(/(\d+(?:\.\d+)?)\s*(?:kw|kwp|kilowatt|किलोवाट)/);
-  const units = t.match(/(\d[\d,]{1,6})\s*(?:units?|kwh|यूनिट)/);
-  const lakh = t.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|लाख)/);
-  const rupee = t.match(/(?:₹|rs\.?\s?|inr\s?|rupees?\s)([\d,]{3,})/) ?? t.match(/([\d,]{3,})\s*(?:rs|rupees|रुपये|रुपए)/);
-  const area = t.match(/(\d[\d,]{1,5})\s*(?:sq\.?\s?ft|sqft|square\s?feet|sq feet|वर्ग)/);
+  const kw = t.match(/(?<![\d.])(\d{1,3}(?:\.\d{1,3})?)\s*(?:kw|kwp|kilowatt|किलोवाट)/);
+  const units = t.match(/(?<![\d,])(\d[\d,]{1,6})\s*(?:units?|kwh|यूनिट)/);
+  const lakh = t.match(/(?<![\d.])(\d{1,3}(?:\.\d{1,2})?)\s*(?:lakhs?|lacs?|l\b|लाख)/);
+  const rupee = t.match(/(?:₹|rs\.?\s?|inr\s?|rupees?\s)([\d,]{3,12})/) ?? t.match(/(?<![\d,])([\d,]{3,12})\s*(?:rs|rupees|रुपये|रुपए)/);
+  // A bare amount like "210000" or "2,10,000" with no unit after it.
+  const bare = [...t.matchAll(/(?<![\d.])(\d{1,3}(?:,\d{2,3})+|\d{5,7})(?![\d,.]*\s*(?:units?|kwh|kw|sq|w\b|watt|%|यूनिट))/g)]
+    .map((m) => parseNum(m[1]))
+    .find((n) => n >= 20000 && n <= 5000000);
+  const area = t.match(/(?<![\d,])(\d[\d,]{1,5})\s*(?:sq\.?\s?ft|sqft|square\s?feet|sq feet|वर्ग)/);
   const month = MONTH_WORDS.findIndex((m) => new RegExp(`\\b${m}`).test(t));
   let stateCode: string | null = null;
   for (const s of Object.values(STATES)) if (t.includes(s.name.toLowerCase())) stateCode = s.code;
@@ -103,6 +107,7 @@ export function extractEntities(text: string) {
     kw: kw ? Number(kw[1]) : null,
     units: units ? parseNum(units[1]) : null,
     price: lakh ? Number(lakh[1]) * 100000 : rupee ? parseNum(rupee[1]) : null,
+    bareAmount: bare ?? null,
     area: area ? parseNum(area[1]) : null,
     month: month >= 0 ? month + 1 : null,
     stateCode,
@@ -146,16 +151,31 @@ export function localAgent(message: string, history: AgentTurn[]): AgentReply {
   }
 
   // 1. Quote audit
-  if (has(t, /quote|quotation|quoted|asking for|charging|कोटेशन|vendor (?:says|wants)/) && (e.price || e.kw)) {
+  if (has(t, /quote|quotation|quoted|asking for|charging|कोटेशन|vendor (?:says|wants)/) && (e.price || e.kw || e.bareAmount)) {
+    const price = e.price ?? e.bareAmount;
+    if (!price) {
+      const band = fairPriceBand(e.kw!);
+      return {
+        lang,
+        trace,
+        text:
+          lang === "hi"
+            ? `${e.kw} kW (DCR पैनल) का उचित दाम ${rupees(band.low)} से ${rupees(band.high)} है। कोटेशन में कुल कितनी कीमत लिखी है? बताइए, मैं जाँच दूँगा।`
+            : `A fair installed price for ${e.kw} kW with DCR panels is ${rupees(band.low)} to ${rupees(band.high)}. What total price does the quote give? Tell me and I'll check it.`,
+        links: [{ label: "Open Quote Check", to: "/quote" }],
+      };
+    }
     const kw = e.kw ?? 3;
+    const assumed = e.kw === null;
     const st = e.stateCode ?? stateOfCity(city);
     const nonDcr = has(t, /non[-\s]?dcr|imported|chinese panel/);
+    const gstM = t.match(/(?<![\d.])(\d{1,2}(?:\.\d{1,2})?)\s*%\s*gst/);
     const r = call("audit_quote", {
       vendor_name: null,
       state_code: st,
       system_kw: kw,
-      total_price: e.price,
-      gst_percent: (t.match(/(\d+(?:\.\d+)?)\s*%\s*gst/) ?? [])[1] ? Number((t.match(/(\d+(?:\.\d+)?)\s*%\s*gst/) ?? [])[1]) : null,
+      total_price: price,
+      gst_percent: gstM ? Number(gstM[1]) : null,
       panel_brand: null,
       panel_watt: null,
       panel_count: null,
@@ -180,8 +200,8 @@ export function localAgent(message: string, history: AgentTurn[]): AgentReply {
     const top = a.findings.filter((f) => f.severity === "critical" || f.severity === "warn").slice(0, 3);
     const text =
       lang === "hi"
-        ? `${kw} kW के लिए उचित दाम ${rupees(band.low)} से ${rupees(band.high)} है।${a.overcharge > 0 ? ` यह कोटेशन लगभग ${rupees(a.overcharge)} ज़्यादा है।` : " यह कोटेशन उचित दायरे में है।"}${top.length ? `\n\nध्यान दें: ${top.map((f) => f.title).join("; ")}।` : ""}\n\nपूरी जाँच के लिए कोटेशन “Quote Check” में अपलोड करें।`
-        : `For ${kw} kW with DCR panels, a fair installed price is ${rupees(band.low)} to ${rupees(band.high)}.${a.overcharge > 0 ? ` This quote is about ${rupees(a.overcharge)} above that.` : " This quote sits inside the fair range."}${top.length ? `\n\nWatch for: ${top.map((f) => f.title).join("; ")}.` : ""}\n\nFor a line-by-line audit (DCR, warranties, structure, GST), upload the full quote to Quote Check.`;
+        ? `${assumed ? "साइज़ नहीं बताया, इसलिए 3 kW मानकर: " : ""}${kw} kW के लिए उचित दाम ${rupees(band.low)} से ${rupees(band.high)} है।${a.overcharge > 0 ? ` यह कोटेशन लगभग ${rupees(a.overcharge)} ज़्यादा है।` : price < band.low ? " यह कोटेशन इस दायरे से कम है: पैनल ब्रांड और DCR सर्टिफिकेट लिखित में माँगें।" : " यह कोटेशन उचित दायरे में है।"}${top.length ? `\n\nध्यान दें: ${top.map((f) => f.title).join("; ")}।` : ""}\n\nपूरी जाँच के लिए कोटेशन “Quote Check” में अपलोड करें।`
+        : `${assumed ? "You didn't give the size, so I've assumed 3 kW. " : ""}For ${kw} kW with DCR panels, a fair installed price is ${rupees(band.low)} to ${rupees(band.high)}.${a.overcharge > 0 ? ` This quote is about ${rupees(a.overcharge)} above that.` : price < band.low ? " This quote is below that range: ask for the panel brand and DCR certificate in writing." : " This quote sits inside the fair range."}${top.length ? `\n\nWatch for: ${top.map((f) => f.title).join("; ")}.` : ""}\n\nFor a line-by-line audit (DCR, warranties, structure, GST), upload the full quote to Quote Check.`;
     return { lang, trace, text, links: [{ label: "Open Quote Check", to: "/quote" }] };
   }
 
@@ -279,6 +299,16 @@ export function localAgent(message: string, history: AgentTurn[]): AgentReply {
       tariff: null,
       panels: e.kw ? Math.max(2, Math.round((e.kw * 1000) / 545)) : null,
     });
+    if (!r.ok) {
+      return {
+        lang,
+        trace,
+        text:
+          lang === "hi"
+            ? `${u} यूनिट महीने के लिए सही नहीं लगता। बिल पर लिखी महीने की यूनिट बताइए (आम तौर पर 100 से 2,000 के बीच)।`
+            : `${u} units a month doesn't look right. Tell me the monthly units printed on your bill (usually somewhere between 100 and 2,000).`,
+      };
+    }
     const d = r.data as { kwp: number; panels: number; annualGeneration: number; savings: number; subsidy: number; netCost: number; payback: number | null; emi: number };
     const assumed = !units ? (lang === "hi" ? ` (आपके ₹ बिल से लगभग ${u} यूनिट मानकर)` : ` (assuming ~${u} units from your ₹ bill)`) : "";
     return {

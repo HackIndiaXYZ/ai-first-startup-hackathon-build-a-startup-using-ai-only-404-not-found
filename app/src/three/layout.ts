@@ -3,6 +3,11 @@
 export const MODULE = { w: 2.278, d: 1.134, t: 0.035 };
 export const FLOOR_H = 3.1;
 export const STRUCTURE_H = 1.7; // elevated GI structure: low edge clearance above the slab
+/** Most panels the scene will draw; instance buffers are sized from it. */
+export const MAX_PANELS = 40;
+/** Every row has at most 3 post pairs and 2 rails, and there are at most MAX_PANELS rows. */
+export const MAX_POSTS = MAX_PANELS * 6;
+export const MAX_RAILS = MAX_PANELS * 2;
 
 export interface RoofDims {
   w: number;

@@ -13,6 +13,7 @@ import { CITIES } from "../engine/climate";
 import { rupees } from "../engine/format";
 import { auditQuote, EMPTY_QUOTE, negotiationMessage, type Quote as Q, type StructureType } from "../engine/quoteAudit";
 import { STATES } from "../engine/states";
+import { numParam } from "../lib/params";
 import "../styles/tools.css";
 
 const STATE_OPTS = Object.values(STATES)
@@ -29,7 +30,8 @@ export default function Quote() {
       void _c;
       return { q, sample: s.id };
     }
-    return { q: { ...EMPTY_QUOTE, systemKw: Number(params.get("kw")) || null, stateCode: params.get("state") } };
+    const state = params.get("state")?.toUpperCase() ?? null;
+    return { q: { ...EMPTY_QUOTE, systemKw: numParam(params, "kw", 0.5, 100), stateCode: state && STATES[state] ? state : null } };
   }, [params]);
   const [q, setQ] = useState<Q>(initial.q);
   const [lang, setLang] = useState<"en" | "hi">("en");
@@ -177,13 +179,19 @@ export default function Quote() {
 
         <div className="audit__results" aria-live="polite">
           <section className="verdict">
-            <div className="grade" data-g={a.grade} aria-label={`Grade ${a.grade}`}>
-              {a.grade}
-            </div>
+            {a.incomplete && a.findings.every((x) => x.severity !== "critical") ? (
+              <div className="grade" data-g="none" aria-label="Not graded yet">
+                ?
+              </div>
+            ) : (
+              <div className="grade" data-g={a.grade} aria-label={`Grade ${a.grade}`}>
+                {a.grade}
+              </div>
+            )}
             <div>
               <h2 className="verdict__title">{a.verdict}</h2>
               <p className="verdict__sub">
-                Score {a.score}/100.{" "}
+                {a.incomplete ? "Chhat needs the system size and total price to grade the deal. " : `Score ${a.score}/100. `}
                 {a.moneyAtRisk > 0 ? (
                   <>
                     Money at risk: <span className="verdict__risk">{rupees(a.moneyAtRisk)}</span>

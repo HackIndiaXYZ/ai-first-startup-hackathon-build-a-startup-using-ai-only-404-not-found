@@ -9,7 +9,7 @@ import { STATES } from "../engine/states";
 import { findCities } from "./localAgent";
 
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-const AMT = String.raw`(?:rs\.?|₹|inr)?\s*([\d,]+(?:\.\d+)?)`;
+const AMT = String.raw`(?:rs\.?|₹|inr)?\s*([\d,]{1,15}(?:\.\d{1,2})?)`;
 
 function toNum(s: string | undefined): number | null {
   if (!s) return null;
@@ -47,7 +47,7 @@ export function detectMonth(text: string): { month: number | null; periodMonths:
   const two = /bimonthly|bi-monthly|2 months|two months/.test(t);
   const range = t.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*[-–]\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/);
   if (range) return { month: MONTHS.indexOf(range[1]), periodMonths: 2 };
-  const labelled = t.match(/(?:bill month|billing month|month)\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/);
+  const labelled = t.match(/(?:bill month|billing month|month)\s*[:-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/);
   if (labelled) return { month: MONTHS.indexOf(labelled[1]), periodMonths: two ? 2 : 1 };
   const any = t.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\s\-']*20\d\d/);
   if (any) return { month: MONTHS.indexOf(any[1]), periodMonths: two ? 2 : 1 };
@@ -76,7 +76,7 @@ export function parseBill(text: string): ParsedBill {
   const units = after(text, ["units consumed", "total units", "consumption", "units billed", "kwh consumed", "units"]);
   const energy = after(text, ["energy charges?", "energy charge"]);
   const amount = after(text, ["amount payable", "net bill amount", "total amount", "bill amount", "amount due", "total"]);
-  const load = text.match(/sanctioned load\s*[:\-]?\s*([\d.]+)\s*kw/i);
+  const load = text.match(/sanctioned load\s*[:-]?\s*(\d{1,3}(?:\.\d{1,2})?)\s*kw/i);
   const cities = findCities(text);
   return {
     units,
@@ -102,7 +102,7 @@ export interface ParsedSolarBill extends SolarBill {
 
 export function parseSolarBill(text: string): ParsedSolarBill {
   const { month } = detectMonth(text);
-  const kwp = text.match(/(\d+(?:\.\d+)?)\s*kwp/i);
+  const kwp = text.match(/(?<![\d.])(\d{1,3}(?:\.\d{1,3})?)\s*kwp/i);
   const other = text.match(new RegExp(`other charges?\\s*(?:\\(([^)]*)\\))?\\s*[:\\-]?\\s*${AMT}`, "i"));
   return {
     ...EMPTY_BILL,
@@ -131,7 +131,7 @@ export function parseQuote(text: string): Quote & { city: string | null } {
 
   // System size: prefer a kW figure introduced by system/capacity words, never the inverter's.
   let systemKw: number | null = null;
-  const kwRe = /(\d+(?:\.\d+)?)\s*kwp?\b/gi;
+  const kwRe = /(?<![\d.])(\d{1,3}(?:\.\d{1,3})?)\s*kwp?\b/gi;
   for (const line of lines) {
     if (/inverter/i.test(line)) continue;
     const m = [...line.matchAll(kwRe)];
@@ -149,7 +149,7 @@ export function parseQuote(text: string): Quote & { city: string | null } {
     panelLine.match(/\d{3}\s*wp?\s*(?:x|×)\s*(\d{1,2})/i) ??
     panelLine.match(/(\d{1,2})\s*nos/i);
   const invLine = lines.find((l) => /inverter/i.test(l)) ?? "";
-  const invKw = invLine.match(/(\d+(?:\.\d+)?)\s*kw/i);
+  const invKw = invLine.match(/(?<![\d.])(\d{1,3}(?:\.\d{1,2})?)\s*kw/i);
   const invWarr = (invLine.match(/(\d{1,2})\s*years?/i) ?? lines.find((l) => /inverter warranty/i.test(l))?.match(/(\d{1,2})\s*years?/i)) ?? null;
   const brand = invLine.match(/brand:?\s*([A-Za-z][\w-]+)/i);
 
@@ -167,13 +167,13 @@ export function parseQuote(text: string): Quote & { city: string | null } {
   const perf = t.match(/performance warranty\s*(\d{1,2})/) ?? t.match(/(\d{1,2})\s*years? performance/);
   const sys =
     t.match(/(\d{1,2})\s*years? comprehensive/) ??
-    t.match(/system warranty\s*[:\-]?\s*(\d{1,2})/) ??
+    t.match(/system warranty\s*[:-]?\s*(\d{1,2})/) ??
     t.match(/workmanship warranty\s*(\d{1,2})/) ??
     t.match(/(\d{1,2})\s*years? (?:of )?o&m/);
 
-  const totals = [...text.matchAll(new RegExp(`(?:grand total|total project cost|total amount|total)[^\\n]*?(?:rs\\.?|₹)\\s*([\\d,]{5,})`, "gi"))].map((m) => toNum(m[1]) ?? 0);
-  const gst = t.match(/gst\s*@?\s*(\d+(?:\.\d+)?)\s*%/);
-  const adv = t.match(/(\d{1,3})\s*%\s*(?:advance|booking)/) ?? t.match(/advance\s*[:\-]?\s*(\d{1,3})\s*%/);
+  const totals = [...text.matchAll(new RegExp(`(?:grand total|total project cost|total amount|total)[^\\n]{0,80}?(?:rs\\.?|₹)\\s*([\\d,]{5,12})`, "gi"))].map((m) => toNum(m[1]) ?? 0);
+  const gst = t.match(/gst\s*@?\s*(\d{1,2}(?:\.\d{1,2})?)\s*%/);
+  const adv = t.match(/(\d{1,3})\s*%\s*(?:advance|booking)/) ?? t.match(/advance\s*[:-]?\s*(\d{1,3})\s*%/);
 
   const laLine = lines.find((l) => /lightning arrester/i.test(l) || /\bLA\b/.test(l)) ?? "";
   const nmLine = lines.find((l) => /net meter/i.test(l)) ?? "";

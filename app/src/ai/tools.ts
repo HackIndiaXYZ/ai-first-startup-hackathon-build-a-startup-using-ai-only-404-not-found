@@ -8,6 +8,7 @@ import { auditBill, EMPTY_BILL, type SolarBill } from "../engine/billAudit";
 import { CITIES, climateFromCity, searchCities } from "../engine/climate";
 import { loanPlan } from "../engine/finance";
 import { rupees } from "../engine/format";
+import { fairPriceBand } from "../engine/pricing";
 import { monthlyEnergy, specificYield, type Shading } from "../engine/pv";
 import { auditQuote, EMPTY_QUOTE, type Quote } from "../engine/quoteAudit";
 import { buildReport } from "../engine/report";
@@ -141,13 +142,20 @@ type Args = Record<string, unknown>;
 const n = (v: unknown): number | null => (typeof v === "number" && Number.isFinite(v) ? v : null);
 const s = (v: unknown): string | null => (typeof v === "string" && v.trim() ? v : null);
 const b = (v: unknown): boolean | null => (typeof v === "boolean" ? v : null);
+/** A finite number inside [lo, hi], else null. */
+const inRange = (v: unknown, lo: number, hi: number): number | null => {
+  const x = n(v);
+  return x !== null && x >= lo && x <= hi ? x : null;
+};
+/** User text echoed in an error, never "[object Object]" or a novel. */
+const echo = (v: unknown) => (typeof v === "string" ? v.slice(0, 40) : "");
 
 export function runTool(name: ToolName | string, args: Args): ToolResult {
   try {
     switch (name) {
       case "get_irradiance": {
         const c = findCity(String(args.city ?? ""));
-        if (!c) return { ok: false, summary: `No data for "${args.city}". Known cities include ${CITIES.slice(0, 12).map((x) => x.name).join(", ")}.` };
+        if (!c) return { ok: false, summary: `No data for "${echo(args.city)}". Known cities include ${CITIES.slice(0, 12).map((x) => x.name).join(", ")}.` };
         const clim = climateFromCity(c);
         const sy = specificYield(clim);
         const ann = c.ghi.reduce((a, g) => a + g, 0) / 12;
@@ -161,9 +169,9 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
       }
       case "size_system": {
         const c = findCity(String(args.city ?? ""));
-        if (!c) return { ok: false, summary: `Unknown city "${args.city}".` };
-        const units = n(args.monthly_units);
-        if (!units || units <= 0) return { ok: false, summary: "Need monthly units (kWh) from a bill." };
+        if (!c) return { ok: false, summary: `Unknown city "${echo(args.city)}".` };
+        const units = inRange(args.monthly_units, 1, 100000);
+        if (!units) return { ok: false, summary: "Need monthly units (kWh) from a bill, between 1 and 1,00,000." };
         const month = Math.min(12, Math.max(1, Math.round(n(args.bill_month) ?? new Date().getMonth() + 1))) - 1;
         const shading = (["none", "some", "heavy"].includes(String(args.shading)) ? args.shading : "none") as Shading;
         const r = buildReport({
@@ -171,10 +179,10 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
           units,
           billMonth: month,
           periodMonths: 1,
-          tariff: n(args.tariff) ?? undefined,
-          roofAreaSqft: n(args.roof_area_sqft) ?? 800,
+          tariff: inRange(args.tariff, 1, 30) ?? undefined,
+          roofAreaSqft: inRange(args.roof_area_sqft, 100, 20000) ?? 800,
           shading,
-          overridePanels: n(args.panels) ?? undefined,
+          overridePanels: inRange(args.panels, 2, 200) !== null ? Math.round(n(args.panels)!) : undefined,
         });
         return {
           ok: true,
@@ -201,7 +209,7 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
         };
       }
       case "compute_subsidy": {
-        const kw = n(args.kw) ?? 0;
+        const kw = inRange(args.kw, 0, 1000) ?? 0;
         const st = stateInfo(stateCodeOf(s(args.state_code)));
         const sb = subsidyFor(kw, st);
         return {
@@ -211,8 +219,8 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
         };
       }
       case "finance_options": {
-        const gross = n(args.gross_cost) ?? 0;
-        const kw = n(args.kw) ?? 3;
+        const kw = inRange(args.kw, 0.5, 1000) ?? 3;
+        const gross = inRange(args.gross_cost, 1, 1e8) ?? fairPriceBand(kw).mid;
         const st = stateInfo(stateCodeOf(s(args.state_code)));
         const sb = subsidyFor(kw, st);
         const l = loanPlan(gross, sb.total, kw);
@@ -238,7 +246,7 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
           inverterBrand: s(args.inverter_brand),
           inverterKw: n(args.inverter_kw),
           inverterWarrantyYears: n(args.inverter_warranty_years),
-          structure: (s(args.structure) as Quote["structure"]) ?? "unknown",
+          structure: (["hdg", "zam", "aluminium", "ms-painted"].includes(String(args.structure)) ? args.structure : "unknown") as Quote["structure"],
           panelProductWarrantyYears: n(args.panel_product_warranty_years),
           panelPerformanceYears: n(args.panel_performance_years),
           systemWarrantyYears: n(args.system_warranty_years),
@@ -261,7 +269,7 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
       }
       case "audit_bill": {
         const c = findCity(String(args.city ?? "")) ?? CITIES[0];
-        const kwp = n(args.system_kwp) ?? 3;
+        const kwp = inRange(args.system_kwp, 0.5, 1000) ?? 3;
         const month = Math.min(12, Math.max(1, Math.round(n(args.bill_month) ?? 1))) - 1;
         const gen = monthlyEnergy(climateFromCity(c), kwp)[month];
         const bill: SolarBill = {

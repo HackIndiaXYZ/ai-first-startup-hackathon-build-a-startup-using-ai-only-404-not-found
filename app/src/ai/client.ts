@@ -80,7 +80,6 @@ async function fileToBase64(file: Blob): Promise<string> {
 
 /** Downscale photos so uploads stay under serverless body limits. */
 async function shrinkImage(file: File, max = 1800): Promise<Blob> {
-  if (!file.type.startsWith("image/")) return file;
   const bmp = await createImageBitmap(file);
   const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
   const c = document.createElement("canvas");
@@ -132,15 +131,15 @@ type Parsed<K extends ExtractKind> = K extends "quote" ? ReturnType<typeof parse
 function fromServer(kind: ExtractKind, f: Record<string, unknown>) {
   const camel = (s: string) => s.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase());
   const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(f)) out[camel(k)] = v;
+  // Nulls are left out so a field the on-device parser found isn't erased.
+  for (const [k, v] of Object.entries(f)) if (v !== null && v !== undefined) out[camel(k)] = v;
   if (kind === "bill") {
-    out.billMonth = typeof f.bill_month === "number" ? (f.bill_month as number) - 1 : null;
-    out.periodMonths = f.period_months === 2 ? 2 : 1;
-    out.tariff = typeof f.energy_charges === "number" && typeof f.units === "number" && f.units ? Math.round(((f.energy_charges as number) / (f.units as number)) * 100) / 100 : null;
-    out.billAmount = f.bill_amount ?? null;
+    if (f.period_months === 1 || f.period_months === 2) out.periodMonths = f.period_months;
+    if (typeof f.energy_charges === "number" && typeof f.units === "number" && f.units > 0) out.tariff = Math.round((f.energy_charges / f.units) * 100) / 100;
   }
-  if (kind === "solar-bill") out.billMonth = typeof f.bill_month === "number" ? (f.bill_month as number) - 1 : null;
-  if (kind === "quote") out.stateCode = f.state_code ?? null;
+  delete out.billMonth;
+  if (typeof f.bill_month === "number" && f.bill_month >= 1 && f.bill_month <= 12) out.billMonth = Math.round(f.bill_month) - 1;
+  if (typeof out.stateCode === "string") out.stateCode = out.stateCode.toUpperCase();
   return out;
 }
 
@@ -162,12 +161,17 @@ export async function extractText<K extends ExtractKind>(kind: K, text: string):
 }
 
 export async function extractFile<K extends ExtractKind>(kind: K, file: File, onProgress?: (p: ExtractProgress) => void): Promise<ExtractResult<Parsed<K>>> {
+  if (file.type.startsWith("text/") || /\.txt$/i.test(file.name)) return extractText(kind, await file.text());
+  const isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+  if (!isPdf && !file.type.startsWith("image/") && !/\.(jpe?g|png|webp|gif|bmp)$/i.test(file.name)) {
+    throw new Error("Chhat reads photos (JPG, PNG), PDFs and text files.");
+  }
   const mode = await detectMode();
   if (mode === "live") {
     try {
       onProgress?.({ stage: "Reading with Claude" });
-      const blob = await shrinkImage(file);
-      const mediaType = file.type === "application/pdf" ? "application/pdf" : blob.type || "image/jpeg";
+      const blob = isPdf ? file : await shrinkImage(file);
+      const mediaType = isPdf ? "application/pdf" : blob.type || "image/jpeg";
       const res = await fetch("./api/extract", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -182,14 +186,10 @@ export async function extractFile<K extends ExtractKind>(kind: K, file: File, on
       /* on-device below */
     }
   }
-  if (file.type === "application/pdf") {
+  if (isPdf) {
     onProgress?.({ stage: "Reading PDF text on your device" });
     const text = await pdfText(file);
     return { fields: parseFor(kind, text) as Parsed<K>, mode: "local", method: "pdf-text", rawText: text };
-  }
-  if (file.type.startsWith("text/")) {
-    const text = await file.text();
-    return { fields: parseFor(kind, text) as Parsed<K>, mode: "local", method: "text-rules", rawText: text };
   }
   onProgress?.({ stage: "Loading on-device OCR" });
   const text = await ocrImage(file, onProgress);

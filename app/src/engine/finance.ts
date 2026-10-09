@@ -64,6 +64,7 @@ export function cashFlows(inp: CashFlowInput): YearRow[] {
 
 /** Years until cumulative cash flow turns positive, interpolated. */
 export function paybackYears(rows: YearRow[]): number | null {
+  if (rows.length && rows[0].cumulative >= 0) return 0;
   for (let i = 1; i < rows.length; i++) {
     if (rows[i].cumulative >= 0) {
       const prev = rows[i - 1].cumulative;
