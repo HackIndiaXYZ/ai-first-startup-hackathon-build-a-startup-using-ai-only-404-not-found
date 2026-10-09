@@ -1,0 +1,220 @@
+.built-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-3);
+  overflow: hidden;
+  padding: 0;
+}
+.built-stats .stat {
+  background: var(--surface);
+  padding: 20px;
+}
+.built-stats .stat__value {
+  font-size: clamp(1.6rem, 1rem + 1.6vw, 2.6rem);
+}
+@media (max-width: 900px) {
+  .built-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.built-section {
+  margin-top: var(--space-8);
+}
+.section-h {
+  font-size: var(--step-2);
+  letter-spacing: -0.035em;
+  margin-bottom: var(--space-5);
+}
+.stages {
+  display: grid;
+  border-top: 1px solid var(--line-2);
+}
+.stage-row {
+  display: grid;
+  grid-template-columns: 48px 150px 1.6fr 1fr 220px;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line-2);
+  align-items: start;
+}
+.stage-row__n {
+  color: var(--text-3);
+  padding-top: 3px;
+}
+.stage-row__k {
+  font-size: var(--step-1);
+  letter-spacing: -0.02em;
+}
+.stage-row__ai,
+.stage-row__human {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+.stage-row__ai svg {
+  color: var(--neel);
+  margin-top: 3px;
+}
+.stage-row__human {
+  color: var(--text-3);
+}
+.stage-row__human svg {
+  margin-top: 3px;
+}
+.stage-row__doc {
+  font-size: 12px;
+  color: var(--neel);
+  text-decoration: none;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  word-break: break-all;
+}
+@media (max-width: 1000px) {
+  .stage-row {
+    grid-template-columns: 40px 1fr;
+  }
+  .stage-row__ai,
+  .stage-row__human,
+  .stage-row__doc {
+    grid-column: 2;
+  }
+}
+.built-two {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: var(--space-7);
+}
+.built-two > div {
+  min-width: 0;
+}
+@media (max-width: 1000px) {
+  .built-two {
+    grid-template-columns: 1fr;
+  }
+}
+.arch {
+  margin: 0 0 12px;
+  padding: 16px;
+  border-radius: var(--radius-3);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.arch svg {
+  width: 100%;
+  height: auto;
+}
+.arch__box rect {
+  fill: var(--paper-2);
+  stroke: var(--line-2);
+}
+.arch__box text {
+  text-anchor: middle;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 15px;
+  fill: var(--ink);
+}
+.arch__box--ink rect {
+  fill: var(--ink);
+  stroke: none;
+}
+.arch__box--ink text {
+  fill: var(--paper);
+}
+.arch__box--haldi rect {
+  fill: var(--haldi-soft);
+  stroke: var(--haldi-2);
+}
+.arch__sub {
+  font-family: var(--font-mono) !important;
+  font-weight: 400 !important;
+  font-size: 11px !important;
+  fill: var(--text-2) !important;
+}
+.arch__sub--inv {
+  fill: oklch(1 0 0 / 0.7) !important;
+}
+.arch__line {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
+.arch__note {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  fill: var(--text-3);
+  text-anchor: middle;
+}
+.toollist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.toollist li {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2);
+  background: var(--surface);
+}
+.toollist code {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--neel-2);
+}
+.toollist p {
+  font-size: 13.5px;
+  color: var(--text-2);
+  margin-top: 4px;
+}
+.prompt {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  padding: 18px;
+  border-radius: var(--radius-3);
+  background: var(--ink);
+  color: oklch(1 0 0 / 0.86);
+  max-height: 460px;
+  overflow: auto;
+  margin: 0 0 12px;
+}
+.prompt--sys {
+  background: var(--neel-soft);
+  color: var(--ink);
+}
+.commits {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 2px;
+}
+.commits li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.commits svg {
+  color: var(--neel);
+  margin-top: 2px;
+}
+.commits__s {
+  font-weight: 600;
+}
+.commits__m {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
