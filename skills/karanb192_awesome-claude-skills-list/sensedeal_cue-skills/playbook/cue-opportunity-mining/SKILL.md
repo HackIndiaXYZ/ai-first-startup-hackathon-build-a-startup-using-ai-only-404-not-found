@@ -1,0 +1,55 @@
+---
+name: cue-opportunity-mining
+description: >
+  用 Cue 跑「商机挖掘」场景的深度研究：多源公开数据交叉、结论带来源。
+  Run Cue deep research for the "Opportunity Mining" scenario.
+  触发 Triggers: 商机挖掘、企业尽调、产业链与研报 / business opportunity mining, lead generation
+license: MIT
+metadata:
+  source: cuecue.cn/playbook
+  scene: "商机挖掘"
+  generated_from: /api/playbook
+---
+
+# Cue「商机挖掘」研究 skill
+
+加载本 skill 后，你可以用 Cue 跑这个场景的深度研究（多源公开数据交叉、结论带来源链接）。
+
+## 何时用
+商机挖掘：企业尽调、产业链与研报、全网检索。
+
+## 当前可用搭子（仅供理解；运行时以 live 为准）
+  - 高管股权激励解禁日历：跟着解禁日历做业务。提前预测哪些上市公司高管即将获得股票解禁，为理财师提供精准的资金周转介入时机，抢占流动性窗口。
+  - 区域优质企业名录：全量采集指定区域的优质企业名录（专精特新、高新、独角兽等资质），消除「待核实」空白，产出可用于招商与营销的名录及产业分析
+  - 招投标数据全景扫描：销售线索挖掘利器。基于内外双擎数据源，全量扫描特定业务的招标与中标情报。自动规避数据截断，分离正在招标与已结束项目，提供
+  - 对公拜访简报：扫描目标企业的工商、招投标、经营事件与司法舆情，推断潜在金融需求，产出出门前可用的拜访简报。
+  - 对公揽储商机线索：扫描区域内大额资金流动的前置信号（辅导备案、首发过会、分红预案等），锁定募资户、派息户与代发源头，产出可派单的揽储商机清
+  - 项目线索穿透与BD策略：穿透项目线索表象，还原商业实质与交易结构，锁定实质运营主体并深挖股权与资本动态，识别知识产权、跨境合规及国资合作等法律痛
+  - 创新药出海情报：以交易所、企业和监管官方信息核验创新药出海BD事实；用户点名单一资产或交易时只核验该交易，不扩展候选、推荐或预测。
+  - 对公客户动态雷达：扫一遍存量对公客户名单，捕捉中标、扩产、融资、被执行与舆情等公开动态，挑出今天有变化的、值得优先跟进。
+
+## 准备 Cue runner（首次用时，幂等）
+本 skill 不自带脚本，靠 Cue 开源 runner 跑研究。先确认 runner 是否就绪：
+- 若你已安装 `cue-skills`（或本 skill 来自整包发布）→ 直接用其中的 `cue-research/scripts/research_run.py`，**跳过本节**。
+- 否则克隆开源仓（拿到自包含的 cue-research runner；整仓克隆最省事），**有则更新、无则克隆**（GitHub 不通走镜像）：
+  ```bash
+  if [ -d ~/.cue/cue-skills/.git ]; then
+    git -C ~/.cue/cue-skills pull --ff-only
+  else
+    git clone https://github.com/sensedeal/cue-skills ~/.cue/cue-skills \
+      || git clone https://gitee.com/sensedeal/cue-skills ~/.cue/cue-skills
+  fi
+  ```
+  之后 runner = `~/.cue/cue-skills/cue-research/scripts/research_run.py`。需 `git` + `python3`（runner 仅用标准库）。
+
+## 怎么跑（搭子是动态的，运行时查 live）
+1. **拉本场景当前搭子**：`GET https://cuecue.cn/api/playbook`，找 `secondary_category == "商机挖掘"` 的 scene，读 `buddies[]`（每个有 `template_id`/`title`/`goal`）。若该场景当前不在返回里（临时未达展示门槛）→ 告知用户暂不可用。
+2. **选一个搭子**：**委托 cue-research 的匹配逻辑**（其 `+match`/Stage-2：对 `goal` 做语义匹配、把用户的具体主体从匹配中剥离、弱命中先列 ≤2 候选确认）——不要只按字面 title 关键词裸选。取选中搭子的 `template_id`。
+3. **确认 credits（强制）**：跑深度研究消耗 credits。运行前显式问用户「将用搭子 X 跑【主体】，耗 credits，是否继续？」并等确认。
+4. **跑**：`python3 ~/.cue/cue-skills/cue-research/scripts/research_run.py --query "<用户主体/问题>" --template-id <template_id>`（用上一节就绪的 runner 路径；已装 cue-skills 则用你本地的 `cue-research/scripts/research_run.py`）。深度研究 3–15 分钟；长跑 live 流常不带报告段，用 replay 取最终报告。 读 runner 末行 `RESULT ok|empty`：`empty` → 告知用户本次未取到内容、可换主体/搭子重试，**不要编造**。
+5. **回报**：把带来源链接的报告交给用户，不去掉来源、不杜撰。
+
+## 前置
+- Cue 账号 API key（cue CLI 登录后在 `~/.cue/config.json`，runner 自动读）；新账号赠送积分（注册 500 + 每天 10），可先用赠送额度试。
+- `git` + `python3`（自举 runner 用；runner 仅标准库）。
+- 跑深度研究**消耗 credits**；只覆盖公开数据，不替代尽调/法律/核保。

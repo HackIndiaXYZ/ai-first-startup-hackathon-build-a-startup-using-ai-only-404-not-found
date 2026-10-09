@@ -1,0 +1,219 @@
+---
+name: academic-pptx
+description: "Use this skill whenever the user wants to create or improve a presentation for an academic context — conference papers, seminar talks, thesis defenses, grant briefings, lab meetings, invited lectures, or any presentation where the audience will evaluate reasoning and evidence. Triggers include: 'conference talk', 'seminar slides', 'thesis defense', 'research presentation', 'academic deck', 'academic presentation'. Also triggers when the user asks to 'make slides' in combination with academic content (e.g., 'make slides for my paper on X', 'create a presentation for my dissertation defense', 'build a deck for my grant proposal'). This skill governs CONTENT and STRUCTURE decisions. For the technical work of creating or editing the .pptx file itself, also read the pptx SKILL.md."
+license: Proprietary. LICENSE.txt has complete terms
+---
+
+# Academic Presentations Skill
+
+## How This Skill Works
+
+This skill has two layers:
+
+1. **This file** — governs content, argument structure, and design standards for academic presentations. Read it fully before planning any slides.
+2. **PPTX skill** — governs the technical implementation (creating, editing, and QA-ing the .pptx file). Read it too.
+
+**Always read both before writing any code or creating any files.**
+
+---
+
+## Quick Reference
+
+| Task | Guide |
+|------|-------|
+| Content planning, argument structure, slide-by-slide rules | [content_guidelines.md](content_guidelines.md) |
+| Per-slide-type patterns (title, methods, results, etc.) | [slide_patterns.md](slide_patterns.md) |
+| Technical creation from scratch | PPTX skill → `pptxgenjs.md` |
+| Technical editing of an existing file | PPTX skill → `editing.md` |
+
+---
+
+## Step 0: Commit to a look first
+
+Before Step 1's presentation-type decision, and before drafting any content,
+answer three questions out loud (with the user, if they're available) and
+write the answers down:
+
+1. **What must the audience see in 5 seconds?** If a slide were flashed for
+   five seconds, what single fact or number should register? If you can't
+   answer this for the deck's key slide, the argument isn't sharp enough yet
+   to start building.
+2. **Venue and duration?** Is this a journal-editorial briefing, a thesis
+   defense, a 45-minute seminar, a 15-minute conference talk, a teaching
+   session, or a poster-session conversation aid — and how many minutes do
+   you actually have?
+3. **Will it survive a projector at 60% brightness?** Most conference rooms
+   and lecture halls run house lights partially up and projectors well below
+   their rated brightness. A palette or contrast ratio that looks crisp on a
+   laptop screen can wash out badly under those conditions.
+
+Answering (2) determines which of the six style specifications in
+[references/academic-style-catalog.md](references/academic-style-catalog.md)
+applies — that file gives each style's type scale, layout grid, density
+limits, Okabe-Ito-compatible color set, and explicit no-gos, plus a
+three-question audience/duration/occasion flow for narrowing to a style when
+the venue isn't already obvious. Read it now, before Step 1, and commit to
+one style; Step 3's design standards below are the shared baseline every
+style in that catalog builds on, not a substitute for choosing one.
+
+---
+
+## Step 1: Identify Presentation Type
+
+Before planning a single slide, determine which mode applies.
+
+### Structured Argument (default for academic work)
+
+Use for: conference papers, seminar talks, thesis defenses, dissertation chapters, grant briefings, internal lab presentations, policy briefings, consulting-style research deliverables.
+
+**Priority order: argument structure → data → layout → aesthetics.**
+
+Follow [content_guidelines.md](content_guidelines.md) in full.
+
+### Visual / Narrative
+
+Use for: public engagement talks, science communication to non-specialist audiences, funding pitches to lay panels, event keynotes.
+
+Follow the PPTX skill's design-forward guidelines. Argument structure still matters, but visual storytelling and emotional engagement take priority.
+
+### When in doubt
+
+Default to **Structured Argument**. If the user mentions a paper, a study, a dataset, a thesis, a grant, or a conference, they almost certainly want structured argument mode.
+
+---
+
+## Step 2: Plan the Deck Before Creating Any Slides
+
+Produce a slide-by-slide outline (title, action title, exhibit type) and confirm with the user if the deck is more than 10 slides or if the content is complex. Do not start building until the outline is agreed.
+
+Use the ghost deck test during planning: read only the proposed action titles in sequence. They must tell the complete argument. If they don't, fix the outline before building.
+
+---
+
+## Step 3: Apply Design Standards
+
+Academic presentations use **communication-first design**. These rules override the PPTX skill's design-forward defaults.
+
+### Color
+
+- White background for all content slides.
+- One sans-serif font throughout (Arial, Calibri, or Helvetica — confirm with user or match their institution's template if provided).
+- Maximum three colors: one primary, one accent, one for emphasis or alerts. Default: dark navy primary (`1F4E79`), mid-blue accent (`2E75B6`), white or off-white background.
+- No decorative color gradients, no themed color palettes unless the user explicitly requests them.
+- Use color to **direct attention** — highlight the key finding on a chart, mark a callout box — not for decoration.
+
+### Typography
+
+| Element | Size | Weight |
+|---------|------|--------|
+| Action title | 24–28 pt | Bold |
+| Section header | 20–22 pt | Bold |
+| Body bullets | 20 pt | Regular |
+| Chart labels / annotations | 16–18 pt | Regular |
+| Source citations on slides | 12–14 pt | Regular, muted color |
+
+Single font face. Use size and weight for hierarchy — never multiple typefaces.
+
+### Layout
+
+- Left-align all body text. Center only slide titles and axis labels.
+- Consistent grid: all text boxes and figures align to the same margins (minimum 0.5" from slide edges).
+- For result slides: figure on the left, interpretive bullets on the right. This matches natural left-to-right reading.
+- White space is a signal of analytical clarity — do not fill every inch.
+- 16:9 widescreen is the default. Confirm with the user if they know the venue's aspect ratio.
+
+### Avoid (Academic-Specific)
+
+- **No decorative icons** — icons in colored circles, stock images, clip art are inappropriate for analytical academic presentations.
+- **No accent lines under titles** — use whitespace instead.
+- **No color palettes chosen for aesthetic interest** — use institution colors or the minimal defaults above.
+- **No full-bleed background images on content slides** — reserve for title/section dividers only if desired.
+- **No text-heavy slides** — if the audience is reading, they are not listening. Maximum ~40 words of body text per content slide.
+
+---
+
+## Step 4: Build and QA
+
+Follow the PPTX skill's QA procedure in full, including:
+- Content QA via `markitdown`
+- Visual QA via slide images (subagents if available)
+- Fix-and-verify loop until a full pass reveals no new issues
+
+**Before choosing a build path, check whether this deck needs native `.pptx`
+object-level work** — matching an institutional template's exact theme,
+editing specific slides of an existing file in place, producing charts or
+tables the user can keep editing natively in PowerPoint, or inserting
+mathematical notation. If so, read
+[references/native-pptx-workflows.md](references/native-pptx-workflows.md)
+first: it documents the `python-pptx`-based path for each of those four
+cases and states plainly what each one can and cannot guarantee (in
+particular, native in-place editing of an existing file cannot guarantee
+untouched slides are byte-identical after save — only that their content and
+layout are unchanged). Building from scratch with no template and no native
+object requirements can proceed directly with the base PPTX skill's
+`pptxgenjs.md` path as before.
+
+**Additionally, run the academic-specific checks:**
+
+```
+Academic QA checklist:
+□ Every content slide has an action title (complete sentence stating the takeaway)
+□ Ghost deck test passes (action titles alone tell the full argument)
+□ One exhibit per results slide; each exhibit has a "so what" annotation
+□ Every borrowed figure or data point has an in-slide citation
+□ A References slide exists at the end
+□ Conclusions slide is the last non-appendix slide (not "Thank You" or a blank)
+□ Contact information and/or QR code/link on the final slide
+□ Font sizes are readable from the back of a room (≥ 20 pt body text)
+□ No decorative elements that don't carry content
+□ Section dividers or breadcrumb bar present for decks > 15 slides
+```
+
+---
+
+## Key Principles (Summary)
+
+**Action titles, not topic labels.** Every slide title is a complete sentence stating the takeaway. Reading titles alone should tell the whole argument (ghost deck test).
+
+**One argument, made well.** Don't present your whole paper. Pick the claim that can be made convincingly in the allotted time. Everything else goes in the appendix.
+
+**One insight per slide.** One exhibit per results slide. Highlight the key finding directly on the chart — don't make the audience hunt for it.
+
+**Slides support speech; they don't replace it.** Body text is for orientation, not information transfer. The presenter carries the argument; the slide carries the evidence.
+
+**Cite everything borrowed.** Academic integrity applies to slides. In-text citations on the slide, full references on the References slide.
+
+**End on conclusions.** The conclusions slide stays on screen during Q&A. Never end on "Thank You" or a blank slide.
+
+---
+
+## Further Reading
+
+The design standards above are not this skill's inventions — they consolidate established
+guidance from the academic-presentation literature. These are the primary sources, and
+all of them are **freely accessible**, so you can check any rule against its origin:
+
+- **Naegle, K. M. (2021). Ten simple rules for effective presentation slides.**
+  *PLOS Computational Biology, 17*(12), e1009554.
+  <https://doi.org/10.1371/journal.pcbi.1009554> — Open access. The most widely cited
+  practical checklist in this area. The one-idea-per-slide rule and the figure-legibility
+  thresholds in Step 3 follow it directly.
+- **Minto, B. *The Pyramid Principle*.** The structured-argument format in Step 1 is an
+  adaptation of Minto's top-down structure (answer first, then supporting argument) to
+  conference-talk length.
+- **Purdue OWL — Conference Presentations** (<https://owl.purdue.edu/>) and university
+  graduate-advising guides (Chicago, Hull) cover timing and audience calibration, which
+  this skill deliberately leaves to the speaker.
+
+> A note on why these are cited rather than bundled: guidance documents circulated by
+> individual scholars are usually **all rights reserved** unless they carry an explicit
+> licence. Citing them is always permitted; redistributing them is not. If you find a
+> compilation you like, link to it — do not copy it into your own repository.
+
+## Dependencies
+
+Same as PPTX skill:
+- `pip install "markitdown[pptx]"` — text extraction
+- `npm install -g pptxgenjs` — creating from scratch
+- LibreOffice (`soffice`) — PDF conversion
+- Poppler (`pdftoppm`) — PDF to images

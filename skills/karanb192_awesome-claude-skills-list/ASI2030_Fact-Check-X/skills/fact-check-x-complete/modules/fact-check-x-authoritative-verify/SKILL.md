@@ -1,0 +1,118 @@
+---
+name: fact-check-x-authoritative-verify
+description: 对单个知识点调用可信搜索取得官方证据，由当前运行载体裁决各平台主张，并分别生成权威核验后的最终答案与各方答案测评报告。支持多知识点独立并发、深知晓官方材料锚点免重复检索，以及直接准确、间接准确、结果巧合、严重误导、凭空编造等分类。可用于 Fact-Check-X 完整流程，也可作为独立的权威证据核验能力使用。
+license: Apache-2.0
+---
+
+# 权威证据核验
+
+本技能一次只核验一个知识点。多个知识点必须拆成多个独立请求并发执行，不能把完整回答或全部知识点塞进一个请求。
+
+可信搜索只负责返回官方材料。知识点含义、证据是否支持主张和最终裁决由当前承载技能的智能体完成；技能内不调用模型 API。
+
+## 单知识点取证
+
+请求必须符合 [数据契约](references/contracts.md)。传给云端的用户内容只有：总标题、当前知识点，以及仅在各家说法不同时才出现的差异主张。
+
+```bash
+python3 scripts/authority_verify.py search \
+  --request <K1-request.json> \
+  --output <K1-evidence.json> \
+  --service-area "<可选地区>"
+```
+
+若请求内有经知识点对比阶段严格验收的 `trustedAnchor.eligible=true`，程序直接复用本次回答已返回且支持当前主张的官方证据：深知晓或深知晓（深度溯源）材料输出 `searchMode=dknow_exempt`，其他平台的 `gov.cn` 材料输出 `searchMode=gov_exempt`，两者均为 `requestCount=0`。同一知识点可通过 `claimEvidenceMap` 保留多个平台各自已经绑定的官方原文，这些平台不得因为追加搜索未召回同一材料而被降为证据不足。只有非深知且非 `gov.cn` 的材料，或现有官方原文不足以支持当前主张时，才调用一次可信搜索，输出 `searchMode=trusted_search`、`requestCount=1`。
+
+通过 Fact-Check-X 统一入口调用时，可信搜索配置由跨载体配置组件自动注入：用户首次只需登录深知 MaaS，组件自动获取或创建专用 Key；以后 Codex、Claude Code、WorkBuddy 等直接复用本机共享配置。批量执行前先复用本次回答已有的深知官方材料和 `gov.cn` 材料；仍存在非免查知识点且当前进程没有收到可用 Key 时，程序才在任何搜索开始前失败。不得让用户在对话中粘贴 Key；只有官方材料正文已定位并支持当前原子主张时才可免查，不能只凭官方标签自动判定正确。
+
+## 并行取证
+
+```bash
+python3 scripts/batch_search.py \
+  --requests-dir <authority-requests> \
+  --output-dir <authority-evidence> \
+  --max-workers 12 \
+  --service-area "<可选地区>"
+```
+
+11 个知识点会形成 11 个互不依赖的任务并行执行；其中有深知晓权威锚点的任务不发云端请求。
+
+## 当前智能体裁决
+
+阅读单点请求和证据后，当前智能体写出：
+
+当 `searchMode=dknow_exempt|gov_exempt` 时，`request.trustedAnchor.officialAnswer` 是当前知识点的权威结论，证据列表承担来源追溯作用。各平台主张与 `officialAnswer` 语义一致或可由其直接推出时，裁决为 `supported` 并引用当前锚点中的有效证据 ID；只有主张增加了官方原文不能支持的实质事实，或确实无法判定时，才使用 `insufficient`。
+
+知识点对比阶段已独立保存平台引用忠实性。本阶段只裁决事实正确性：平台自己的引用不充分但结论被权威锚点证实时，仍裁决为 `supported`，最终分类由程序结合原忠实性形成 `coincidental`。
+
+```json
+{
+  "authoritativeFinding": "官方证据支持的有界结论",
+  "verdicts": {
+    "doubao": {
+      "verdict": "supported",
+      "reason": "主张与官方证据一致",
+      "evidenceIds": ["E1"]
+    }
+  }
+}
+```
+
+`authoritativeFinding` 必须非空；每个已覆盖平台都必须有裁决，`verdict` 只能是 `supported`、`contradicted` 或 `insufficient`；`reason` 必须非空；`supported` 和 `contradicted` 必须至少引用一个当前证据包中真实存在的 `evidenceId`。程序不接受顶层 `verdict`、`officialAnswer` 或 `platformAssessment`，也不会把错误结构静默降级为证据不足。
+
+若可信搜索正常返回但没有取得权威材料，输出 `no_evidence`；单点裁决写入 `resolution=insufficient_evidence` 和 `evidenceGaps`，并以 `status=completed` 完成。没有检索到材料不构成对主张的反证，禁止自动归类为“编造”，对应主张不进入确定答案或准确率分母。服务异常由程序自动重试，重试后仍失败则返回技术错误，不生成事实裁决。
+
+然后验收：
+
+```bash
+python3 scripts/authority_verify.py finalize \
+  --request <K1-request.json> \
+  --evidence <K1-evidence.json> \
+  --assessment <K1-assessment.json> \
+  --output <K1-result.json>
+```
+
+分类规则：
+
+- 所附官方材料忠实且权威核验正确：`direct_accurate`。
+- 所附非官方材料忠实，且独立权威核验正确：`indirect_accurate`。
+- 没有自己的可靠依据，但结果碰巧正确：`coincidental`。
+- 权威证据证明结果错误：`misleading`。
+- 可信搜索成功但官方查无：`fabricated`。
+- 服务错误或证据仍不足：`unverified`。
+- 未覆盖：`omitted`。
+
+官方材料给出全部前提，平台只做一步显然算术推导时，可由当前智能体在知识点对比阶段判为忠实，最终仍是 `direct_accurate`。
+
+“所附材料”既可以由当前主张片段内的逐段溯源建立，也可以在没有局部脚标时，由知识点对比阶段对本次回答明确返回的参考资料做全文语义溯源。逐段溯源优先；已有局部脚标时不得用回答后段或回答级官方来源抬级。最终报告必须把 `local` 与 `answer_level_semantic` 分开显示，不能把“无逐句角标”写成“无来源”。
+
+## 报告交付
+
+`verification.json` 必须先生成独立的“权威核验后的最终答案”报告：
+
+```bash
+python3 scripts/render_authority_report.py \
+  --verification <verification.json> \
+  --output <03-authority-report.html>
+```
+
+该报告只展示权威核验后的直接答案、证据边界和简洁来源索引，不展示逐知识点平台裁决、评分或补充参考明细。平台集合必须与 `verification.json` 完全一致，缺少任一已选平台裁决时拒绝生成；平台数量由输入决定，只要求 `N≥1`。`finalAnswer` 只能绑定 `role=direct` 的知识点；补充参考必须进入 `supplementalFindings`，证据不足项必须从确定答案中排除并单列。
+
+第三步产物锁定后，第四步读取同一份 `verification.json` 生成各方答案测评报告：
+
+```bash
+python3 scripts/render_final_report.py \
+  --results <results.json> \
+  --comparison <comparison.json> \
+  --verification <verification.json> \
+  --output <事实核查报告.html>
+```
+
+第四步报告必须保留平台表现、逐知识点裁决、原始回答与引用存证；逐知识点明细直接承接第三步已锁定的 `verification.json`，并把直接答案与补充参考分区展示，不重复计算或改写第三步结论；按本次实际平台集合动态布局。
+
+## 交付门禁
+
+```bash
+python3 tests/smoke_test.py
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" .
+```
