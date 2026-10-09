@@ -1,0 +1,6 @@
+# Static deploy of the app. Live AI mode needs the Vercel functions in app/api;
+# on Netlify the app runs fully in on-device mode.
+[build]
+  base = "app"
+  command = "npm ci && npm run build"
+  publish = "dist"

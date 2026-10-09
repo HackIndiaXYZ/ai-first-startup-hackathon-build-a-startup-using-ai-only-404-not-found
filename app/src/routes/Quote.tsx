@@ -222,7 +222,7 @@ export default function Quote() {
                 ]}
               />
             </h2>
-            <div className={`msgbox${lang === "hi" ? " msgbox--hi" : ""}`} data-lenis-prevent>
+            <div className={`msgbox${lang === "hi" ? " msgbox--hi" : ""}`} data-lenis-prevent tabIndex={0} aria-label="Message to the vendor">
               {msg}
             </div>
             <div className="actions" style={{ marginTop: 12 }}>

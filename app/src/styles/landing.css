@@ -50,8 +50,10 @@
   display: flex;
   gap: 14px;
   font-size: 11.5px;
-  color: oklch(1 0 0 / 0.86);
-  text-shadow: 0 1px 6px oklch(0.19 0.03 258 / 0.5);
+  color: #fff;
+  background: oklch(0.19 0.03 258 / 0.72);
+  padding: 6px 12px;
+  border-radius: 999px;
 }
 .story__hud span {
   display: inline-flex;
@@ -534,7 +536,7 @@ button.tool:active {
   border-color: transparent;
 }
 .tool--ask .tool__body {
-  color: oklch(1 0 0 / 0.82);
+  color: #fff;
 }
 .tool--ask .tool__go {
   margin-top: 0;
@@ -570,7 +572,7 @@ button.tool:active {
   font-weight: 600;
 }
 .meter-math__bad {
-  color: var(--sindoor);
+  color: oklch(0.5 0.19 30);
   font-weight: 600;
   text-decoration: line-through;
   text-decoration-thickness: 2px;
@@ -582,7 +584,7 @@ button.tool:active {
 }
 .mini-chat__q {
   justify-self: start;
-  background: oklch(1 0 0 / 0.14);
+  background: var(--neel-2);
   padding: 8px 12px;
   border-radius: 14px;
   font-family: var(--font-deva);
@@ -597,7 +599,7 @@ button.tool:active {
 }
 .mini-chat__t {
   font-size: 11.5px;
-  opacity: 0.75;
+  color: #fff;
 }
 .quick {
   display: grid;
@@ -864,6 +866,10 @@ button.tool:active {
   gap: 18px;
   justify-items: start;
 }
+.built__card .eyebrow,
+.built__card .stat__label {
+  color: var(--text-2);
+}
 .built__stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -887,4 +893,25 @@ button.tool:active {
   font-weight: 700;
   letter-spacing: -0.045em;
   max-width: 16ch;
+}
+@media (max-width: 640px) {
+  .grade-stamp {
+    width: 52px;
+    height: 52px;
+    font-size: 1.8rem;
+    right: 16px;
+    top: 14px;
+    border-width: 2.5px;
+  }
+  .tool--quote .tool__body {
+    padding-right: 0;
+  }
+  .tool--quote .tool__head {
+    padding-right: 60px;
+  }
+}
+@media (min-width: 641px) {
+  .tool--quote .tool__body {
+    padding-right: 84px;
+  }
 }

@@ -213,13 +213,13 @@ export default function BuiltWithAI() {
       <section className="wrap built-section built-two">
         <div>
           <h2 className="section-h">The brief (the human's whole contribution)</h2>
-          <pre className="prompt" data-lenis-prevent>
+          <pre className="prompt" data-lenis-prevent tabIndex={0} aria-label="The brief">
             {PROMPT}
           </pre>
         </div>
         <div>
           <h2 className="section-h">The product's system prompt</h2>
-          <pre className="prompt prompt--sys" data-lenis-prevent>
+          <pre className="prompt prompt--sys" data-lenis-prevent tabIndex={0} aria-label="System prompt">
             {SYSTEM_EXCERPT}
           </pre>
           <p className="muted small">

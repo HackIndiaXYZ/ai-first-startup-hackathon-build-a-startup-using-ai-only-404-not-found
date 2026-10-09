@@ -16,7 +16,7 @@ export function Findings({ items, showOk = true }: { items: Finding[]; showOk?: 
     <ul className="findings">
       {list.map((f) => (
         <li key={f.id} className="finding" data-sev={f.severity}>
-          <span className="finding__icon" aria-label={LABEL[f.severity]}>
+          <span className="finding__icon" role="img" aria-label={LABEL[f.severity]}>
             {ICON[f.severity]}
           </span>
           <div>

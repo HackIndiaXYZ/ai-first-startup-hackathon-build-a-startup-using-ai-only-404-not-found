@@ -262,7 +262,7 @@ export default function Report() {
               <RoofScene state={scene} roof={roof} interactive panelsKey={s.panels} lowPower={low} cameraPosition={[15, 17, 19]} />
             </Suspense>
           ) : (
-            <div className="stage__poster stage__poster--msg">3D view needs WebGL. Every number below still works.</div>
+            <div className="stage__poster stage__poster--msg" style={{ backgroundImage: "linear-gradient(rgba(240,245,249,.75),rgba(240,245,249,.75)), url(./poster.jpg)", backgroundSize: "cover" }}>3D view needs WebGL. Every number below still works.</div>
           )}
           <div className="stage__meter">
             <span className="eyebrow">Output now</span>

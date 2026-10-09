@@ -9,7 +9,8 @@
     "build": "node scripts/build-log.mjs && tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "build:vercel": "npm run build && node scripts/vercel-output.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.1",
@@ -39,6 +40,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "axe-core": "^4.10.2",
     "playwright-core": "^1.64.0",
     "typescript": "^5.6.3",
     "vite": "^6.0.3",

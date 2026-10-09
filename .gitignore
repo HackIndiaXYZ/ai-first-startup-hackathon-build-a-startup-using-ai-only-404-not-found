@@ -5,3 +5,4 @@ app/dist/
 .env
 .env.local
 .vercel
+.vercel/

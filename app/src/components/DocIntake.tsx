@@ -105,7 +105,7 @@ export function DocIntake<K extends ExtractKind>({
               </button>
             ))}
           </div>
-          {sample && <pre className="paper-doc" data-lenis-prevent>{sample.text}</pre>}
+          {sample && <pre className="paper-doc" data-lenis-prevent tabIndex={0} aria-label={`Sample ${noun} text`}>{sample.text}</pre>}
         </Tabs.Content>
 
         <Tabs.Content value="upload" className="intake__pane">

@@ -2,7 +2,7 @@ import * as RSlider from "@radix-ui/react-slider";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CaretDown, Info } from "@phosphor-icons/react";
-import type { ComponentProps, ReactNode } from "react";
+import { createContext, useContext, useId, type ComponentProps, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 type BtnVariant = "primary" | "accent" | "ghost" | "neel";
@@ -19,14 +19,21 @@ export function LinkButton({ variant, size, className, ...rest }: ComponentProps
   return <Link className={btnClass(variant, size, className)} {...rest} />;
 }
 
+// Field hands its generated ids to the control inside it, so every input is
+// labelled without each call site passing ids around.
+const FieldCtx = createContext<{ inputId?: string; labelId?: string }>({});
+
 export function Field({ label, hint, children, htmlFor }: { label: ReactNode; hint?: ReactNode; children: ReactNode; htmlFor?: string }) {
+  const auto = useId();
+  const inputId = htmlFor ?? `f${auto}`;
+  const labelId = `l${auto}`;
   return (
     <div className="field">
-      <label className="field__label" htmlFor={htmlFor}>
+      <label className="field__label" htmlFor={inputId} id={labelId}>
         <span>{label}</span>
         {hint && <span className="field__hint">{hint}</span>}
       </label>
-      {children}
+      <FieldCtx.Provider value={{ inputId, labelId }}>{children}</FieldCtx.Provider>
     </div>
   );
 }
@@ -52,11 +59,12 @@ export function NumberInput({
   placeholder?: string;
   ariaLabel?: string;
 }) {
+  const ctx = useContext(FieldCtx);
   return (
     <div className="input-wrap">
       {prefix && <span className="affix affix--pre">{prefix}</span>}
       <input
-        id={id}
+        id={id ?? ctx.inputId}
         type="number"
         inputMode="decimal"
         step={step}
@@ -75,9 +83,10 @@ export function NumberInput({
 }
 
 export function TextInput({ id, value, onChange, placeholder }: { id?: string; value: string | null; onChange: (v: string | null) => void; placeholder?: string }) {
+  const ctx = useContext(FieldCtx);
   return (
     <div className="input-wrap">
-      <input id={id} type="text" value={value ?? ""} placeholder={placeholder} onChange={(e) => onChange(e.target.value || null)} />
+      <input id={id ?? ctx.inputId} type="text" value={value ?? ""} placeholder={placeholder} onChange={(e) => onChange(e.target.value || null)} />
     </div>
   );
 }
@@ -93,9 +102,10 @@ export function Select<T extends string>({
   onChange: (v: T) => void;
   options: { value: T; label: string }[];
 }) {
+  const ctx = useContext(FieldCtx);
   return (
     <div className="input-wrap">
-      <select id={id} value={value} onChange={(e) => onChange(e.target.value as T)}>
+      <select id={id ?? ctx.inputId} value={value} onChange={(e) => onChange(e.target.value as T)}>
         {options.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}
@@ -134,8 +144,9 @@ export function Segmented<T extends string>({
   options: { value: T; label: ReactNode }[];
   ariaLabel?: string;
 }) {
+  const ctx = useContext(FieldCtx);
   return (
-    <ToggleGroup.Root type="single" className="seg" value={value} aria-label={ariaLabel} onValueChange={(v) => v && onChange(v as T)}>
+    <ToggleGroup.Root type="single" className="seg" value={value} aria-label={ariaLabel} aria-labelledby={ariaLabel ? undefined : ctx.labelId} onValueChange={(v) => v && onChange(v as T)}>
       {options.map((o) => (
         <ToggleGroup.Item key={o.value} value={o.value} className="seg__item">
           {o.label}

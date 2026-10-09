@@ -1,13 +1,13 @@
 {
- "generated": "2026-10-09T15:51:39.169Z",
+ "generated": "2026-10-09T16:34:45.199Z",
  "stats": {
-  "commits": 2,
-  "files": 46,
-  "linesAdded": 4498,
-  "loc": 7124,
+  "commits": 4,
+  "files": 65,
+  "linesAdded": 13753,
+  "loc": 12379,
   "tests": 34,
-  "docs": 4,
-  "docWords": 11394
+  "docs": 6,
+  "docWords": 14213
  },
  "commits": [
   {
@@ -37,6 +37,40 @@
     "app/package.json",
     "app/scripts/cities-seed.json",
     "app/scripts/fetch-nasa.mjs"
+   ]
+  },
+  {
+   "hash": "c0f74e2",
+   "date": "2026-10-09T16:09:16+00:00",
+   "subject": "Chhat web app: 3D day-cycle landing, Roof Report, Quote Check, Bill Audit, Ask Chhat, Built-with-AI",
+   "author": "Claude",
+   "added": 7660,
+   "deleted": 3,
+   "files": 36,
+   "areas": [
+    "app/index.html",
+    "app/package.json",
+    "app/public/favicon.svg",
+    "app/scripts/build-log.mjs",
+    "app/scripts/shoot.mjs",
+    "app/src/App.tsx"
+   ]
+  },
+  {
+   "hash": "e29b07c",
+   "date": "2026-10-09T16:16:43+00:00",
+   "subject": "Business plan, formula-driven financial model, and pitch deck (/deck route + PDF)",
+   "author": "Claude",
+   "added": 1595,
+   "deleted": 1,
+   "files": 24,
+   "areas": [
+    "app/public/deck",
+    "app/scripts/export-deck.mjs",
+    "app/src/routes",
+    "app/src/styles",
+    "business",
+    "pitch"
    ]
   }
  ]

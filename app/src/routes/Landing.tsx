@@ -145,7 +145,7 @@ function Story() {
               <RoofScene state={state} roof={HERO_ROOF} lowPower={low} onReady={() => setReady(true)} />
             </Suspense>
           ) : (
-            <div className="story__poster story__poster--img" />
+            <div className="story__poster story__poster--img" style={{ backgroundImage: "url(./poster.jpg)" }} />
           )}
           <div className={`story__veil${ready || !gl ? " is-gone" : ""}`} />
           <div className="story__hud mono">

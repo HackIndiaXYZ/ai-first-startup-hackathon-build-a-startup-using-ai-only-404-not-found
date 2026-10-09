@@ -66,7 +66,7 @@ Unit tests (Vitest) cover every module with hand-checked values.
 |---|---|---|
 | Read a bill photo/PDF | Claude vision → strict JSON schema | Tesseract.js OCR in the browser → field extraction rules |
 | Read a quote | Claude → strict JSON schema | Same OCR + rules; or paste text |
-| Ask Chhat | Claude with 7 tools, agent loop server-side, trace returned | Intent router + entity extraction + BM25 over a 40-entry knowledge base, same tools, same trace UI |
+| Ask Chhat | Claude with 7 tools, agent loop server-side, trace returned | Intent router + entity extraction + BM25 over a ~20-entry knowledge base, same tools, same trace UI |
 | Language | Replies in the user's language (Hindi / Hinglish / English) | Hindi templates for top intents |
 
 The UI shows which mode is active. The product never presents a rules-based answer as model output.

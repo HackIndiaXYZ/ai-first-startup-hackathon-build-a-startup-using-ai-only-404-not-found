@@ -205,7 +205,7 @@ export default function Bill() {
           {a.findings.some((f) => f.severity === "critical" || f.severity === "warn") && (
             <section className="card">
               <h2 className="card__title">Correction letter</h2>
-              <pre className="letter" data-lenis-prevent>
+              <pre className="letter" data-lenis-prevent tabIndex={0} aria-label="Correction letter">
                 {letter}
               </pre>
               <div className="actions" style={{ marginTop: 12 }}>

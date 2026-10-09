@@ -76,7 +76,7 @@ export function MonthlyChart({ consumption, generation, billed }: { consumption:
         </button>
       </div>
       {table ? (
-        <div className="chart__table" data-lenis-prevent>
+        <div className="chart__table" data-lenis-prevent tabIndex={0} aria-label="Monthly data table">
           <table>
             <thead>
               <tr>

@@ -9,7 +9,7 @@
   line-height: 1.5;
 }
 .good {
-  color: var(--leaf);
+  color: oklch(0.45 0.11 155);
 }
 .haldi {
   color: var(--haldi);
@@ -538,7 +538,7 @@
   transform: translateX(-50%);
   font-size: 11px;
   font-weight: 700;
-  color: var(--leaf);
+  color: oklch(0.45 0.11 155);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -566,7 +566,7 @@
 }
 .pband__marker.is-over,
 .pband__marker.is-over span {
-  background: var(--sindoor);
+  background: oklch(0.5 0.19 30);
 }
 .pband__scale {
   position: relative;
