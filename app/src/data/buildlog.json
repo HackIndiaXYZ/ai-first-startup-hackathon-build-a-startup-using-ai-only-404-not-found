@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-09T16:48:45.898Z",
+ "generated": "2026-10-09T16:50:55.297Z",
  "stats": {
-  "commits": 9,
+  "commits": 10,
   "files": 66,
-  "linesAdded": 14550,
+  "linesAdded": 14572,
   "loc": 12474,
   "tests": 34,
   "docs": 6,
@@ -140,6 +140,19 @@
     "app/src/styles",
     "app/src/three",
     "app/vite.config.ts"
+   ]
+  },
+  {
+   "hash": "dc22e96",
+   "date": "2026-10-09T16:48:46+00:00",
+   "subject": "Keep committed build log on shallow clones; add Vercel deploy button and submission push steps",
+   "author": "Claude",
+   "added": 22,
+   "deleted": 1,
+   "files": 2,
+   "areas": [
+    "README.md",
+    "app/scripts/build-log.mjs"
    ]
   }
  ]

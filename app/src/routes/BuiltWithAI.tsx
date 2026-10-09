@@ -1,4 +1,5 @@
 import { ArrowUpRight, GitCommit, Robot, User } from "@phosphor-icons/react";
+import { usePageIntro } from "../lib/motion";
 import { useEffect } from "react";
 import { TOOL_SCHEMAS } from "../ai/tools";
 import { Stat } from "../components/ui";
@@ -103,12 +104,13 @@ const SYSTEM_EXCERPT = `You are Chhat, an independent rooftop-solar advisor for 
 - Be brief and concrete: 2 to 6 sentences, or a short list. Indian number formatting.`;
 
 export default function BuiltWithAI() {
+  const intro = usePageIntro<HTMLDivElement>();
   useEffect(() => {
     document.title = "Built with AI · Chhat";
   }, []);
   const s = LOG.stats;
   return (
-    <div className="page built-page">
+    <div className="page built-page" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">AI usage report · live</p>
         <h1 className="page__title">One brief in. A startup out.</h1>
@@ -117,12 +119,14 @@ export default function BuiltWithAI() {
         </p>
       </header>
 
-      <section className="wrap built-stats">
-        <Stat label="Product commits" value={num(s.commits)} />
-        <Stat label="Lines of source" value={num(s.loc)} />
-        <Stat label="Unit tests" value={num(s.tests)} />
-        <Stat label="Words of research & planning" value={num(s.docWords)} />
-        <Stat label="Code written by a human" value="0 lines" />
+      <section className="wrap">
+        <div className="built-stats">
+          <Stat label="Product commits" value={num(s.commits)} />
+          <Stat label="Lines of source" value={num(s.loc)} />
+          <Stat label="Unit tests" value={num(s.tests)} />
+          <Stat label="Words of research & planning" value={num(s.docWords)} />
+          <Stat label="Code written by a human" value="0 lines" />
+        </div>
       </section>
 
       <section className="wrap built-section">

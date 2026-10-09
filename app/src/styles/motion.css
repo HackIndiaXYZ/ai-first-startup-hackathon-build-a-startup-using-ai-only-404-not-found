@@ -1,0 +1,232 @@
+/* Global motion surfaces: the landing preloader, the route curtain and the
+   cursor. All of them disappear under prefers-reduced-motion. */
+
+/* ---------- Preloader ---------- */
+.pre {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  clip-path: inset(0% 0% 0% 0%);
+  overflow: hidden;
+}
+.pre__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+.pre__deva {
+  position: relative;
+  font-size: clamp(8rem, 30vw, 22rem);
+  line-height: 1.05;
+  color: var(--paper);
+  z-index: 1;
+}
+/* The sun rises behind छत's headline stroke (the shirorekha, a roof line). */
+.pre__sun {
+  --p: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(9rem, 26vw, 19rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  z-index: 0;
+  background: radial-gradient(circle, var(--haldi) 0 52%, oklch(0.84 0.165 80 / 0.35) 53%, oklch(0.84 0.165 80 / 0) 70%);
+  transform: translate(-50%, calc(-20% + (1 - var(--p)) * 55%)) scale(calc(0.7 + var(--p) * 0.3));
+  opacity: calc(0.25 + var(--p) * 0.75);
+}
+.pre__meta {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(20px, 4vh, 40px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.pre__count {
+  font-size: clamp(3.4rem, 9vw, 8rem);
+  line-height: 0.85;
+  color: var(--haldi);
+  letter-spacing: -0.05em;
+  font-weight: 600;
+}
+.pre__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  text-align: right;
+  font-size: 12px;
+}
+.pre__steps li {
+  opacity: 0.3;
+  transition: opacity 300ms ease;
+}
+.pre__steps li[data-on="true"] {
+  opacity: 0.9;
+}
+.pre__steps li[data-on="true"]::before {
+  content: "✓ ";
+  color: var(--haldi);
+}
+@media (max-width: 560px) {
+  .pre__steps {
+    display: none;
+  }
+}
+
+/* ---------- Route curtain ---------- */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: var(--ink);
+  color: var(--paper);
+  place-items: center;
+  clip-path: inset(100% 0% 0% 0%);
+  pointer-events: all;
+}
+.curtain__inner {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.curtain__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.curtain__line > span {
+  display: inline-block;
+}
+.curtain__line--en {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 8vw, 7.4rem);
+  font-weight: 760;
+  font-variation-settings: "wdth" 112;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+.curtain__line--hi {
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  color: var(--haldi);
+}
+.curtain__sun {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 6px;
+  background: var(--haldi);
+}
+
+/* ---------- Cursor ---------- */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 300;
+  pointer-events: none;
+}
+.cursor__dot,
+.cursor__ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.cursor__dot {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--haldi);
+  box-shadow: 0 0 0 1px oklch(0.19 0.03 258 / 0.35);
+}
+.cursor__ring {
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  display: grid;
+  place-items: center;
+  mix-blend-mode: difference;
+}
+.cursor__ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  transition:
+    transform 380ms var(--ease-out),
+    background-color 240ms ease,
+    border-color 240ms ease,
+    opacity 200ms ease;
+}
+.cursor__ring[data-state="hover"]::before {
+  transform: scale(1.7);
+  background: oklch(1 0 0 / 0.14);
+}
+.cursor__ring[data-state="label"] {
+  mix-blend-mode: normal;
+}
+.cursor__ring[data-state="label"]::before {
+  transform: scale(2.3);
+  background: var(--haldi);
+  border-color: var(--haldi);
+}
+.cursor__ring[data-state="hidden"]::before,
+.cursor__dot[data-state="hidden"] {
+  opacity: 0;
+}
+.cursor__label {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  white-space: nowrap;
+}
+.cursor__ring[data-state="label"] .cursor__label {
+  opacity: 1;
+}
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor [role="button"],
+html.has-cursor label {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea,
+html.has-cursor select,
+html.has-cursor [contenteditable="true"] {
+  cursor: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .curtain {
+    display: none !important;
+  }
+}
+@media print {
+  .pre,
+  .curtain,
+  .cursor {
+    display: none !important;
+  }
+}

@@ -1,6 +1,8 @@
 import { lazy, Suspense } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { AskProvider } from "./components/AskChhat";
+import { Cursor } from "./components/Cursor";
+import { RouteCurtain } from "./components/RouteCurtain";
 import { Footer, Nav } from "./components/Shell";
 import { SmoothScroll } from "./lib/smooth";
 
@@ -24,7 +26,7 @@ function Loading() {
 
 export default function App() {
   return (
-    <HashRouter>
+    <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SmoothScroll>
         <AskProvider>
           <a className="skip" href="#main">
@@ -46,6 +48,8 @@ export default function App() {
             </Suspense>
           </main>
           <Footer />
+          <RouteCurtain />
+          <Cursor />
           <div className="grain" aria-hidden="true" />
         </AskProvider>
       </SmoothScroll>

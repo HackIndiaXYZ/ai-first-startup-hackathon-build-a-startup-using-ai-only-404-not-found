@@ -1,4 +1,5 @@
 import { Copy, WhatsappLogo } from "@phosphor-icons/react";
+import { usePageIntro } from "../lib/motion";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { detectMode, type Mode } from "../ai/client";
@@ -20,6 +21,7 @@ const STATE_OPTS = Object.values(STATES)
   .map((s) => ({ value: s.code, label: s.name }));
 
 export default function Quote() {
+  const intro = usePageIntro<HTMLDivElement>();
   const [params] = useSearchParams();
   const initial = useMemo<{ q: Q; sample?: string }>(() => {
     const sid = params.get("sample") ?? (params.get("kw") ? null : "overcharger");
@@ -47,7 +49,7 @@ export default function Quote() {
   const kwp = a.actualKwp ?? q.systemKw;
 
   return (
-    <div className="page">
+    <div className="page" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">Quote Check</p>
         <h1 className="page__title">Is this quote fair?</h1>

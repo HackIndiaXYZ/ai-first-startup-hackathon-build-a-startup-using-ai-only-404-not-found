@@ -1,13 +1,15 @@
 import { useEffect } from "react";
+import { usePageIntro } from "../lib/motion";
 import { ChatPanel } from "../components/AskChhat";
 import "../styles/tools.css";
 
 export default function Ask() {
+  const intro = usePageIntro<HTMLDivElement>();
   useEffect(() => {
     document.title = "Ask Chhat";
   }, []);
   return (
-    <div className="page">
+    <div className="page" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">Ask Chhat · पूछिए</p>
         <h1 className="page__title">Ask anything about going solar.</h1>

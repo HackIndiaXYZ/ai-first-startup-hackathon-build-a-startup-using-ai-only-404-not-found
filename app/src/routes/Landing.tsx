@@ -1,128 +1,138 @@
-import { ArrowRight, ArrowUpRight, CheckCircle, FileMagnifyingGlass, Lightning, Receipt, SealWarning, SunHorizon } from "@phosphor-icons/react";
-import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, ArrowUpRight, CheckCircle, FileMagnifyingGlass, Lightning, Receipt, SunHorizon } from "@phosphor-icons/react";
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAsk } from "../components/AskChhat";
+import { Preloader } from "../components/Preloader";
+import { LinkButton, Select, Stat } from "../components/ui";
 import buildlog from "../data/buildlog.json";
 import { CITIES, cityByName, climateFromCity } from "../engine/climate";
-import { rupees, num } from "../engine/format";
-import { specificYield } from "../engine/pv";
+import { num, rupees } from "../engine/format";
+import { instantOutput, specificYield } from "../engine/pv";
 import { buildReport } from "../engine/report";
-import { formatClock } from "../engine/solar";
+import { formatClock, sunPosition, sunTimes } from "../engine/solar";
 import { hasWebGL, isLowPower, prefersReducedMotion } from "../lib/env";
-import { gsap, ScrollTrigger } from "../lib/smooth";
-import { makeSceneState } from "../three/RoofScene";
-import { LinkButton, Select, Stat } from "../components/ui";
-import { useAsk } from "../components/AskChhat";
+import { countUp, EASE, gsap, ScrollTrigger, SplitText, useMagnetic, useReveals } from "../lib/motion";
+import { CHAPTERS, chapterAt, colorsAt, dialPoint, HOUR_KEYS, interp, smoothstep, STEPS } from "../lib/story";
+import { useLenis } from "../lib/smooth";
+import { onAssetProgress, preloadSceneAssets } from "../three/assets";
+import type { SceneState } from "../three/RoofScene";
 import "../styles/landing.css";
 
-const RoofScene = lazy(() => import("../three/RoofScene"));
+const sceneModule = () => import("../three/RoofScene");
+const RoofScene = lazy(sceneModule);
 const HERO_ROOF = { w: 11.5, d: 10, floors: 3 };
+const HERO_KWP = 3.27;
+const DOY = 105; // 15 April
 
-/* ---------------- story timeline ---------------- */
+function layoutView() {
+  const w = window.innerWidth;
+  if (w >= 1100) return { x: 0.2, y: 0 };
+  if (w >= 760) return { x: 0.14, y: 0 };
+  return { x: 0, y: 0.16 };
+}
 
-const HOUR_KEYS: [number, number][] = [
-  [0, 6.7],
-  [0.14, 8.6],
-  [0.3, 11.1],
-  [0.46, 12.7],
-  [0.62, 15.3],
-  [0.78, 17.85],
-  [0.9, 19.5],
-  [1, 21],
-];
-// Almanac background through the day. Text colour flips by luminance so it
-// never passes through a low-contrast midpoint.
-const COLOR_KEYS: [number, string][] = [
-  [0, "#f6e3da"],
-  [0.14, "#f4ece6"],
-  [0.32, "#f1f4f7"],
-  [0.5, "#f6f6f1"],
-  [0.66, "#f8e7cc"],
-  [0.8, "#f4c79a"],
-  [0.86, "#f0b585"],
-  [0.89, "#2a2747"],
-  [1, "#111833"],
-];
-const STEPS = [0, 0.14, 0.3, 0.46, 0.62, 0.78, 0.9];
+/* ---------------- sun dial ---------------- */
 
-function interp(keys: [number, number][], p: number) {
-  for (let i = 1; i < keys.length; i++) {
-    if (p <= keys[i][0]) {
-      const [p0, v0] = keys[i - 1];
-      const [p1, v1] = keys[i];
-      return v0 + ((v1 - v0) * (p - p0)) / (p1 - p0);
-    }
-  }
-  return keys[keys.length - 1][1];
+/** The day as an arc: sunrise on the left, sunset on the right, the sun on it. */
+function SunDial({ dialRef }: { dialRef: React.RefObject<SVGSVGElement> }) {
+  const ticks = Array.from({ length: 13 }, (_, i) => i);
+  return (
+    <svg ref={dialRef} className="dial" viewBox="0 0 220 120" aria-hidden="true">
+      <path className="dial__arc" d="M14 106 A96 96 0 0 1 206 106" />
+      <line className="dial__horizon" x1="4" y1="106" x2="216" y2="106" />
+      {ticks.map((i) => {
+        const a = Math.PI - (i / 12) * Math.PI;
+        const x1 = 110 + Math.cos(a) * 90;
+        const y1 = 106 - Math.sin(a) * 90;
+        const x2 = 110 + Math.cos(a) * (i % 3 ? 86 : 82);
+        const y2 = 106 - Math.sin(a) * (i % 3 ? 86 : 82);
+        return <line key={i} className="dial__tick" x1={x1} y1={y1} x2={x2} y2={y2} />;
+      })}
+      <circle className="dial__sun" cx="14" cy="106" r="7" />
+      <circle className="dial__halo" cx="14" cy="106" r="14" />
+    </svg>
+  );
 }
-const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-function mix(a: string, b: string, t: number) {
-  const A = hex(a);
-  const B = hex(b);
-  return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(",")})`;
-}
-function colorsAt(p: number) {
-  let bg = COLOR_KEYS[COLOR_KEYS.length - 1][1];
-  for (let i = 1; i < COLOR_KEYS.length; i++) {
-    if (p <= COLOR_KEYS[i][0]) {
-      const [p0, b0] = COLOR_KEYS[i - 1];
-      const [p1, b1] = COLOR_KEYS[i];
-      bg = mix(b0, b1, (p - p0) / (p1 - p0));
-      break;
-    }
-  }
-  const [r, g, b] = bg.slice(4, -1).split(",").map(Number);
-  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-  const dark = lum < 0.45;
-  return { bg, fg: dark ? "#f1eee7" : "#161c36", dark };
-}
-const smoothstep = (a: number, b: number, x: number) => {
-  const t = Math.max(0, Math.min(1, (x - a) / (b - a)));
-  return t * t * (3 - 2 * t);
-};
 
 /* ---------------- story section ---------------- */
 
-function Story() {
+function Story({ state, intro, onReady, quality }: { state: React.MutableRefObject<SceneState>; intro: boolean; onReady: () => void; quality?: "high" | "medium" | "low" }) {
   const section = useRef<HTMLElement>(null);
-  const almanac = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const clock = useRef<HTMLSpanElement>(null);
+  const sunAlt = useRef<HTMLSpanElement>(null);
+  const kw = useRef<HTMLSpanElement>(null);
   const billNum = useRef<HTMLSpanElement>(null);
-  const state = useRef(makeSceneState({ hour: 6.7, doy: 105, drop: 0, panels: 6, camT: 0 }));
+  const dial = useRef<SVGSVGElement>(null);
+  const chapterLabel = useRef<HTMLSpanElement>(null);
   const [step, setStep] = useState(0);
-  const [ready, setReady] = useState(false);
   const navigate = useNavigate();
   const reduced = useMemo(prefersReducedMotion, []);
   const gl = useMemo(hasWebGL, []);
   const low = useMemo(isLowPower, []);
   const delhi = useMemo(() => climateFromCity(cityByName("Delhi")!), []);
   const sy = useMemo(() => specificYield(delhi), [delhi]);
+  const times = useMemo(() => sunTimes(delhi.lat, delhi.lon, DOY), [delhi]);
+  const ctaPrimary = useMagnetic<HTMLAnchorElement>();
+  const [visible, setVisible] = useState(true);
+
+  // Only draw the rooftop while it is on screen.
+  useEffect(() => {
+    const el = section.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { rootMargin: "200px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useLayoutEffect(() => {
-    if (reduced) {
-      Object.assign(state.current, { hour: 12.9, drop: 1, camT: 0.5 });
-      return;
-    }
     const el = section.current!;
+    const root = document.documentElement;
+    const view = layoutView();
+    state.current.viewX = view.x;
     const apply = (p: number) => {
       const s = state.current;
       s.hour = interp(HOUR_KEYS, p);
       s.drop = smoothstep(0.44, 0.58, p);
       s.camT = p;
+      const v = layoutView();
+      s.viewX = v.x;
       const c = colorsAt(p);
-      if (almanac.current) {
-        almanac.current.style.setProperty("--alm-bg", c.bg);
-        almanac.current.style.setProperty("--alm-fg", c.fg);
-        almanac.current.dataset.dark = String(c.dark);
-      }
+      stage.current?.style.setProperty("--alm-bg", c.bg);
+      stage.current?.style.setProperty("--alm-fg", c.fg);
+      if (stage.current) stage.current.dataset.dark = String(c.dark);
+      root.dataset.hero = c.dark ? "dark" : "light";
+      const sun = sunPosition(delhi.lat, delhi.lon, DOY, s.hour);
       if (clock.current) clock.current.textContent = formatClock(s.hour);
+      if (sunAlt.current) sunAlt.current.textContent = `${sun.elevation >= 0 ? "" : "−"}${Math.abs(sun.elevation).toFixed(1)}°`;
+      if (kw.current) {
+        const out = s.drop > 0.95 ? instantOutput(delhi, HERO_KWP, 3, sun.elevation, times.sunset - times.sunrise) : 0;
+        kw.current.textContent = out.toFixed(2);
+      }
+      if (dial.current) {
+        const { x, y, below } = dialPoint(s.hour, times.sunrise, times.sunset);
+        dial.current.querySelectorAll("circle").forEach((cEl) => {
+          cEl.setAttribute("cx", x.toFixed(1));
+          cEl.setAttribute("cy", y.toFixed(1));
+        });
+        dial.current.dataset.below = String(below);
+      }
       if (billNum.current) {
         const t = smoothstep(0.8, 0.88, p);
         billNum.current.textContent = rupees(3840 - t * (3840 - 412));
       }
-      let i = 0;
-      while (i < STEPS.length - 1 && p >= STEPS[i + 1] - 0.015) i++;
+      const i = chapterAt(p);
+      if (chapterLabel.current) chapterLabel.current.textContent = `${String(i + 1).padStart(2, "0")} / ${String(STEPS.length).padStart(2, "0")} · ${CHAPTERS[i]}`;
       setStep(i);
     };
+    if (reduced) {
+      // A still frame: noon, panels installed, every chapter stacked below.
+      apply(0);
+      Object.assign(state.current, { hour: 12.9, drop: 1, camT: 0.5 });
+      return () => {
+        delete root.dataset.hero;
+      };
+    }
     apply(0);
     const st = ScrollTrigger.create({
       trigger: el,
@@ -130,77 +140,153 @@ function Story() {
       end: "bottom bottom",
       scrub: true,
       onUpdate: (self) => apply(self.progress),
+      onLeave: () => delete root.dataset.hero,
+      onEnterBack: (self) => apply(self.progress),
     });
-    return () => st.kill();
-  }, [reduced]);
+    const onResize = () => apply(st.progress);
+    window.addEventListener("resize", onResize);
+    return () => {
+      st.kill();
+      window.removeEventListener("resize", onResize);
+      delete root.dataset.hero;
+    };
+  }, [reduced, state, delhi, times]);
+
+  // Chapter changes: the outgoing title lines leave upward, the new ones rise.
+  const splits = useRef<Map<number, SplitText>>(new Map());
+  const prev = useRef(-1);
+  useLayoutEffect(() => {
+    const host = stage.current;
+    if (!host) return;
+    const steps = Array.from(host.querySelectorAll<HTMLElement>(".step"));
+    if (reduced) return;
+    steps.forEach((s, i) => {
+      const on = i === step;
+      s.toggleAttribute("inert", !on);
+      s.setAttribute("aria-hidden", String(!on));
+    });
+    if (!intro) return;
+    const getSplit = (i: number) => {
+      let sp = splits.current.get(i);
+      const title = steps[i]?.querySelector<HTMLElement>(".step__title, .hero__title");
+      if (!sp && title) {
+        sp = SplitText.create(title, { type: "lines", mask: "lines", linesClass: "split-line" });
+        splits.current.set(i, sp);
+      }
+      return sp;
+    };
+    const from = prev.current;
+    prev.current = step;
+    const incoming = steps[step];
+    if (!incoming) return;
+    const tl = gsap.timeline();
+    if (from >= 0 && from !== step && steps[from]) {
+      const out = steps[from];
+      const sp = getSplit(from);
+      tl.to(sp?.lines ?? [], { yPercent: -105, duration: 0.45, ease: EASE.inOut, stagger: 0.03 }, 0).to(out.querySelectorAll(".step__rest > *"), { autoAlpha: 0, y: -14, duration: 0.3, ease: "power2.in" }, 0);
+      tl.set(out, { autoAlpha: 0 });
+    }
+    const sp = getSplit(step);
+    tl.set(incoming, { autoAlpha: 1 }, from >= 0 ? 0.28 : 0)
+      .fromTo(sp?.lines ?? [], { yPercent: 108 }, { yPercent: 0, duration: 1, ease: EASE.out, stagger: 0.08 }, "<")
+      .fromTo(incoming.querySelectorAll(".step__rest > *"), { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: EASE.out, stagger: 0.06 }, "<0.15");
+    return () => {
+      tl.progress(1).kill();
+    };
+  }, [step, intro, reduced]);
+
+  useEffect(
+    () => () => {
+      splits.current.forEach((s) => s.revert());
+      splits.current.clear();
+    },
+    [],
+  );
 
   const sample = () => navigate("/report?city=Delhi&units=476&month=5&roof=1100&sample=delhi-may");
 
   return (
     <section ref={section} className={`story${reduced ? " story--static" : ""}`} aria-label="How Chhat works, from dawn to night">
-      <div className="story__stage">
+      <a className="story__skip" href="#tools-title" onClick={(e) => { e.preventDefault(); document.getElementById("tools")?.scrollIntoView(); }}>
+        Skip the story
+      </a>
+      <div ref={stage} className="story__stage" data-dark="false" data-intro={intro}>
         <div className="story__canvas" aria-hidden="true">
           {gl ? (
             <Suspense fallback={<div className="story__poster" />}>
-              <RoofScene state={state} roof={HERO_ROOF} lowPower={low} onReady={() => setReady(true)} />
+              <RoofScene state={state} roof={HERO_ROOF} lowPower={low} quality={quality} onReady={onReady} paused={!visible} />
             </Suspense>
           ) : (
             <div className="story__poster story__poster--img" style={{ backgroundImage: "url(./poster.jpg)" }} />
           )}
-          <div className={`story__veil${ready || !gl ? " is-gone" : ""}`} />
-          <div className="story__hud mono">
-            <span>28.61°N 77.21°E</span>
-            <span>15 Apr</span>
-            <span>
-              <SunHorizon size={14} weight="bold" /> real sun path
+        </div>
+        <div className="story__scrim" aria-hidden="true" />
+
+        <div className="hud mono" aria-hidden="true">
+          <div className="hud__cell hud__cell--clock">
+            <span className="hud__k">IST</span>
+            <span className="hud__v hud__v--big">
+              <span ref={clock}>06:42</span>
             </span>
+          </div>
+          <div className="hud__cell">
+            <span className="hud__k">Sun altitude</span>
+            <span className="hud__v">
+              <span ref={sunAlt}>0.0°</span>
+            </span>
+          </div>
+          <div className="hud__cell">
+            <span className="hud__k">Roof output</span>
+            <span className="hud__v">
+              <span ref={kw}>0.00</span> kW
+            </span>
+          </div>
+          <div className="hud__cell hud__cell--wide">
+            <span className="hud__k">Delhi · 28.61°N 77.21°E · 15 Apr</span>
+            <span className="hud__v">{num(sy)} kWh/kWp·yr</span>
           </div>
         </div>
 
-        <div ref={almanac} className="almanac" data-dark="false">
-          <div className="almanac__top mono">
-            <span className="almanac__clock">
-              <span ref={clock}>06:42</span> IST
-            </span>
-            <span>Delhi · {num(sy)} kWh/kWp·yr</span>
-          </div>
-
-          <div className="almanac__steps">
-            {/* 0. Dawn: hero */}
-            <article className="step step--hero" data-active={step === 0}>
-              <p className="eyebrow">Independent AI solar advisor · India</p>
-              <h1 className="hero__title">Every Indian roof has a number.</h1>
+        <div className="chapters">
+          {/* 0. Dawn: hero */}
+          <article className="step step--hero" data-active={step === 0}>
+            <p className="eyebrow step__eyebrow">Independent AI solar advisor · India</p>
+            <h1 className="hero__title">
+              Every Indian roof <span className="hero__title-em">has a number.</span>
+            </h1>
+            <div className="step__rest">
               <p className="hero__lede">
                 Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight, stacks every subsidy, and checks the installer's quote before you sign.
               </p>
               <div className="hero__ctas">
-                <LinkButton to="/report" variant="accent" size="lg">
+                <Link ref={ctaPrimary} to="/report" className="btn btn--accent btn--lg btn--magnet">
                   Read my roof <ArrowRight size={18} weight="bold" />
-                </LinkButton>
+                </Link>
                 <button type="button" className="btn btn--ghost btn--lg" onClick={sample}>
                   Try a sample house
                 </button>
               </div>
               <p className="hero__fact mono">
-                <Lightning size={14} weight="fill" /> 3.27 kWp in Delhi ≈ {num(sy * 3.27)} units a year · NASA POWER 2001-2020
+                <Lightning size={14} weight="fill" /> {HERO_KWP} kWp in Delhi ≈ {num(sy * HERO_KWP)} units a year · NASA POWER 2001-2020
               </p>
-              <p className="hero__scroll mono" aria-hidden="true">
-                Scroll through a day on this roof ↓
-              </p>
-            </article>
+            </div>
+          </article>
 
-            <article className="step" data-active={step === 1}>
-              <p className="eyebrow">The gap</p>
-              <h2 className="step__title">637 GW of roofs. 5% willing.</h2>
+          <article className="step" data-active={step === 1}>
+            <p className="eyebrow step__eyebrow">The gap</p>
+            <h2 className="step__title">637 GW of roofs. 5% willing.</h2>
+            <div className="step__rest">
               <p className="step__body">
                 CEEW counted 637 GW of solar potential on Indian homes. Only one household in twenty says it would install. The sunlight is there. Trust in the numbers isn't.
               </p>
               <p className="step__src mono">CEEW, 2023 · 51 lakh PM Surya Ghar homes by Sep 2026</p>
-            </article>
+            </div>
+          </article>
 
-            <article className="step" data-active={step === 2}>
-              <p className="eyebrow">The sun</p>
-              <h2 className="step__title">Your roof already gets the energy.</h2>
+          <article className="step" data-active={step === 2}>
+            <p className="eyebrow step__eyebrow">The sun</p>
+            <h2 className="step__title">Your roof already gets the energy.</h2>
+            <div className="step__rest">
               <p className="step__body">
                 Delhi averages 4.89 kWh of sunlight per square metre a day. Chhat tilts that onto your panels month by month, takes off heat and wiring losses, and checks it against your bill.
               </p>
@@ -209,23 +295,27 @@ function Story() {
                 <span className="chip">−0.35%/°C</span>
                 <span className="chip">72 cities, live for any lat/lon</span>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article className="step" data-active={step === 3}>
-              <p className="eyebrow">The system</p>
-              <h2 className="step__title">Six panels. ₹1,08,000 back.</h2>
+          <article className="step" data-active={step === 3}>
+            <p className="eyebrow step__eyebrow">The system</p>
+            <h2 className="step__title">Six panels. ₹1,08,000 back.</h2>
+            <div className="step__rest">
               <p className="step__body">
                 PM Surya Ghar pays ₹78,000 for 3 kW. Delhi adds ₹30,000. Chhat stacks both, picks the panel count with the best 25-year return, and tells you if the subsidy sweet spot is one panel away.
               </p>
               <div className="step__grid">
-                <Stat label="System" value="3.27 kWp" />
+                <Stat label="System" value={`${HERO_KWP} kWp`} />
                 <Stat label="Subsidy" hi="सब्सिडी" value="₹1.08 L" />
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article className="step" data-active={step === 4}>
-              <p className="eyebrow">The quote</p>
-              <h2 className="step__title">Then it reads the quote.</h2>
+          <article className="step" data-active={step === 4}>
+            <p className="eyebrow step__eyebrow">The quote</p>
+            <h2 className="step__title">Then it reads the quote.</h2>
+            <div className="step__rest">
               <div className="quote-card">
                 <div className="quote-card__line">
                   <span>3 kW On-Grid System</span>
@@ -243,23 +333,29 @@ function Story() {
                 <span className="stamp stamp--b">Non-DCR: ₹72,600 subsidy lost</span>
                 <span className="stamp stamp--c">Only 2.7 kWp</span>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article className="step" data-active={step === 5}>
-              <p className="eyebrow">The bill</p>
-              <h2 className="step__title">And every bill after.</h2>
+          <article className="step" data-active={step === 5}>
+            <p className="eyebrow step__eyebrow">The bill</p>
+            <h2 className="step__title">And every bill after.</h2>
+            <div className="step__rest">
               <p className="step__bill">
-                <span ref={billNum} className="mono">₹3,840</span>
+                <span ref={billNum} className="mono">
+                  ₹3,840
+                </span>
                 <span className="step__bill-label">this month</span>
               </p>
               <p className="step__body">
                 In July 2026 MNRE admitted DISCOMs were sending wrong bills to new solar homes: exports ignored, net meters never switched on. Chhat checks the arithmetic and drafts the letter.
               </p>
-            </article>
+            </div>
+          </article>
 
-            <article className="step step--cta" data-active={step === 6}>
-              <p className="eyebrow">Your turn</p>
-              <h2 className="step__title step__title--big">Read your roof.</h2>
+          <article className="step step--cta" data-active={step === 6}>
+            <p className="eyebrow step__eyebrow">Your turn</p>
+            <h2 className="step__title step__title--big">Read your roof.</h2>
+            <div className="step__rest">
               <p className="step__body">Two minutes, one bill, no login. Nobody calls you afterwards.</p>
               <div className="hero__ctas">
                 <LinkButton to="/report" variant="accent" size="lg">
@@ -269,50 +365,135 @@ function Story() {
                   Check a quote
                 </LinkButton>
               </div>
-            </article>
-          </div>
+            </div>
+          </article>
+        </div>
 
-          <div className="almanac__progress" aria-hidden="true">
+        <div className="story__foot mono" aria-hidden="true">
+          <div className="story__ticks">
             {STEPS.map((_, i) => (
               <span key={i} data-on={i <= step} />
             ))}
           </div>
+          <span ref={chapterLabel} className="story__chapter">
+            01 / 07 · Dawn
+          </span>
+          <span className="story__scroll">Scroll through a day on this roof</span>
+        </div>
+        <div className="story__dial" aria-hidden="true">
+          <SunDial dialRef={dial} />
+          <span className="story__dial-cap mono">
+            <SunHorizon size={13} weight="bold" /> NOAA sun path
+          </span>
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------------- city marquee ---------------- */
+/* ---------------- manifesto: words light up as you read ---------------- */
 
-function CityMarquee() {
-  const items = useMemo(
-    () =>
-      CITIES.filter((_, i) => i % 2 === 0)
-        .map((c) => ({ name: c.name, y: specificYield(climateFromCity(c)) }))
-        .slice(0, 28),
-    [],
-  );
-  const row = (
-    <div className="marquee__row">
-      {items.map((it) => (
-        <span key={it.name} className="marquee__item">
-          {it.name} <b className="mono">{num(it.y)}</b>
-        </span>
-      ))}
-    </div>
-  );
+function Manifesto() {
+  const p = useRef<HTMLParagraphElement>(null);
+  useLayoutEffect(() => {
+    const el = p.current;
+    if (!el || prefersReducedMotion()) return;
+    let split: SplitText | null = null;
+    let st: ScrollTrigger | undefined;
+    let dead = false;
+    document.fonts.ready.then(() => {
+      if (dead) return;
+      split = SplitText.create(el, { type: "words", wordsClass: "mf-word" });
+      const tween = gsap.fromTo(split.words, { opacity: 0.14 }, { opacity: 1, ease: "none", stagger: 0.12, scrollTrigger: { trigger: el, start: "top 78%", end: "bottom 45%", scrub: 0.4 } });
+      st = tween.scrollTrigger;
+    });
+    return () => {
+      dead = true;
+      st?.kill();
+      split?.revert();
+    };
+  }, []);
   return (
-    <div className="marquee" aria-label="Annual kWh per kWp by city, from NASA POWER">
-      <div className="marquee__track">
-        {row}
-        {row}
-      </div>
-    </div>
+    <section className="manifesto wrap" aria-labelledby="mf-title">
+      <h2 id="mf-title" className="eyebrow">
+        Why Chhat exists
+      </h2>
+      <p ref={p} className="manifesto__text">
+        Sunlight isn't India's solar problem. Trust is. The same 3 kW system is quoted anywhere from ₹1.35 lakh to ₹2.1 lakh, the panel rules changed in June, and the first bill after going solar is often
+        wrong. Chhat is the second opinion that works for the homeowner, <em>not the installer.</em>
+      </p>
+    </section>
   );
 }
 
-/* ---------------- three tools ---------------- */
+/* ---------------- velocity marquee ---------------- */
+
+function CityMarquee() {
+  const lenis = useLenis();
+  const rows = useRef<(HTMLDivElement | null)[]>([]);
+  const items = useMemo(
+    () =>
+      CITIES.map((c) => ({ name: c.name, y: specificYield(climateFromCity(c)) }))
+        .sort((a, b) => b.y - a.y)
+        .slice(0, 36),
+    [],
+  );
+  const halves = [items.filter((_, i) => i % 2 === 0), items.filter((_, i) => i % 2 === 1)];
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    let v = 0;
+    const offs = [0, 0];
+    const onScroll = (l: { velocity: number }) => {
+      v = l.velocity;
+    };
+    lenis?.on("scroll", onScroll);
+    let boost = 0;
+    const tick = (_: number, dt: number) => {
+      boost += (Math.min(40, Math.abs(v)) - boost) * 0.08;
+      v *= 0.92;
+      const dir = Math.sign(v) || 1;
+      rows.current.forEach((row, i) => {
+        if (!row) return;
+        const w = row.scrollWidth / 2;
+        const speed = (0.035 + boost * 0.012) * dt * (i === 0 ? 1 : -1) * dir;
+        offs[i] = (offs[i] - speed + w) % w;
+        row.style.transform = `translate3d(${-offs[i]}px,0,0) skewX(${(-boost * 0.25 * (i === 0 ? 1 : -1)).toFixed(2)}deg)`;
+      });
+    };
+    gsap.ticker.add(tick);
+    return () => {
+      gsap.ticker.remove(tick);
+      lenis?.off("scroll", onScroll);
+    };
+  }, [lenis]);
+
+  return (
+    <section className="marquee" aria-label="Annual kWh per kWp by city, from NASA POWER">
+      <p className="marquee__cap mono wrap">kWh a year from one kWp of panels · NASA POWER 2001-2020 · {CITIES.length} cities</p>
+      {halves.map((h, i) => (
+        <div key={i} className={`marquee__track${i ? " marquee__track--alt" : ""}`} aria-hidden={i === 1}>
+          <div
+            ref={(r) => {
+              rows.current[i] = r;
+            }}
+            className="marquee__row"
+          >
+            {[...h, ...h].map((it, k) => (
+              <span key={`${it.name}-${k}`} className="marquee__item">
+                {it.name}
+                <b className="mono">{num(it.y)}</b>
+                <span className="marquee__dot" aria-hidden="true" />
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+/* ---------------- tools: stacking cards ---------------- */
 
 function QuickReport() {
   const [city, setCity] = useState("Pune");
@@ -350,72 +531,136 @@ function QuickReport() {
 
 function Tools() {
   const { open } = useAsk();
+  const root = useRef<HTMLElement>(null);
+  useReveals(root);
+  useLayoutEffect(() => {
+    const host = root.current;
+    if (!host || prefersReducedMotion() || window.matchMedia("(max-width: 760px)").matches) return;
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray<HTMLElement>(".stack-card");
+      cards.forEach((card, i) => {
+        if (i === cards.length - 1) return;
+        const st = { trigger: cards[i + 1], start: "top bottom", end: "top 18%", scrub: true };
+        // The card underneath recedes: a little smaller, a little darker.
+        gsap.fromTo(card.querySelector(".stack-card__inner"), { scale: 1 }, { scale: 0.92, ease: "none", scrollTrigger: st });
+        gsap.fromTo(card.querySelector(".stack-card__shade"), { opacity: 0 }, { opacity: 0.32, ease: "none", scrollTrigger: { ...st } });
+      });
+    }, host);
+    return () => ctx.revert();
+  }, []);
   return (
-    <section className="tools wrap" aria-labelledby="tools-title">
-      <div className="section-head">
-        <p className="eyebrow">What you get</p>
-        <h2 id="tools-title" className="section-title">
-          Four checks between you
-          <br /> and a bad deal.
+    <section ref={root} id="tools" className="tools" aria-labelledby="tools-title">
+      <div className="wrap section-head">
+        <p className="eyebrow" data-reveal="up">
+          What you get
+        </p>
+        <h2 id="tools-title" className="section-title" data-reveal="lines">
+          Four checks between you and a bad deal.
         </h2>
       </div>
-      <div className="tools__grid">
-        <article className="tool tool--report">
-          <header className="tool__head">
-            <SunHorizon size={26} weight="duotone" />
-            <h3>Roof Report</h3>
-            <span className="tool__hi deva">छत रिपोर्ट</span>
-          </header>
-          <p className="tool__body">Size, generation, subsidy, loan and 25-year payback from one bill. Try it right here:</p>
-          <QuickReport />
+      <div className="stack wrap">
+        <article className="stack-card stack-card--report">
+          <div className="stack-card__inner">
+            <span className="stack-card__shade" aria-hidden="true" />
+            <div className="stack-card__text">
+              <span className="stack-card__k mono">01</span>
+              <h3 className="stack-card__title">
+                Roof Report <span className="deva">छत रिपोर्ट</span>
+              </h3>
+              <p className="stack-card__body">Size, generation, subsidy, loan and 25-year payback from one bill. Pick a city, type a number, watch it change.</p>
+              <span className="stack-card__icon" aria-hidden="true">
+                <SunHorizon size={30} weight="duotone" />
+              </span>
+            </div>
+            <div className="stack-card__demo">
+              <QuickReport />
+            </div>
+          </div>
         </article>
 
-        <Link to="/quote?sample=overcharger" className="tool tool--quote">
-          <header className="tool__head">
-            <FileMagnifyingGlass size={26} weight="duotone" />
-            <h3>Quote Check</h3>
-          </header>
-          <p className="tool__body">14 checks against the fair price, DCR and ALMM rules, warranties, structure, GST and payment terms. With a message to send the vendor, in English or Hindi.</p>
-          <div className="grade-stamp" aria-hidden="true">
-            F
+        <article className="stack-card stack-card--quote">
+          <div className="stack-card__inner">
+            <span className="stack-card__shade" aria-hidden="true" />
+            <div className="stack-card__text">
+              <span className="stack-card__k mono">02</span>
+              <h3 className="stack-card__title">Quote Check</h3>
+              <span className="stack-card__icon" aria-hidden="true">
+                <FileMagnifyingGlass size={30} weight="duotone" />
+              </span>
+              <p className="stack-card__body">14 checks against the fair price, DCR and ALMM rules, warranties, structure, GST and payment terms. With a message to send the vendor, in English or Hindi.</p>
+              <LinkButton to="/quote?sample=overcharger" variant="primary" data-cursor="Audit">
+                Audit a sample quote <ArrowUpRight size={16} weight="bold" />
+              </LinkButton>
+            </div>
+            <div className="stack-card__demo" aria-hidden="true">
+              <div className="paper">
+                <div className="paper__head">
+                  <span className="mono">QTN/2026/0419</span>
+                  <span>Sunrise Solar Pvt Ltd</span>
+                </div>
+                {["3 kW On-Grid System|₹2,41,256", "Panels 5 × 540 Wp|imported", "Inverter 3 kW|1 nos", "GST @ 13.8%|₹29,256", "Advance|100%"].map((l) => {
+                  const [a, b] = l.split("|");
+                  return (
+                    <div key={a} className="paper__line">
+                      <span>{a}</span>
+                      <span className="mono">{b}</span>
+                    </div>
+                  );
+                })}
+                <span className="grade-stamp">F</span>
+              </div>
+            </div>
           </div>
-          <span className="tool__go">
-            Audit a sample quote <ArrowUpRight size={16} weight="bold" />
-          </span>
-        </Link>
+        </article>
 
-        <Link to="/bill?sample=import-billed" className="tool tool--bill">
-          <header className="tool__head">
-            <Receipt size={26} weight="duotone" />
-            <h3>Bill Audit</h3>
-          </header>
-          <div className="meter-math mono" aria-hidden="true">
-            <span>410 import</span>
-            <span>− 236 export</span>
-            <span className="meter-math__eq">= 174 units</span>
-            <span className="meter-math__bad">billed 410</span>
+        <article className="stack-card stack-card--bill">
+          <div className="stack-card__inner">
+            <span className="stack-card__shade" aria-hidden="true" />
+            <div className="stack-card__text">
+              <span className="stack-card__k mono">03</span>
+              <h3 className="stack-card__title">Bill Audit</h3>
+              <span className="stack-card__icon" aria-hidden="true">
+                <Receipt size={30} weight="duotone" />
+              </span>
+              <p className="stack-card__body">For homes that already went solar. Checks the meter arithmetic on every DISCOM bill and drafts the correction letter.</p>
+              <LinkButton to="/bill?sample=import-billed" variant="accent" data-cursor="Audit">
+                Audit a sample bill <ArrowUpRight size={16} weight="bold" />
+              </LinkButton>
+            </div>
+            <div className="stack-card__demo" aria-hidden="true">
+              <div className="meter-math mono">
+                <span>410 import</span>
+                <span>− 236 export</span>
+                <span className="meter-math__eq">= 174 units</span>
+                <span className="meter-math__bad">billed 410</span>
+              </div>
+            </div>
           </div>
-          <p className="tool__body">For homes that already went solar. Checks the meter arithmetic on every DISCOM bill and drafts the correction letter.</p>
-          <span className="tool__go">
-            Audit a sample bill <ArrowUpRight size={16} weight="bold" />
-          </span>
-        </Link>
+        </article>
 
-        <button type="button" className="tool tool--ask" onClick={() => open("Lucknow, 380 units a month. What size should I install?")}>
-          <header className="tool__head">
-            <Lightning size={26} weight="duotone" />
-            <h3>Ask Chhat</h3>
-          </header>
-          <div className="mini-chat" aria-hidden="true">
-            <span className="mini-chat__q">लखनऊ में 3 kW पर कितनी सब्सिडी?</span>
-            <span className="mini-chat__a">केंद्र ₹78,000 + राज्य ₹30,000 = ₹1,08,000</span>
-            <span className="mini-chat__t mono">compute_subsidy(kw: 3, state_code: "UP")</span>
+        <article className="stack-card stack-card--ask">
+          <div className="stack-card__inner">
+            <span className="stack-card__shade" aria-hidden="true" />
+            <div className="stack-card__text">
+              <span className="stack-card__k mono">04</span>
+              <h3 className="stack-card__title">Ask Chhat</h3>
+              <span className="stack-card__icon" aria-hidden="true">
+                <Lightning size={30} weight="duotone" />
+              </span>
+              <p className="stack-card__body">An agent that answers in Hindi, Hinglish or English, and only quotes numbers its tools computed. Open the trace on any answer to see which.</p>
+              <button type="button" className="btn btn--accent" onClick={() => open("Lucknow, 380 units a month. What size should I install?")}>
+                Ask a question <ArrowUpRight size={16} weight="bold" />
+              </button>
+            </div>
+            <div className="stack-card__demo" aria-hidden="true">
+              <div className="mini-chat">
+                <span className="mini-chat__q">लखनऊ में 3 kW पर कितनी सब्सिडी?</span>
+                <span className="mini-chat__a">केंद्र ₹78,000 + राज्य ₹30,000 = ₹1,08,000</span>
+                <span className="mini-chat__t mono">compute_subsidy(kw: 3, state_code: "UP")</span>
+              </div>
+            </div>
           </div>
-          <p className="tool__body">An agent that answers in Hindi, Hinglish or English, and only quotes numbers its tools computed. Open the trace on any answer to see which.</p>
-          <span className="tool__go">
-            Ask a question <ArrowUpRight size={16} weight="bold" />
-          </span>
-        </button>
+        </article>
       </div>
     </section>
   );
@@ -444,6 +689,7 @@ const LEARNS = [
 function Learns() {
   const wrap = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (prefersReducedMotion() || window.matchMedia("(max-width: 900px)").matches) return;
     const ctx = gsap.context(() => {
@@ -451,7 +697,15 @@ function Learns() {
       gsap.to(t, {
         x: () => -(t.scrollWidth - window.innerWidth + 48),
         ease: "none",
-        scrollTrigger: { trigger: wrap.current, start: "top top", end: () => `+=${t.scrollWidth}`, scrub: 0.6, pin: true, invalidateOnRefresh: true },
+        scrollTrigger: {
+          trigger: wrap.current,
+          start: "top top",
+          end: () => `+=${t.scrollWidth}`,
+          scrub: 0.6,
+          pin: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => bar.current && (bar.current.style.transform = `scaleX(${self.progress})`),
+        },
       });
     }, wrap);
     return () => ctx.revert();
@@ -462,8 +716,7 @@ function Learns() {
         <div className="learns__intro">
           <p className="eyebrow">The moat</p>
           <h2 id="learns-title" className="section-title">
-            What Chhat learns
-            <br /> while it helps.
+            What Chhat learns while it helps.
           </h2>
           <p className="learns__lede">A calculator is easy to copy. A dataset of real quotes and real bills from real roofs is not.</p>
         </div>
@@ -475,6 +728,9 @@ function Learns() {
           </article>
         ))}
       </div>
+      <div className="learns__bar" aria-hidden="true">
+        <div ref={bar} />
+      </div>
     </section>
   );
 }
@@ -482,22 +738,26 @@ function Learns() {
 /* ---------------- who pays ---------------- */
 
 function Payers() {
+  const root = useRef<HTMLElement>(null);
+  useReveals(root);
   return (
-    <section id="installers" className="payers wrap" aria-labelledby="payers-title">
-      <div className="section-head">
-        <p className="eyebrow">Business model</p>
-        <h2 id="payers-title" className="section-title">
-          Free for homes. Paid for by
-          <br /> the people who want to sell to them.
-        </h2>
+    <section ref={root} id="installers" className="payers wrap" aria-labelledby="payers-title">
+      <div className="section-head section-head--split">
+        <div>
+          <p className="eyebrow" data-reveal="up">
+            Business model
+          </p>
+          <h2 id="payers-title" className="section-title" data-reveal="lines">
+            Free for homes. Paid for by the people who want to sell to them.
+          </h2>
+        </div>
       </div>
-      <div className="payers__grid">
-        <article className="payer payer--main">
-          <p className="eyebrow">Installers</p>
+      <div className="payers__rows">
+        <article className="payer payer--main" data-reveal="up">
+          <p className="payer__who">Installers</p>
           <h3 className="payer__price">
-            ₹1,500 <span>per verified lead</span>
+            ₹1,500 <span>per verified lead + 2% on install</span>
           </h3>
-          <p>+ 2% of system value when the install completes. Leads arrive with a bill, a roof model and a buyer who already trusts the numbers.</p>
           <ul className="ticks">
             <li>
               <CheckCircle weight="fill" /> “Chhat Verified” badge for quotes that pass the audit
@@ -510,15 +770,15 @@ function Payers() {
             </li>
           </ul>
         </article>
-        <article className="payer">
-          <p className="eyebrow">Banks & NBFCs</p>
+        <article className="payer" data-reveal="up">
+          <p className="payer__who">Banks & NBFCs</p>
           <h3 className="payer__price">
             1% <span>of loan originated</span>
           </h3>
           <p>PM Surya Ghar loans are small and collateral-free. Chhat hands lenders a sized system, a verified bill and a cash-flow case before the first call.</p>
         </article>
-        <article className="payer">
-          <p className="eyebrow">DISCOMs & state agencies</p>
+        <article className="payer" data-reveal="up">
+          <p className="payer__who">DISCOMs & state agencies</p>
           <h3 className="payer__price">
             ₹40 L <span>per state, per year</span>
           </h3>
@@ -535,30 +795,41 @@ function Payers() {
 /* ---------------- proof ---------------- */
 
 const FACTS = [
-  { big: "51 lakh", label: "PM Surya Ghar installations by late Sep 2026, half the 1 crore target", src: "DD India / MNRE", url: "https://ddindia.co.in/2026/08/pm-surya-ghar-scheme-crosses-50-lakh-rooftop-solar-installations/" },
-  { big: "5%", label: "of households willing to install rooftop solar (13% in Gujarat)", src: "CEEW 2023", url: "https://pv-magazine-india.com/2023/11/16/indias-residential-rooftop-solar-potential-estimated-at-637-gw" },
-  { big: "₹78,000", label: "central subsidy for 3 kW; ₹85,800 in special-category states", src: "MNRE", url: "https://www.cag.org.in/sites/default/files/database/2.%20PM%20Surya%20Ghar%20Scheme-%20A%20consumer%20manual%20%281%29.pdf" },
-  { big: "Jul 2026", label: "MNRE acknowledges wrong DISCOM bills after rooftop installs", src: "Energetica India", url: "https://www.energetica-india.net/news/mnre-flags-incorrect-rooftop-solar-billing-by-discoms-refers-complaints-for-resolution" },
-  { big: "1 Jun 2026", label: "ALMM List-II: subsidised panels need listed domestic cells", src: "TaiyangNews", url: "https://taiyangnews.info/markets/mnre-clarifies-almm-list-ii-exemption-pm-surya-ghar-users" },
-  { big: "8.9%", label: "effective GST on installed solar since 22 Sep 2025 (was ~13.8%)", src: "EQ Mag", url: "https://www.eqmagpro.com/gst-on-renewable-energy-devices-rationalised-to-5-to-accelerate-indias-clean-energy-transition-eq/" },
-  { big: "$53M", label: "SolarSquare's Series C, Jun 2026: the market is real and funded", src: "Mercom", url: "https://mercomindia.com/solarsquare-raises-53-million-in-series-c-funding-round" },
-  { big: "0.727", label: "tCO₂ per MWh, India's grid emission factor (FY24)", src: "CEA", url: "https://solarquarter.com/2025/01/06/co2-baseline-database-highlights-indias-progress-in-renewable-energy-and-emission-reduction-cea/" },
+  { big: "51 lakh", count: true, label: "PM Surya Ghar installations by late Sep 2026, half the 1 crore target", src: "DD India / MNRE", url: "https://ddindia.co.in/2026/08/pm-surya-ghar-scheme-crosses-50-lakh-rooftop-solar-installations/" },
+  { big: "5%", count: true, label: "of households willing to install rooftop solar (13% in Gujarat)", src: "CEEW 2023", url: "https://pv-magazine-india.com/2023/11/16/indias-residential-rooftop-solar-potential-estimated-at-637-gw" },
+  { big: "₹78,000", count: true, label: "central subsidy for 3 kW; ₹85,800 in special-category states", src: "MNRE", url: "https://www.cag.org.in/sites/default/files/database/2.%20PM%20Surya%20Ghar%20Scheme-%20A%20consumer%20manual%20%281%29.pdf" },
+  { big: "Jul 2026", count: false, label: "MNRE acknowledges wrong DISCOM bills after rooftop installs", src: "Energetica India", url: "https://www.energetica-india.net/news/mnre-flags-incorrect-rooftop-solar-billing-by-discoms-refers-complaints-for-resolution" },
+  { big: "1 Jun 2026", count: false, label: "ALMM List-II: subsidised panels need listed domestic cells", src: "TaiyangNews", url: "https://taiyangnews.info/markets/mnre-clarifies-almm-list-ii-exemption-pm-surya-ghar-users" },
+  { big: "8.9%", count: true, label: "effective GST on installed solar since 22 Sep 2025 (was ~13.8%)", src: "EQ Mag", url: "https://www.eqmagpro.com/gst-on-renewable-energy-devices-rationalised-to-5-to-accelerate-indias-clean-energy-transition-eq/" },
+  { big: "$53M", count: true, label: "SolarSquare's Series C, Jun 2026: the market is real and funded", src: "Mercom", url: "https://mercomindia.com/solarsquare-raises-53-million-in-series-c-funding-round" },
+  { big: "0.727", count: true, label: "tCO₂ per MWh, India's grid emission factor (FY24)", src: "CEA", url: "https://solarquarter.com/2025/01/06/co2-baseline-database-highlights-indias-progress-in-renewable-energy-and-emission-reduction-cea/" },
 ];
 
 function Proof() {
+  const root = useRef<HTMLElement>(null);
+  useReveals(root);
+  useLayoutEffect(() => {
+    const host = root.current;
+    if (!host) return;
+    const undo = Array.from(host.querySelectorAll<HTMLElement>("[data-count]")).map(countUp);
+    return () => undo.forEach((f) => f());
+  }, []);
   return (
-    <section className="proof wrap" aria-labelledby="proof-title">
+    <section ref={root} className="proof wrap" aria-labelledby="proof-title">
       <div className="section-head section-head--split">
-        <h2 id="proof-title" className="section-title">
-          Numbers we
-          <br /> didn't make up.
+        <h2 id="proof-title" className="section-title" data-reveal="lines">
+          Numbers we didn't make up.
         </h2>
-        <p className="section-lede">Every figure on this site links to where it came from. When sources disagreed, the research log in the repo says which one we picked and why.</p>
+        <p className="section-lede" data-reveal="up">
+          Every figure on this site links to where it came from. When sources disagreed, the research log in the repo says which one we picked and why.
+        </p>
       </div>
       <div className="proof__grid">
         {FACTS.map((f) => (
-          <a key={f.big} className="fact" href={f.url} target="_blank" rel="noreferrer">
-            <span className="fact__big">{f.big}</span>
+          <a key={f.big} className="fact" href={f.url} target="_blank" rel="noreferrer" data-reveal="up" data-cursor="Source">
+            <span className="fact__big" {...(f.count ? { "data-count": "" } : {})}>
+              {f.big}
+            </span>
             <span className="fact__label">{f.label}</span>
             <span className="fact__src mono">
               {f.src} <ArrowUpRight size={12} weight="bold" />
@@ -573,28 +844,47 @@ function Proof() {
 /* ---------------- built with AI teaser ---------------- */
 
 function BuiltTeaser() {
-  const log = buildlog as { stats: { commits: number; files: number; linesAdded: number; tests: number } };
+  const root = useRef<HTMLElement>(null);
+  useReveals(root);
+  const log = buildlog as { stats: { commits: number; files: number; linesAdded: number; tests: number }; commits: { hash: string; subject: string; added: number }[] };
   return (
-    <section className="built wrap" aria-labelledby="built-title">
+    <section ref={root} className="built wrap" aria-labelledby="built-title">
       <div className="built__card">
-        <div>
+        <div className="built__copy">
           <p className="eyebrow">AI-first, with receipts</p>
-          <h2 id="built-title" className="section-title">
-            Claude did the research, the code
-            <br /> and this sentence.
+          <h2 id="built-title" className="section-title" data-reveal="lines">
+            Claude did the research, the code and this sentence.
           </h2>
-          <p className="section-lede">
+          <p className="section-lede" data-reveal="up">
             Research, a 25-idea tournament, the PV model, the 3D roof, the tests, the deck and the financial model were all produced by Claude Code from one brief. A person set the goal and reviewed the result.
           </p>
-          <LinkButton to="/built-with-ai" variant="accent">
+          <LinkButton to="/built-with-ai" variant="accent" data-cursor="Read">
             See the build log <ArrowRight size={16} weight="bold" />
           </LinkButton>
         </div>
-        <div className="built__stats">
-          <Stat label="Commits" value={num(log.stats.commits)} />
-          <Stat label="Files" value={num(log.stats.files)} />
-          <Stat label="Lines written" value={num(log.stats.linesAdded)} />
-          <Stat label="Unit tests" value={num(log.stats.tests)} />
+        <div className="built__term mono" aria-label="Recent commits">
+          <div className="built__term-bar">
+            <span />
+            <span />
+            <span />
+            <em>git log --oneline</em>
+          </div>
+          <ol>
+            {log.commits
+              .slice(-8)
+              .reverse()
+              .map((c) => (
+                <li key={c.hash} data-reveal="up">
+                  <b>{c.hash}</b> {c.subject}
+                  <i>+{num(c.added)}</i>
+                </li>
+              ))}
+          </ol>
+          <div className="built__stats">
+            <Stat label="Commits" value={num(log.stats.commits)} />
+            <Stat label="Lines written" value={num(log.stats.linesAdded)} />
+            <Stat label="Unit tests" value={num(log.stats.tests)} />
+          </div>
         </div>
       </div>
     </section>
@@ -602,31 +892,98 @@ function BuiltTeaser() {
 }
 
 function Final() {
+  const root = useRef<HTMLElement>(null);
+  const sun = useRef<HTMLDivElement>(null);
+  const btn = useMagnetic<HTMLAnchorElement>(0.4);
+  useReveals(root);
+  useLayoutEffect(() => {
+    if (!sun.current || prefersReducedMotion()) return;
+    const tw = gsap.fromTo(sun.current, { yPercent: 60 }, { yPercent: -10, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom bottom", scrub: true } });
+    return () => {
+      tw.scrollTrigger?.kill();
+      tw.kill();
+    };
+  }, []);
   return (
-    <section className="final wrap">
-      <SealWarning size={34} weight="duotone" color="var(--haldi-2)" />
-      <h2 className="final__title">Before you sign anything, read your roof.</h2>
-      <div className="hero__ctas">
-        <LinkButton to="/report" variant="primary" size="lg">
-          Start the Roof Report <ArrowRight size={18} weight="bold" />
-        </LinkButton>
-        <LinkButton to="/quote" variant="ghost" size="lg">
-          I already have a quote
-        </LinkButton>
+    <section ref={root} className="final" aria-labelledby="final-title">
+      <div ref={sun} className="final__sun" aria-hidden="true" />
+      <span className="final__deva deva" aria-hidden="true">
+        छत
+      </span>
+      <div className="final__inner wrap">
+        <h2 id="final-title" className="final__title" data-reveal="lines">
+          Before you sign anything, read your roof.
+        </h2>
+        <div className="hero__ctas" data-reveal="up">
+          <Link ref={btn} to="/report" className="btn btn--accent btn--lg btn--magnet">
+            Start the Roof Report <ArrowRight size={18} weight="bold" />
+          </Link>
+          <LinkButton to="/quote" variant="ghost" size="lg">
+            I already have a quote
+          </LinkButton>
+        </div>
       </div>
     </section>
   );
 }
 
+/* ---------------- page ---------------- */
+
 export default function Landing() {
+  const state = useRef<SceneState>({ lat: 28.61, lon: 77.21, doy: DOY, hour: 6.7, panels: 6, drop: 0, camT: 0, viewX: 0 });
+  const gl = useMemo(hasWebGL, []);
+  const [parts, setParts] = useState({ fonts: 0, scene: 0, assets: 0, frame: gl ? 0 : 1 });
+  const [intro, setIntro] = useState(false);
+  const [ready, setReady] = useState(!gl);
+  const lenis = useLenis();
+
   useEffect(() => {
     document.title = "Chhat: solar, without the sales pitch";
     const id = requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => cancelAnimationFrame(id);
+    let live = true;
+    document.fonts.ready.then(() => live && setParts((p) => ({ ...p, fonts: 1 })));
+    if (gl) {
+      sceneModule().then(() => live && setParts((p) => ({ ...p, scene: 1 })));
+      preloadSceneAssets(["aircon", "drum", "planter", "plant", "chair", "lantern"], ["plaster_normal", "plaster_rough", "slab_diff", "slab_normal", "lane_diff"]);
+    } else {
+      setParts((p) => ({ ...p, scene: 1, assets: 1 }));
+    }
+    const off = onAssetProgress((a) => live && setParts((p) => ({ ...p, assets: a })));
+    // Never hold anyone hostage to a slow network or GPU.
+    const bail = window.setTimeout(() => setReady(true), 12000);
+    return () => {
+      live = false;
+      off();
+      cancelAnimationFrame(id);
+      window.clearTimeout(bail);
+    };
+  }, [gl]);
+
+  // Keep the page still while the intro plays.
+  useEffect(() => {
+    if (!lenis) return;
+    if (intro) lenis.start();
+    else lenis.stop();
+    return () => lenis.start();
+  }, [lenis, intro]);
+
+  const onSceneReady = useCallback(() => {
+    setParts((p) => ({ ...p, frame: 1 }));
+    setReady(true);
   }, []);
+  const onExit = useCallback(() => {
+    setIntro(true);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, []);
+
+  const progress = parts.fonts * 0.1 + parts.scene * 0.2 + parts.assets * 0.5 + parts.frame * 0.2;
+  const done = ready && parts.fonts === 1;
+
   return (
     <>
-      <Story />
+      <Preloader progress={progress} done={done} onExit={onExit} />
+      <Story state={state} intro={intro} onReady={onSceneReady} />
+      <Manifesto />
       <CityMarquee />
       <Tools />
       <Learns />
@@ -637,3 +994,4 @@ export default function Landing() {
     </>
   );
 }
+

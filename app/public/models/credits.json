@@ -1,0 +1,106 @@
+{
+  "note": "All third-party 3D assets are CC0 (public domain) from Poly Haven. Processed by scripts/fetch-assets.mjs.",
+  "generated": "2026-10-09",
+  "models": [
+    {
+      "file": "models/aircon.glb",
+      "source": "https://polyhaven.com/a/exterior_aircon_unit",
+      "id": "exterior_aircon_unit",
+      "license": "CC0",
+      "role": "Split AC outdoor units on neighbouring roofs",
+      "bytes": 166540,
+      "tris": 9546
+    },
+    {
+      "file": "models/drum.glb",
+      "source": "https://polyhaven.com/a/Barrel_02",
+      "id": "Barrel_02",
+      "license": "CC0",
+      "role": "Blue plastic water drum by the stair room",
+      "bytes": 48724,
+      "tris": 2688
+    },
+    {
+      "file": "models/planter.glb",
+      "source": "https://polyhaven.com/a/planter_pot_clay",
+      "id": "planter_pot_clay",
+      "license": "CC0",
+      "role": "Terracotta planter (tulsi pot)",
+      "bytes": 46556,
+      "tris": 3080
+    },
+    {
+      "file": "models/plant.glb",
+      "source": "https://polyhaven.com/a/potted_plant_02",
+      "id": "potted_plant_02",
+      "license": "CC0",
+      "role": "Potted plant on the parapet",
+      "bytes": 100892,
+      "tris": 2987
+    },
+    {
+      "file": "models/chair.glb",
+      "source": "https://polyhaven.com/a/SchoolChair_01",
+      "id": "SchoolChair_01",
+      "license": "CC0",
+      "role": "Folding chair on the roof",
+      "bytes": 68956,
+      "tris": 5072
+    },
+    {
+      "file": "models/lantern.glb",
+      "source": "https://polyhaven.com/a/brass_diya_lantern",
+      "id": "brass_diya_lantern",
+      "license": "CC0",
+      "role": "Brass lantern that lights up at dusk",
+      "bytes": 121836,
+      "tris": 7694
+    }
+  ],
+  "textures": [
+    {
+      "id": "white_plaster_rough_01",
+      "source": "https://polyhaven.com/a/white_plaster_rough_01",
+      "license": "CC0",
+      "role": "Plaster relief on every facade",
+      "files": [
+        {
+          "file": "textures/plaster_normal.webp",
+          "bytes": 11900
+        },
+        {
+          "file": "textures/plaster_rough.webp",
+          "bytes": 63768
+        }
+      ]
+    },
+    {
+      "id": "concrete_floor_02",
+      "source": "https://polyhaven.com/a/concrete_floor_02",
+      "license": "CC0",
+      "role": "Roof slabs",
+      "files": [
+        {
+          "file": "textures/slab_diff.webp",
+          "bytes": 61768
+        },
+        {
+          "file": "textures/slab_normal.webp",
+          "bytes": 20958
+        }
+      ]
+    },
+    {
+      "id": "aerial_asphalt_01",
+      "source": "https://polyhaven.com/a/aerial_asphalt_01",
+      "license": "CC0",
+      "role": "Lanes between houses",
+      "files": [
+        {
+          "file": "textures/lane_diff.webp",
+          "bytes": 44246
+        }
+      ]
+    }
+  ]
+}

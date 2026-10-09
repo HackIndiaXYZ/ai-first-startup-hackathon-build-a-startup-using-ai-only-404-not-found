@@ -885,10 +885,65 @@
   flex-direction: column;
   max-width: 880px;
 }
+/* 404: the zero is a sun setting behind a parapet line */
 .nf {
+  padding-bottom: var(--space-9);
+  overflow: hidden;
+}
+.nf__head {
   display: grid;
   gap: 18px;
   justify-items: start;
-  align-content: start;
-  padding-bottom: var(--space-9);
+}
+.nf__art {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.04em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 118;
+  font-size: clamp(9rem, 30vw, 24rem);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+  margin: 0 auto var(--space-6);
+  width: fit-content;
+}
+.nf__zero {
+  position: relative;
+  width: 0.66em;
+  height: 0.8em;
+  overflow: hidden;
+}
+.nf__sun {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0.62em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% 0;
+  background: radial-gradient(circle at 50% 40%, var(--haldi) 0 60%, var(--haldi-2) 100%);
+  box-shadow: 0 0 0.25em oklch(0.84 0.165 80 / 0.55);
+  animation: nf-set 7s var(--ease-in-out) infinite;
+}
+.nf__roof {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: -0.02em;
+  height: 0.05em;
+  background: var(--ink);
+  border-radius: 2px;
+}
+@keyframes nf-set {
+  0%,
+  100% {
+    transform: translateY(-6%);
+  }
+  50% {
+    transform: translateY(78%);
+  }
 }
