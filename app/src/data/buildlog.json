@@ -1,10 +1,10 @@
 {
- "generated": "2026-10-09T16:34:45.199Z",
+ "generated": "2026-10-09T16:43:40.962Z",
  "stats": {
-  "commits": 4,
-  "files": 65,
-  "linesAdded": 13753,
-  "loc": 12379,
+  "commits": 7,
+  "files": 66,
+  "linesAdded": 14516,
+  "loc": 12448,
   "tests": 34,
   "docs": 6,
   "docWords": 14213
@@ -71,6 +71,48 @@
     "app/src/styles",
     "business",
     "pitch"
+   ]
+  },
+  {
+   "hash": "357228f",
+   "date": "2026-10-09T16:41:29+00:00",
+   "subject": "Demo video, AI usage report, deploy configs, accessibility fixes, README",
+   "author": "Claude",
+   "added": 728,
+   "deleted": 27,
+   "files": 26,
+   "areas": [
+    ".github",
+    "README.md",
+    "app/.env.example",
+    "app/package.json",
+    "app/public/og.png",
+    "app/public/poster.jpg"
+   ]
+  },
+  {
+   "hash": "e24cc2d",
+   "date": "2026-10-09T16:41:42+00:00",
+   "subject": "Ignore TypeScript build info",
+   "author": "Claude",
+   "added": 0,
+   "deleted": 1,
+   "files": 1,
+   "areas": [
+    "app/tsconfig.tsbuildinfo"
+   ]
+  },
+  {
+   "hash": "fec5aa1",
+   "date": "2026-10-09T16:43:39+00:00",
+   "subject": "Add live-preview packaging script and npm scripts for deck export and demo recording",
+   "author": "Claude",
+   "added": 35,
+   "deleted": 2,
+   "files": 2,
+   "areas": [
+    "app/package.json",
+    "app/scripts/artifact-entry.mjs"
    ]
   }
  ]
