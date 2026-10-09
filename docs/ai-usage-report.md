@@ -171,7 +171,7 @@ Why two modes: judges can open the link with no key and every feature works; hom
 
 ## 6. How we checked the AI's work
 
-- Second pass: 57 unit tests (23 new, including a WCAG contrast check across the whole day and the asset budget), 66 Playwright end-to-end tests on desktop and a Pixel 7 profile, axe-core on every route (0 serious or critical violations), Lighthouse (100 accessibility, best practices and SEO on all four audited routes), and a bundle budget in CI. The tests found eleven real issues, all fixed; the list is in `docs/test-report.md` §3.
+- Second pass: 57 unit tests (23 new, including a WCAG contrast check across the whole day and the asset budget), 67 Playwright end-to-end tests on desktop and a Pixel 7 profile, axe-core on every route (0 serious or critical violations), Lighthouse (100 accessibility, best practices and SEO on all four audited routes), and a bundle budget in CI. The tests and the demo recording found eleven real issues, all fixed; the list is in `docs/test-report.md` §3.
 - 34 unit tests against hand-checked values (e.g. extraterrestrial irradiance at the equator ≈ 10.4 kWh/m²/day; Delhi solar noon on 21 June ≈ 12:20 IST; subsidy slabs; EMI formula).
 - Parser tests on every sample document; agent tests for English, Hindi, Hinglish and multi-turn context.
 - The financial model recalculated in LibreOffice: 235 formulas, 0 errors.

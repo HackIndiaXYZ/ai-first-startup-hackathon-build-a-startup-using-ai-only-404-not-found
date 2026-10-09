@@ -1,14 +1,14 @@
 {
- "generated": "2026-10-09T21:51:07.403Z",
+ "generated": "2026-10-09T23:18:16.943Z",
  "stats": {
-  "commits": 13,
+  "commits": 14,
   "files": 92,
-  "linesAdded": 19560,
-  "loc": 15945,
+  "linesAdded": 19692,
+  "loc": 16008,
   "tests": 57,
   "e2e": 67,
   "docs": 8,
-  "docWords": 17539
+  "docWords": 17826
  },
  "commits": [
   {
@@ -200,6 +200,23 @@
     "app/e2e/fallbacks.spec.ts",
     "app/e2e/fixtures.ts",
     "app/e2e/landing.spec.ts"
+   ]
+  },
+  {
+   "hash": "3429c95",
+   "date": "2026-10-09T22:15:26+00:00",
+   "subject": "Curtain only on real page changes; stills, deck and docs refreshed",
+   "author": "Claude",
+   "added": 132,
+   "deleted": 35,
+   "files": 18,
+   "areas": [
+    "README.md",
+    "app/e2e/smoke.spec.ts",
+    "app/e2e/tools.spec.ts",
+    "app/public/deck",
+    "app/public/og.png",
+    "app/public/poster.jpg"
    ]
   }
  ]

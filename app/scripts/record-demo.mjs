@@ -170,30 +170,40 @@ const curtainDone = () => {
 
 const SEGMENTS = {
   async landing(d, page) {
+    // Scroll targets are chapter midpoints (see src/lib/story.ts), measured
+    // from the real story height, so captions always match the chapter.
+    let range = 0;
+    let at = 0;
+    const to = async (p, sec) => {
+      const y = Math.round(p * range);
+      await d.wheel(y - at, sec);
+      at = y;
+    };
     await d.card(`<div class="d">छत</div><h1>Solar, without<br/>the sales pitch.</h1><p>Chhat · HackIndia AI-First Startup Hackathon 2026 · Team 404 not found</p>`, 4.2);
-    await d.until(preGone, 30);
+    await d.until(() => !!document.querySelector("main h1") && !document.querySelector(".pre"), 30);
+    range = await page.evaluate(() => document.querySelector(".story").offsetHeight - window.innerHeight);
     await d.hold(1.2);
     await d.cap("Every Indian roof has a number. Chhat finds it from one bill and 20 years of NASA sunlight.");
     await d.glide(W * 0.62, H * 0.45, W * 0.7, H * 0.4, 2.5);
     await d.hold(2.5);
     await d.cap("The sunlight is there. Trust isn't: only 5% of households say they'd install.");
-    await d.wheel(860, 2.2);
-    await d.hold(2.6);
+    await to(0.205, 2.2);
+    await d.hold(3);
     await d.cap("A real NOAA sun path for Delhi in mid-April. Watch the clock, the sun dial and the shadows.");
-    await d.wheel(980, 2.4);
-    await d.hold(2.4);
-    await d.cap("Noon: Chhat sizes the system, the panels go up, and the roof starts producing.");
-    await d.wheel(1080, 2.6);
+    await to(0.365, 2.4);
+    await d.hold(2.8);
+    await d.cap("Noon: Chhat sizes the system, stacks ₹78,000 + ₹30,000 of subsidy, and the panels go up.");
+    await to(0.585, 4.2);
     await d.hold(3.2);
     await d.cap("Then it reads the installer's quote: ₹57,710 over, subsidy-killing panels, 0.3 kW missing.");
-    await d.wheel(980, 2.4);
-    await d.hold(3.4);
+    await to(0.685, 2.2);
+    await d.hold(3.6);
     await d.cap("After install, it audits every DISCOM bill. MNRE admitted wrong bills in July 2026.");
-    await d.wheel(940, 2.4);
-    await d.hold(2.8);
-    await d.cap("Sunset. The lantern and the Diwali lights come on. Two minutes, one bill, no login.");
-    await d.wheel(1000, 2.6);
+    await to(0.86, 2.8);
     await d.hold(3);
+    await d.cap("Sunset. The lantern and the Diwali lights come on. Two minutes, one bill, no login.");
+    await to(0.97, 2.4);
+    await d.hold(3.4);
     await d.cap("");
     await d.wheel(900, 2);
     await d.cap("Why it exists: the same 3 kW system is quoted anywhere from ₹1.35 to ₹2.1 lakh.");
@@ -352,9 +362,24 @@ const START = {
 
 function join() {
   const names = Object.keys(SEGMENTS).filter((n) => existsSync(`${TMP}/${n}.mp4`));
-  writeFileSync(`${TMP}/list.txt`, names.map((n) => `file '${TMP}/${n}.mp4'`).join("\n"));
-  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", `${TMP}/list.txt`, "-c:v", "libx264", "-preset", "slow", "-crf", "22", "-pix_fmt", "yuv420p", "-movflags", "+faststart", `${OUT}chhat-demo.mp4`]);
-  console.log(`saved ${OUT}chhat-demo.mp4 from ${names.join(", ")}`);
+  const files = names.map((n) => `${TMP}/${n}.mp4`);
+  const durs = files.map((f) => parseFloat(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f]).toString()));
+  // Short crossfades between segments instead of hard cuts.
+  const F = 0.35;
+  let filter = "";
+  let last = "[0:v]";
+  let offset = 0;
+  for (let i = 1; i < files.length; i++) {
+    offset += durs[i - 1] - F;
+    filter += `${last}[${i}:v]xfade=transition=fade:duration=${F}:offset=${offset.toFixed(3)}[v${i}];`;
+    last = `[v${i}]`;
+  }
+  const args = ["-y", "-loglevel", "error", ...files.flatMap((f) => ["-i", f])];
+  if (files.length > 1) args.push("-filter_complex", filter.replace(/;$/, ""), "-map", last);
+  args.push("-c:v", "libx264", "-preset", "slow", "-crf", "22", "-pix_fmt", "yuv420p", "-movflags", "+faststart", `${OUT}chhat-demo.mp4`);
+  execFileSync("ffmpeg", args);
+  const total = durs.reduce((a, b) => a + b, 0) - F * (files.length - 1);
+  console.log(`saved ${OUT}chhat-demo.mp4 (${Math.floor(total / 60)}:${String(Math.round(total % 60)).padStart(2, "0")}) from ${names.join(", ")}`);
 }
 
 const argv = process.argv.slice(2);
