@@ -101,7 +101,7 @@ Each iteration attacks the current leader with a new adversarial scenario, re-sc
 - A plain calculator covers 1 of our 4 flows. Quote audit and post-install bill audit are the differentiators; the 3D sun-path roof and live NASA data are hard to match in the same window. −1 Originality. **Chhat 90.** Ranking unchanged.
 
 ### Iteration 4: "The AI usage judge asks to see the agent loop."
-- **Chhat:** The agent has 7 typed tools (`read_bill`, `get_irradiance`, `size_system`, `compute_subsidy`, `finance_options`, `audit_quote`, `audit_bill`); the UI shows a live trace of tool calls. +1 AI Workflow. **Chhat 91.**
+- **Chhat:** The agent has 7 typed tools (`get_irradiance`, `size_system`, `compute_subsidy`, `finance_options`, `audit_quote`, `audit_bill`, `search_knowledge`), with bill and quote reading as a separate extraction step; the UI shows a live trace of tool calls. +1 AI Workflow. **Chhat 91.**
 - **Haq:** Comparable agent depth. **82.**
 - Ranking unchanged.
 
