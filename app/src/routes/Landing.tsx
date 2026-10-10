@@ -10,6 +10,7 @@ import { formatClock } from "../engine/solar";
 import { hasWebGL, isLowPower, prefersReducedMotion } from "../lib/env";
 import { gsap, ScrollTrigger } from "../lib/smooth";
 import { makeSceneState } from "../three/state";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import { LinkButton, Select, Stat } from "../components/ui";
 import { useAsk } from "../components/AskChhat";
 import "../styles/landing.css";
@@ -141,9 +142,11 @@ function Story() {
       <div className="story__stage">
         <div className="story__canvas" aria-hidden="true">
           {gl ? (
-            <Suspense fallback={<div className="story__poster" />}>
-              <RoofScene state={state} roof={HERO_ROOF} lowPower={low} onReady={() => setReady(true)} />
-            </Suspense>
+            <ErrorBoundary fallback={() => <div className="story__poster story__poster--img" style={{ backgroundImage: "url(./poster.jpg)" }} />} onError={() => setReady(true)}>
+              <Suspense fallback={<div className="story__poster" />}>
+                <RoofScene state={state} roof={HERO_ROOF} lowPower={low} onReady={() => setReady(true)} />
+              </Suspense>
+            </ErrorBoundary>
           ) : (
             <div className="story__poster story__poster--img" style={{ backgroundImage: "url(./poster.jpg)" }} />
           )}

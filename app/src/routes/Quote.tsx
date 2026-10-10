@@ -192,7 +192,7 @@ export default function Quote() {
               <h2 className="verdict__title">{a.verdict}</h2>
               <p className="verdict__sub">
                 {a.incomplete ? "Chhat needs the system size and total price to grade the deal. " : `Score ${a.score}/100. `}
-                {a.moneyAtRisk > 0 ? (
+                {a.incomplete && a.moneyAtRisk === 0 ? null : a.moneyAtRisk > 0 ? (
                   <>
                     Money at risk: <span className="verdict__risk">{rupees(a.moneyAtRisk)}</span>
                   </>

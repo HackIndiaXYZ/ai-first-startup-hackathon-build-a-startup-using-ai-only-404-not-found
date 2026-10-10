@@ -1,6 +1,7 @@
 import { Fragment, lazy, Suspense, useState, type ReactNode } from "react";
 import { HashRouter, Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import { AskProvider } from "./components/AskChhat";
+import { ErrorBoundary, RouteError } from "./components/ErrorBoundary";
 import { Footer, Nav } from "./components/Shell";
 import { SmoothScroll } from "./lib/smooth";
 
@@ -21,9 +22,22 @@ const NotFound = lazy(() => import("./routes/NotFound"));
 function FreshOnNavigate({ children }: { children: ReactNode }) {
   const loc = useLocation();
   const type = useNavigationType();
-  const [key, setKey] = useState(loc.key);
-  if (type !== "REPLACE" && loc.key !== key) setKey(loc.key);
+  // A hand-edited hash arrives as a POP with the key "default", so the
+  // parameters are part of the identity too.
+  const id = `${loc.key}|${loc.search}`;
+  const [key, setKey] = useState(id);
+  if (type !== "REPLACE" && id !== key) setKey(id);
   return <Fragment key={key}>{children}</Fragment>;
+}
+
+/** One error boundary per page, reset when the path changes. */
+function RouteBoundary({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+  return (
+    <ErrorBoundary key={pathname} fallback={(error, retry) => <RouteError error={error} retry={retry} />}>
+      {children}
+    </ErrorBoundary>
+  );
 }
 
 function Loading() {
@@ -37,7 +51,7 @@ function Loading() {
 
 export default function App() {
   return (
-    <HashRouter>
+    <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SmoothScroll>
         <AskProvider>
           <a className="skip" href="#main">
@@ -45,18 +59,20 @@ export default function App() {
           </a>
           <Nav />
           <main id="main">
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/report" element={<FreshOnNavigate><Report /></FreshOnNavigate>} />
-                <Route path="/quote" element={<FreshOnNavigate><Quote /></FreshOnNavigate>} />
-                <Route path="/bill" element={<FreshOnNavigate><Bill /></FreshOnNavigate>} />
-                <Route path="/ask" element={<Ask />} />
-                <Route path="/built-with-ai" element={<BuiltWithAI />} />
-                <Route path="/deck" element={<Deck />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <RouteBoundary>
+              <Suspense fallback={<Loading />}>
+                <Routes>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/report" element={<FreshOnNavigate><Report /></FreshOnNavigate>} />
+                  <Route path="/quote" element={<FreshOnNavigate><Quote /></FreshOnNavigate>} />
+                  <Route path="/bill" element={<FreshOnNavigate><Bill /></FreshOnNavigate>} />
+                  <Route path="/ask" element={<Ask />} />
+                  <Route path="/built-with-ai" element={<BuiltWithAI />} />
+                  <Route path="/deck" element={<Deck />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </RouteBoundary>
           </main>
           <Footer />
           <div className="grain" aria-hidden="true" />

@@ -6,6 +6,7 @@ import { parseBill, type ParsedBill } from "../ai/parsers";
 import { ModeBadge } from "../components/AskChhat";
 import { CashflowChart, MonthlyChart } from "../components/charts";
 import { DocIntake, type IntakeMeta } from "../components/DocIntake";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import { Field, NumberInput, Segmented, Select, Slider, SourceTip, Stat } from "../components/ui";
 import { SAMPLE_BILLS } from "../data/samples";
 import { CITIES, CLIMATE_SOURCE, cityByName, climateFromCity, fetchClimate, nearestCity } from "../engine/climate";
@@ -24,6 +25,7 @@ import { MAX_PANELS } from "../three/layout";
 import "../styles/tools.css";
 
 const RoofScene = lazy(() => import("../three/RoofScene"));
+const POSTER = { backgroundImage: "linear-gradient(rgba(240,245,249,.75),rgba(240,245,249,.75)), url(./poster.jpg)", backgroundSize: "cover" };
 
 const STEPS = [
   { t: "Register on pmsuryaghar.gov.in", d: "State, DISCOM, consumer number and mobile. Takes five minutes." },
@@ -247,7 +249,7 @@ export default function Report() {
       <header className="wrap page__head">
         <p className="eyebrow">Roof Report · छत रिपोर्ट</p>
         <h1 className="page__title">What your roof is worth.</h1>
-        <p className="page__lede">Change anything on the left and every number updates. Drag the roof to look around, and scrub the sun across your sky.</p>
+        <p className="page__lede">Change any input and every number updates. Drag the roof to look around, and scrub the sun across your sky.</p>
         <div className="page__meta">
           <ModeBadge mode={mode} />
           <span className={`chip ${climate.source === "nasa-live" ? "chip--live" : ""}`}>
@@ -260,11 +262,13 @@ export default function Report() {
       <section className="wrap">
         <div className="stage" ref={sceneWrap}>
           {gl ? (
-            <Suspense fallback={<div className="stage__poster" />}>
-              <RoofScene state={scene} roof={roof} interactive panelsKey={s.panels} lowPower={low} cameraPosition={[15, 17, 19]} />
-            </Suspense>
+            <ErrorBoundary fallback={() => <div className="stage__poster stage__poster--msg" style={POSTER}>3D view didn't load. Every number below still works.</div>}>
+              <Suspense fallback={<div className="stage__poster" />}>
+                <RoofScene state={scene} roof={roof} interactive panelsKey={s.panels} lowPower={low} cameraPosition={[15, 17, 19]} />
+              </Suspense>
+            </ErrorBoundary>
           ) : (
-            <div className="stage__poster stage__poster--msg" style={{ backgroundImage: "linear-gradient(rgba(240,245,249,.75),rgba(240,245,249,.75)), url(./poster.jpg)", backgroundSize: "cover" }}>3D view needs WebGL. Every number below still works.</div>
+            <div className="stage__poster stage__poster--msg" style={POSTER}>3D view needs WebGL. Every number below still works.</div>
           )}
           <div className="stage__meter">
             <span className="eyebrow">Output now</span>
