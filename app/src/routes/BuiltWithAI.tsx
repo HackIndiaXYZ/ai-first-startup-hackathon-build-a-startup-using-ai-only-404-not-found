@@ -1,4 +1,5 @@
 import { ArrowUpRight, GitCommit, Robot, User } from "@phosphor-icons/react";
+import { usePageIntro } from "../lib/motion";
 import { useEffect } from "react";
 import { TOOL_SCHEMAS } from "../ai/tools";
 import { Stat } from "../components/ui";
@@ -16,7 +17,7 @@ interface Commit {
   files: number;
   areas: string[];
 }
-const LOG = buildlog as { generated: string; stats: { commits: number; files: number; linesAdded: number; loc: number; tests: number; docs: number; docWords: number }; commits: Commit[] };
+const LOG = buildlog as { generated: string; stats: { commits: number; files: number; linesAdded: number; loc: number; tests: number; e2e?: number; docs: number; docWords: number }; commits: Commit[] };
 
 const STAGES = [
   {
@@ -62,6 +63,18 @@ const STAGES = [
     doc: "app/src/three",
   },
   {
+    k: "Design overhaul",
+    ai: "From a second brief: re-read the Awwwards, taste and GSAP skills, wrote a design brief, pulled six CC0 models from Poly Haven through its API and packed them to 738 KB with glTF-Transform. Rebuilt the renderer (sky-baked reflections, ambient occlusion, bloom, adaptive quality) and the landing (preloader, SplitText chapters, velocity marquee, stacking cards, route curtain).",
+    human: "Wrote the second brief.",
+    doc: "docs/05-design.md",
+  },
+  {
+    k: "Test phase",
+    ai: "Added design-system unit tests (including a WCAG contrast check across the whole day, which caught a real dusk-contrast bug) and a Playwright suite: every route, every tool flow, axe-core accessibility, keyboard, reduced motion, no-WebGL, phones and a four-width viewport sweep.",
+    human: "None.",
+    doc: "docs/test-report.md",
+  },
+  {
     k: "Business",
     ai: "Built the business plan and a formula-driven financial model: unit economics, 5-year P&L, cash flow, funding ask, sensitivity.",
     human: "None.",
@@ -103,26 +116,29 @@ const SYSTEM_EXCERPT = `You are Chhat, an independent rooftop-solar advisor for 
 - Be brief and concrete: 2 to 6 sentences, or a short list. Indian number formatting.`;
 
 export default function BuiltWithAI() {
+  const intro = usePageIntro<HTMLDivElement>();
   useEffect(() => {
     document.title = "Built with AI · Chhat";
   }, []);
   const s = LOG.stats;
   return (
-    <div className="page built-page">
+    <div className="page built-page" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">AI usage report · live</p>
-        <h1 className="page__title">One brief in. A startup out.</h1>
+        <h1 className="page__title">Two briefs in. A startup out.</h1>
         <p className="page__lede">
-          Claude Code (Anthropic) did the research, ran the idea tournament, wrote every line of code and copy, designed the 3D world, built the financial model and the deck, and tested its own output in a headless browser. A person wrote the brief and reviewed the result.
+          Claude Code (Anthropic) did the research, ran the idea tournament, wrote every line of code and copy, designed the 3D world, built the financial model and the deck, and tested its own output in a headless browser. A person wrote two briefs and reviewed the result.
         </p>
       </header>
 
-      <section className="wrap built-stats">
-        <Stat label="Product commits" value={num(s.commits)} />
-        <Stat label="Lines of source" value={num(s.loc)} />
-        <Stat label="Unit tests" value={num(s.tests)} />
-        <Stat label="Words of research & planning" value={num(s.docWords)} />
-        <Stat label="Code written by a human" value="0 lines" />
+      <section className="wrap">
+        <div className="built-stats">
+          <Stat label="Product commits" value={num(s.commits)} />
+          <Stat label="Lines of source" value={num(s.loc)} />
+          <Stat label="Unit + end-to-end tests" value={s.e2e ? `${num(s.tests)} + ${num(s.e2e)}` : num(s.tests)} />
+          <Stat label="Words of research & planning" value={num(s.docWords)} />
+          <Stat label="Code written by a human" value="0 lines" />
+        </div>
       </section>
 
       <section className="wrap built-section">

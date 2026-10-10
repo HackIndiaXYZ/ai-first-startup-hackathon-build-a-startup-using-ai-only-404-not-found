@@ -5,12 +5,14 @@
 // overflow, WebGL context leaks and broken fallbacks.
 
 import { spawn } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { chromium } from "playwright-core";
 
 const PORT = Number(process.env.E2E_PORT ?? 4183);
 const BASE = `http://localhost:${PORT}/`;
-const CHROME = process.env.CHROME_PATH ?? "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
+// The cloud sandbox ships its own Chromium; elsewhere use Playwright's managed one.
+const LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
+const CHROME = process.env.CHROME_PATH ?? (existsSync(LOCAL_CHROME) ? LOCAL_CHROME : undefined);
 const OUT = process.env.E2E_OUT ?? "e2e-out";
 mkdirSync(OUT, { recursive: true });
 
@@ -69,6 +71,8 @@ const ROUTES = ["/", "/report", "/quote", "/bill", "/ask", "/built-with-ai", "/d
 for (const r of ROUTES) {
   const { ctx, page } = await open(browser);
   await go(page, r, 2500);
+  // The landing intro holds the headline hidden until the scene is ready (capped at 12 s).
+  await page.locator("h1").first().waitFor({ state: "visible", timeout: 15000 }).catch(() => {});
   const h1 = await page.locator("h1").first().innerText().catch(() => "");
   const leak = await visibleLeak(page);
   check(`route ${r}: renders a heading`, h1.trim().length > 0, h1.slice(0, 60));
@@ -193,7 +197,9 @@ for (const u of HOSTILE) {
 {
   const { ctx, page } = await open(browser);
   await go(page, "/quote", 1500);
+  await page.locator(".sample").first().waitFor({ state: "visible", timeout: 10000 }).catch(() => {});
   const samples = await page.locator(".sample").count();
+  check("quote: sample documents are listed", samples >= 3, `${samples} samples`);
   for (let i = 0; i < samples; i++) {
     await page.locator(".sample").nth(i).click();
     await page.waitForTimeout(500);
@@ -211,7 +217,9 @@ for (const u of HOSTILE) {
   check("quote: no errors", page.errors.length === 0, page.errors.join(" | "));
 
   await go(page, "/bill", 1500);
+  await page.locator(".sample").first().waitFor({ state: "visible", timeout: 10000 }).catch(() => {});
   const bs = await page.locator(".sample").count();
+  check("bill: sample documents are listed", bs >= 3, `${bs} samples`);
   for (let i = 0; i < bs; i++) {
     await page.locator(".sample").nth(i).click();
     await page.waitForTimeout(500);
@@ -232,6 +240,32 @@ for (const u of HOSTILE) {
   await page.goBack();
   await page.waitForTimeout(1500);
   check("report: back button restores the previous city", (await page.inputValue("#city")) === "Delhi", await page.inputValue("#city"));
+  await ctx.close();
+}
+
+// ---------------------------------------------------------------- 6b. Route curtain: no navigation is lost mid-transition
+{
+  const { ctx, page } = await open(browser);
+  const navLink = (name) => page.getByRole("link", { name, exact: true }).first();
+  const landedOn = async (path) => {
+    await page.waitForTimeout(3000);
+    return new URL(page.url()).hash.startsWith(`#${path}`);
+  };
+  await go(page, "/quote", 1500);
+  await navLink("Roof Report").click();
+  await page.waitForTimeout(150);
+  await navLink("Bill Audit").click({ force: true });
+  check("curtain: a second click during the transition wins", await landedOn("/bill"), page.url());
+  await go(page, "/quote", 1500);
+  await navLink("Roof Report").click();
+  await page.waitForTimeout(200);
+  await page.evaluate(() => (location.hash = "#/ask"));
+  check("curtain: an address-bar navigation during the transition is kept", await landedOn("/ask"), page.url());
+  await go(page, "/report?city=Delhi&units=450", 2000);
+  await page.fill("#units", "512");
+  await navLink("Bill Audit").click();
+  check("curtain: the page rewriting its URL does not cancel a click", await landedOn("/bill"), page.url());
+  check("curtain: no errors", page.errors.length === 0, page.errors.join(" | "));
   await ctx.close();
 }
 

@@ -885,10 +885,3 @@
   flex-direction: column;
   max-width: 880px;
 }
-.nf {
-  display: grid;
-  gap: 18px;
-  justify-items: start;
-  align-content: start;
-  padding-bottom: var(--space-9);
-}

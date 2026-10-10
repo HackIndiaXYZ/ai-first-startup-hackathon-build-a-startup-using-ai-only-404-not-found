@@ -1,4 +1,5 @@
 import { Copy, DownloadSimple } from "@phosphor-icons/react";
+import { usePageIntro } from "../lib/motion";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { detectMode, type Mode } from "../ai/client";
@@ -17,6 +18,7 @@ import { MONTHS } from "../engine/types";
 import "../styles/tools.css";
 
 export default function Bill() {
+  const intro = usePageIntro<HTMLDivElement>();
   const [params] = useSearchParams();
   const init = useMemo(() => {
     const s = SAMPLE_SOLAR_BILLS.find((x) => x.id === (params.get("sample") ?? "import-billed"));
@@ -44,7 +46,7 @@ export default function Bill() {
   const billedBad = a.expectedNetUnits !== null && bill.netUnitsBilled !== null && bill.netUnitsBilled > a.expectedNetUnits + 2;
 
   return (
-    <div className="page">
+    <div className="page" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">Bill Audit · after you go solar</p>
         <h1 className="page__title">Is your DISCOM billing you right?</h1>

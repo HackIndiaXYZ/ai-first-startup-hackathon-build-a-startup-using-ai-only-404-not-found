@@ -1,4 +1,5 @@
 import { ArrowRight, Crosshair, DownloadSimple, LinkSimple, Printer, ShareNetwork, Sun } from "@phosphor-icons/react";
+import { usePageIntro } from "../lib/motion";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { detectMode, type Mode } from "../ai/client";
@@ -38,6 +39,7 @@ const STEPS = [
 ];
 
 export default function Report() {
+  const intro = usePageIntro<HTMLDivElement>();
   const [params, setParams] = useSearchParams();
   const initialCity = cityByName(params.get("city") ?? "") ?? cityByName("Delhi")!;
   const [cityName, setCityName] = useState(initialCity.name);
@@ -245,7 +247,7 @@ export default function Report() {
   };
 
   return (
-    <div className="page report">
+    <div className="page report" ref={intro}>
       <header className="wrap page__head">
         <p className="eyebrow">Roof Report · छत रिपोर्ट</p>
         <h1 className="page__title">What your roof is worth.</h1>

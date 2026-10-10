@@ -57,13 +57,36 @@
   gap: 4px;
   margin-left: auto;
 }
-.nav--home:not(.nav--scrolled) .nav__links {
-  background: oklch(0.968 0.007 235 / 0.9);
-  border-radius: 999px;
-  padding: 4px;
-  box-shadow: var(--shadow-1);
+/* Over the landing's rooftop the nav is glass-free and takes the hero's ink:
+   dark text by day, light text after sunset. */
+html[data-hero] .nav--home {
+  background: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  color: var(--ink);
+}
+html[data-hero="dark"] .nav--home {
+  color: var(--paper);
+}
+html[data-hero] .nav--home .logo,
+html[data-hero] .nav--home .nav__link {
+  color: currentColor;
+}
+html[data-hero] .nav--home .nav__link {
+  opacity: 0.8;
+}
+html[data-hero] .nav--home .nav__link:hover {
+  opacity: 1;
+}
+html[data-hero="dark"] .nav--home .logo__deva {
+  color: oklch(1 0 0 / 0.6);
+}
+html[data-hero="dark"] .nav--home .icon-btn {
+  color: var(--paper);
+  border-color: oklch(1 0 0 / 0.3);
 }
 .nav__link {
+  position: relative;
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;

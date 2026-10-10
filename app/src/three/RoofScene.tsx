@@ -1,9 +1,13 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { sunPosition } from "../engine/solar";
-import { FLOOR_H, layoutArray, MAX_PANELS, MAX_POSTS, MAX_RAILS, MODULE, mulberry32, type RoofDims } from "./layout";
+import { loadTexture, repeated } from "./assets";
+import { TEXTURE_NAMES, type TextureName } from "./manifest";
+import { Effects, pickQuality, type Quality } from "./Effects";
+import { camAt, FLOOR_H, layoutArray, MAX_PANELS, MAX_POSTS, MAX_RAILS, MODULE, mulberry32, type RoofDims } from "./layout";
+import { Instanced, Lantern, sagLine, StringLights, type Placement } from "./Props";
 import { skyFragment, skyLook, skyVertex, sunVector } from "./sky";
 import { panelTexture, windowTextures } from "./textures";
 import type { SceneState } from "./state";
@@ -17,22 +21,67 @@ interface Props {
   /** Re-layout panels when this changes (report slider) */
   panelsKey?: number;
   lowPower?: boolean;
+  quality?: Quality;
   className?: string;
   onReady?: () => void;
   cameraPosition?: [number, number, number];
+  /** Stop rendering, e.g. while the canvas is scrolled out of view */
+  paused?: boolean;
 }
 
-const PALETTE = ["#7d9fd1", "#a9c1e2", "#e8bdb3", "#e5c07a", "#bcd9c7", "#efede6", "#d39a78", "#9fb7d6", "#f0dcc0"];
+// Limewash, Jodhpur blue, sandstone, pista green and haldi facades.
+const PALETTE = ["#86a6d4", "#b3c8e6", "#ecc3b6", "#e9c886", "#c4dccb", "#f1efe8", "#d9a586", "#a9bfdc", "#f2e0c4", "#efe9dc"];
 
 /* ------------------------------------------------------------------ */
-/* Sky + lights, driven every frame from the shared state              */
+/* Shared textures                                                     */
+/* ------------------------------------------------------------------ */
+
+type TexSet = Partial<Record<TextureName, THREE.Texture>>;
+
+function useSceneTextures(): TexSet {
+  const [set, setSet] = useState<TexSet>({});
+  useEffect(() => {
+    let live = true;
+    TEXTURE_NAMES.forEach((n) =>
+      loadTexture(n)
+        .then((t) => live && setSet((s) => ({ ...s, [n]: t })))
+        .catch(() => {
+          /* untextured fallback is fine */
+        }),
+    );
+    return () => {
+      live = false;
+    };
+  }, []);
+  return set;
+}
+
+/** Plaster relief on facades: normal + roughness at the given tiling. */
+function plasterize(m: THREE.MeshStandardMaterial, tex: TexSet, rx: number, ry: number) {
+  if (!tex.plaster_normal || !tex.plaster_rough) return;
+  m.normalMap = repeated(tex.plaster_normal, rx, ry);
+  m.normalScale.set(0.55, 0.55);
+  m.roughnessMap = repeated(tex.plaster_rough, rx, ry);
+  m.needsUpdate = true;
+}
+
+function slabify(m: THREE.MeshStandardMaterial, tex: TexSet, r: number) {
+  if (!tex.slab_diff || !tex.slab_normal) return;
+  m.map = repeated(tex.slab_diff, r, r);
+  m.normalMap = repeated(tex.slab_normal, r, r);
+  m.normalScale.set(0.6, 0.6);
+  m.needsUpdate = true;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sky, lights and a reflection map rendered from the same sky        */
 /* ------------------------------------------------------------------ */
 
 function Atmosphere({ state, lowPower }: { state: MutableRefObject<SceneState>; lowPower?: boolean }) {
   const sun = useRef<THREE.DirectionalLight>(null);
   const hemi = useRef<THREE.HemisphereLight>(null);
   const moon = useRef<THREE.DirectionalLight>(null);
-  const { scene } = useThree();
+  const { scene, gl } = useThree();
   const uniforms = useMemo(
     () => ({
       uTop: { value: new THREE.Color() },
@@ -44,12 +93,26 @@ function Atmosphere({ state, lowPower }: { state: MutableRefObject<SceneState>; 
     [],
   );
   const fog = useMemo(() => new THREE.Fog("#dce9f6", 110, 340), []);
+
+  // The sky also lives in a tiny scene of its own. Whenever the sun moves
+  // enough, it is baked into a prefiltered environment map so panel glass,
+  // metal and plaster pick up dawn pinks and dusk oranges.
+  const env = useMemo(() => {
+    const s = new THREE.Scene();
+    const mat = new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, uniforms, vertexShader: skyVertex, fragmentShader: skyFragment });
+    s.add(new THREE.Mesh(new THREE.SphereGeometry(100, 32, 16), mat));
+    return { scene: s, pmrem: new THREE.PMREMGenerator(gl), rt: null as THREE.WebGLRenderTarget | null, el: 999, night: -1 };
+  }, [gl, uniforms]);
+
   useEffect(() => {
     scene.fog = fog;
     return () => {
       scene.fog = null;
+      scene.environment = null;
+      env.rt?.dispose();
+      env.pmrem.dispose();
     };
-  }, [scene, fog]);
+  }, [scene, fog, env]);
 
   useFrame(() => {
     const s = state.current;
@@ -70,10 +133,20 @@ function Atmosphere({ state, lowPower }: { state: MutableRefObject<SceneState>; 
     if (hemi.current) {
       hemi.current.color.copy(look.hemiSky);
       hemi.current.groundColor.copy(look.hemiGround);
-      hemi.current.intensity = look.hemiIntensity;
+      hemi.current.intensity = look.hemiIntensity * 0.55;
     }
     if (moon.current) moon.current.intensity = look.night * 0.55;
     (scene.userData as { night?: number }).night = look.night;
+
+    if (Math.abs(p.elevation - env.el) > (lowPower ? 4 : 1.5) || Math.abs(look.night - env.night) > 0.06) {
+      env.el = p.elevation;
+      env.night = look.night;
+      const rt = env.pmrem.fromScene(env.scene, 0, 0.1, 400);
+      env.rt?.dispose();
+      env.rt = rt;
+      scene.environment = rt.texture;
+    }
+    scene.environmentIntensity = 0.55 - look.night * 0.35;
   });
 
   return (
@@ -87,14 +160,15 @@ function Atmosphere({ state, lowPower }: { state: MutableRefObject<SceneState>; 
         ref={sun}
         castShadow={!lowPower}
         shadow-mapSize={lowPower ? [1024, 1024] : [2048, 2048]}
-        shadow-camera-left={-24}
-        shadow-camera-right={24}
-        shadow-camera-top={24}
-        shadow-camera-bottom={-24}
+        shadow-camera-left={-26}
+        shadow-camera-right={26}
+        shadow-camera-top={26}
+        shadow-camera-bottom={-26}
         shadow-camera-near={1}
         shadow-camera-far={160}
         shadow-bias={-0.0004}
         shadow-normalBias={0.03}
+        shadow-radius={3}
       />
       <directionalLight ref={moon} position={[-30, 40, 20]} color="#8fa6e6" />
     </>
@@ -105,8 +179,8 @@ function Atmosphere({ state, lowPower }: { state: MutableRefObject<SceneState>; 
 /* The house                                                           */
 /* ------------------------------------------------------------------ */
 
-function useWindowMaterial(floors: number, tint: string) {
-  return useMemo(() => {
+function useWindowMaterial(floors: number, tint: string, tex: TexSet) {
+  const mat = useMemo(() => {
     const { map, emissive } = windowTextures();
     const m = map.clone();
     const e = emissive.clone();
@@ -116,22 +190,45 @@ function useWindowMaterial(floors: number, tint: string) {
     m.needsUpdate = e.needsUpdate = true;
     return new THREE.MeshStandardMaterial({ color: tint, map: m, emissive: "#ffd28a", emissiveMap: e, emissiveIntensity: 0, roughness: 0.92 });
   }, [floors, tint]);
+  useEffect(() => plasterize(mat, tex, 3, floors), [mat, tex, floors]);
+  return mat;
 }
 
 function NightGlow({ materials }: { materials: THREE.MeshStandardMaterial[] }) {
   const { scene } = useThree();
   useFrame(() => {
     const n = (scene.userData as { night?: number }).night ?? 0;
-    for (const m of materials) m.emissiveIntensity = n * 1.1;
+    for (const m of materials) m.emissiveIntensity = n * 1.6;
   });
   return null;
 }
 
-function House({ roof }: { roof: RoofDims }) {
+/** A Sintex-style ribbed black water tank, the most Indian object on any roof. */
+function useTankGeometry() {
+  return useMemo(() => {
+    const pts: THREE.Vector2[] = [];
+    const H = 1.2;
+    for (let i = 0; i <= 24; i++) {
+      const y = (i / 24) * H;
+      const rib = Math.abs(Math.sin((y / H) * Math.PI * 4)) * 0.025;
+      pts.push(new THREE.Vector2(0.6 + rib - (y / H) * 0.03, y));
+    }
+    pts.push(new THREE.Vector2(0.45, H + 0.08), new THREE.Vector2(0.24, H + 0.12), new THREE.Vector2(0.24, H + 0.2), new THREE.Vector2(0.001, H + 0.2));
+    pts.unshift(new THREE.Vector2(0.001, 0));
+    const g = new THREE.LatheGeometry(pts, 32);
+    g.computeVertexNormals();
+    return g;
+  }, []);
+}
+
+function House({ roof, tex }: { roof: RoofDims; tex: TexSet }) {
   const H = roof.floors * FLOOR_H;
-  const wall = useWindowMaterial(roof.floors, "#f3f1ea");
+  const wall = useWindowMaterial(roof.floors, "#f3f1ea", tex);
   const plain = useMemo(() => new THREE.MeshStandardMaterial({ color: "#f1efe8", roughness: 0.95 }), []);
-  const slab = useMemo(() => new THREE.MeshStandardMaterial({ color: "#b9b4aa", roughness: 1 }), []);
+  const slab = useMemo(() => new THREE.MeshStandardMaterial({ color: "#d8d2c6", roughness: 1 }), []);
+  const tankGeo = useTankGeometry();
+  useEffect(() => plasterize(plain, tex, 2, 1), [plain, tex]);
+  useEffect(() => slabify(slab, tex, Math.round(roof.w / 3)), [slab, tex, roof.w]);
   const bodyMats = useMemo(() => [wall, wall, plain, plain, wall, wall], [wall, plain]);
   const cloth = useRef<THREE.Group>(null);
   useFrame(({ clock }) => {
@@ -144,6 +241,38 @@ function House({ roof }: { roof: RoofDims }) {
   const pt = 0.2;
   const mx = roof.w / 2 - 1.7;
   const mz = -roof.d / 2 + 1.6;
+
+  // Props on this roof, in metres from the roof centre.
+  const plants = useMemo<Placement[]>(
+    () => [
+      { x: -roof.w / 2 + 0.6, y: H, z: roof.d / 2 - 0.6, s: 1.1 },
+      { x: roof.w / 2 - 0.6, y: H, z: roof.d / 2 - 0.6, ry: 1.2, s: 0.95 },
+      { x: mx - 2.3, y: H, z: mz + 0.3, ry: 2.4, s: 1.25 },
+    ],
+    [roof.w, roof.d, H, mx, mz],
+  );
+  const pots = useMemo<Placement[]>(
+    () => [
+      { x: -roof.w / 2 + 1.25, y: H, z: roof.d / 2 - 0.5, s: 1.7 },
+      { x: roof.w / 2 - 1.2, y: H, z: roof.d / 2 - 0.45, s: 1.5, ry: 0.7 },
+    ],
+    [roof.w, roof.d, H],
+  );
+  const drum = useMemo<Placement[]>(() => [{ x: mx + 1.75, y: H, z: mz + 0.8, ry: 0.4 }], [mx, mz, H]);
+  const chairs = useMemo<Placement[]>(() => [{ x: -roof.w / 2 + 2.2, y: H, z: roof.d / 2 - 2.1, ry: 2.5 }], [roof.w, roof.d, H]);
+  const ac = useMemo<Placement[]>(() => [{ x: roof.w / 2 - 0.55, y: H + 0.02, z: mz + 2.8, ry: -Math.PI / 2, s: 0.85 }], [roof.w, mz, H]);
+  const lights = useMemo(() => {
+    const y = H + par + 0.32;
+    const z = roof.d / 2 - 0.08;
+    const x0 = -roof.w / 2 + 0.1;
+    const x1 = roof.w / 2 - 0.1;
+    const mid = (x0 + x1) / 2;
+    return [
+      ...sagLine(new THREE.Vector3(x0, y, z), new THREE.Vector3(mid, y, z), 0.22, 18),
+      ...sagLine(new THREE.Vector3(mid, y, z), new THREE.Vector3(x1, y, z), 0.22, 18).slice(1),
+    ];
+  }, [roof.w, roof.d, H]);
+
   return (
     <group>
       <NightGlow materials={[wall]} />
@@ -154,7 +283,7 @@ function House({ roof }: { roof: RoofDims }) {
       <mesh position={[0, H + 0.02, 0]} receiveShadow material={slab}>
         <boxGeometry args={[roof.w - 0.1, 0.06, roof.d - 0.1]} />
       </mesh>
-      {/* parapet */}
+      {/* parapet with a coping band */}
       {[
         [0, roof.d / 2 - pt / 2, roof.w, pt],
         [0, -roof.d / 2 + pt / 2, roof.w, pt],
@@ -171,6 +300,10 @@ function House({ roof }: { roof: RoofDims }) {
           <boxGeometry args={[pt, par, roof.d]} />
         </mesh>
       ))}
+      <mesh position={[0, H + par + 0.03, roof.d / 2 - pt / 2]} castShadow>
+        <boxGeometry args={[roof.w + 0.06, 0.06, pt + 0.08]} />
+        <meshStandardMaterial color="#e2b54a" roughness={0.8} />
+      </mesh>
       {/* mumty (stair room) */}
       <mesh position={[mx, H + 1.3, mz]} castShadow receiveShadow material={plain}>
         <boxGeometry args={[2.8, 2.6, 2.6]} />
@@ -179,23 +312,11 @@ function House({ roof }: { roof: RoofDims }) {
         <planeGeometry args={[0.95, 2.05]} />
         <meshStandardMaterial color="#3d5a8c" roughness={0.7} />
       </mesh>
-      {/* black ribbed water tank on the mumty */}
-      <group position={[mx + 0.2, H + 2.6, mz - 0.1]}>
-        <mesh position={[0, 0.62, 0]} castShadow>
-          <cylinderGeometry args={[0.62, 0.66, 1.2, 28]} />
-          <meshStandardMaterial color="#17191c" roughness={0.55} metalness={0.05} />
-        </mesh>
-        {[0.25, 0.62, 0.99].map((y) => (
-          <mesh key={y} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.645, 0.025, 6, 28]} />
-            <meshStandardMaterial color="#26292e" roughness={0.5} />
-          </mesh>
-        ))}
-        <mesh position={[0, 1.27, 0]}>
-          <cylinderGeometry args={[0.24, 0.26, 0.12, 20]} />
-          <meshStandardMaterial color="#202226" roughness={0.6} />
-        </mesh>
-      </group>
+      <Lantern position={[mx + 0.45, H + 2.05, mz + 1.42]} />
+      {/* ribbed black water tank on the mumty */}
+      <mesh position={[mx + 0.2, H + 2.6, mz - 0.1]} geometry={tankGeo} castShadow receiveShadow>
+        <meshStandardMaterial color="#141619" roughness={0.42} metalness={0.05} />
+      </mesh>
       {/* clothesline along the west parapet */}
       <group position={[-roof.w / 2 + 0.75, H, 0]}>
         {[-roof.d / 2 + 2.2, roof.d / 2 - 1.2].map((z) => (
@@ -224,17 +345,12 @@ function House({ roof }: { roof: RoofDims }) {
           ))}
         </group>
       </group>
-      {/* tulsi planter */}
-      <group position={[mx - 2.2, H, mz + 0.4]}>
-        <mesh position={[0, 0.35, 0]} castShadow>
-          <boxGeometry args={[0.6, 0.7, 0.6]} />
-          <meshStandardMaterial color="#c4693f" roughness={0.9} />
-        </mesh>
-        <mesh position={[0, 0.95, 0]} castShadow>
-          <icosahedronGeometry args={[0.38, 1]} />
-          <meshStandardMaterial color="#4f8a4a" roughness={0.9} flatShading />
-        </mesh>
-      </group>
+      <Instanced name="plant" at={plants} />
+      <Instanced name="planter" at={pots} />
+      <Instanced name="drum" at={drum} />
+      <Instanced name="chair" at={chairs} />
+      <Instanced name="aircon" at={ac} />
+      <StringLights points={lights} />
     </group>
   );
 }
@@ -252,17 +368,19 @@ function SolarArray({ state, roof, panelsKey }: { state: MutableRefObject<SceneS
   const layout = useMemo(() => layoutArray(count, roof, tiltDeg), [count, roof, tiltDeg]);
 
   const mats = useMemo(() => {
-    const frame = new THREE.MeshStandardMaterial({ color: "#c9ced6", metalness: 0.75, roughness: 0.35 });
+    const frame = new THREE.MeshStandardMaterial({ color: "#c9ced6", metalness: 0.85, roughness: 0.28 });
+    const back = new THREE.MeshStandardMaterial({ color: "#e9ecef", roughness: 0.7 });
     const glass = new THREE.MeshPhysicalMaterial({
       map: panelTexture(),
-      roughness: 0.18,
-      metalness: 0.2,
-      clearcoat: 1,
+      roughness: 0.3,
+      metalness: 0.25,
+      clearcoat: 0.8,
       clearcoatRoughness: 0.08,
+      envMapIntensity: 1.1,
     });
-    return [frame, frame, glass, frame, frame, frame];
+    return [frame, frame, glass, back, frame, frame];
   }, []);
-  const steel = useMemo(() => new THREE.MeshStandardMaterial({ color: "#9aa3ad", metalness: 0.6, roughness: 0.45 }), []);
+  const steel = useMemo(() => new THREE.MeshStandardMaterial({ color: "#a7afb8", metalness: 0.75, roughness: 0.38 }), []);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const H = roof.floors * FLOOR_H;
 
@@ -363,6 +481,8 @@ interface Bldg {
   floors: number;
   color: string;
   tank: boolean;
+  ac: boolean;
+  drum: boolean;
 }
 
 function useNeighbourhood(lowPower?: boolean) {
@@ -385,7 +505,9 @@ function useNeighbourhood(lowPower?: boolean) {
           d: 8 + rnd() * 3,
           floors,
           color: PALETTE[Math.floor(rnd() * PALETTE.length)],
-          tank: rnd() < 0.7,
+          tank: rnd() < 0.75,
+          ac: rnd() < 0.55,
+          drum: rnd() < 0.3,
         });
       }
     }
@@ -393,10 +515,31 @@ function useNeighbourhood(lowPower?: boolean) {
   }, [lowPower]);
 }
 
-function FloorGroup({ items, floors }: { items: Bldg[]; floors: number }) {
+/**
+ * Roof slabs keep only a hint of the facade colour: painted walls, concrete
+ * tops. Instance colours are mixed toward white in the shader.
+ */
+function roofMaterial() {
+  const m = new THREE.MeshStandardMaterial({ color: "#d9d3c7", roughness: 1 });
+  m.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace(
+      "#include <color_fragment>",
+      `#if defined( USE_COLOR_ALPHA )
+        diffuseColor *= vColor;
+      #elif defined( USE_COLOR )
+        diffuseColor.rgb *= mix( vec3( 1.0 ), vColor, 0.22 );
+      #endif`,
+    );
+  };
+  m.customProgramCacheKey = () => "chhat-roof";
+  return m;
+}
+
+function FloorGroup({ items, floors, tex }: { items: Bldg[]; floors: number; tex: TexSet }) {
   const ref = useRef<THREE.InstancedMesh>(null);
-  const wall = useWindowMaterial(floors, "#ffffff");
-  const top = useMemo(() => new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 1 }), []);
+  const wall = useWindowMaterial(floors, "#ffffff", tex);
+  const top = useMemo(roofMaterial, []);
+  useEffect(() => slabify(top, tex, 3), [top, tex]);
   const mats = useMemo(() => [wall, wall, top, top, wall, wall], [wall, top]);
   useEffect(() => {
     const m = ref.current;
@@ -425,12 +568,68 @@ function FloorGroup({ items, floors }: { items: Bldg[]; floors: number }) {
   );
 }
 
-function City({ lowPower }: { lowPower?: boolean }) {
+/** Parapet walls around every neighbouring roof, as one instanced mesh. */
+function Parapets({ list, tex }: { list: Bldg[]; tex: TexSet }) {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const mat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.95 }), []);
+  useEffect(() => plasterize(mat, tex, 4, 1), [mat, tex]);
+  useEffect(() => {
+    const m = ref.current;
+    if (!m) return;
+    const d = new THREE.Object3D();
+    const c = new THREE.Color();
+    let i = 0;
+    const h = 0.85;
+    const t = 0.18;
+    list.forEach((b) => {
+      const y = b.floors * FLOOR_H + h / 2;
+      const sides: [number, number, number, number][] = [
+        [b.x, b.z + b.d / 2 - t / 2, b.w, t],
+        [b.x, b.z - b.d / 2 + t / 2, b.w, t],
+        [b.x + b.w / 2 - t / 2, b.z, t, b.d],
+        [b.x - b.w / 2 + t / 2, b.z, t, b.d],
+      ];
+      for (const [x, z, w, dd] of sides) {
+        d.position.set(x, y, z);
+        d.scale.set(w, h, dd);
+        d.updateMatrix();
+        m.setMatrixAt(i, d.matrix);
+        m.setColorAt(i, c.set(b.color));
+        i++;
+      }
+    });
+    m.count = i;
+    m.instanceMatrix.needsUpdate = true;
+    if (m.instanceColor) m.instanceColor.needsUpdate = true;
+  }, [list]);
+  return (
+    <instancedMesh ref={ref} args={[undefined, mat, list.length * 4]} castShadow receiveShadow>
+      <boxGeometry args={[1, 1, 1]} />
+    </instancedMesh>
+  );
+}
+
+function City({ lowPower, tex }: { lowPower?: boolean; tex: TexSet }) {
   const list = useNeighbourhood(lowPower);
   const tanks = useRef<THREE.InstancedMesh>(null);
   const trees = useRef<THREE.InstancedMesh>(null);
   const trunks = useRef<THREE.InstancedMesh>(null);
-  const withTank = list.filter((b) => b.tank);
+  const tankGeo = useTankGeometry();
+  const withTank = useMemo(() => list.filter((b) => b.tank), [list]);
+  const ground = useMemo(() => new THREE.MeshStandardMaterial({ color: "#c9bda6", roughness: 1 }), []);
+  useEffect(() => {
+    if (!tex.lane_diff) return;
+    ground.map = repeated(tex.lane_diff, 26, 26);
+    ground.needsUpdate = true;
+  }, [ground, tex]);
+  const acs = useMemo<Placement[]>(
+    () => list.filter((b) => b.ac).map((b, i) => ({ x: b.x - b.w * 0.18, y: b.floors * FLOOR_H, z: b.z + b.d * 0.3, ry: (i % 4) * (Math.PI / 2), s: 0.85 })),
+    [list],
+  );
+  const drums = useMemo<Placement[]>(
+    () => list.filter((b) => b.drum).map((b, i) => ({ x: b.x + b.w * 0.32, y: b.floors * FLOOR_H, z: b.z + b.d * 0.28, ry: i })),
+    [list],
+  );
   const treeSpots = useMemo(() => {
     const rnd = mulberry32(7);
     const s: [number, number, number][] = [];
@@ -446,8 +645,8 @@ function City({ lowPower }: { lowPower?: boolean }) {
     const d = new THREE.Object3D();
     if (tanks.current) {
       withTank.forEach((b, i) => {
-        d.position.set(b.x + b.w * 0.25, b.floors * FLOOR_H + 0.55, b.z - b.d * 0.22);
-        d.scale.set(1, 1, 1);
+        d.position.set(b.x + b.w * 0.25, b.floors * FLOOR_H, b.z - b.d * 0.22);
+        d.scale.setScalar(0.92);
         d.updateMatrix();
         tanks.current!.setMatrixAt(i, d.matrix);
       });
@@ -471,24 +670,25 @@ function City({ lowPower }: { lowPower?: boolean }) {
   const byFloors = [1, 2, 3, 4].map((f) => list.filter((b) => b.floors === f));
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow material={ground}>
         <planeGeometry args={[400, 400]} />
-        <meshStandardMaterial color="#b6a98f" roughness={1} />
       </mesh>
       {byFloors.map((items, i) => (
-        <FloorGroup key={i} items={items} floors={i + 1} />
+        <FloorGroup key={i} items={items} floors={i + 1} tex={tex} />
       ))}
-      <instancedMesh ref={tanks} args={[undefined, undefined, Math.max(1, withTank.length)]} castShadow>
-        <cylinderGeometry args={[0.55, 0.58, 1.1, 14]} />
-        <meshStandardMaterial color="#1a1c20" roughness={0.6} />
+      <Parapets list={list} tex={tex} />
+      <instancedMesh ref={tanks} args={[tankGeo, undefined, Math.max(1, withTank.length)]} castShadow>
+        <meshStandardMaterial color="#17191c" roughness={0.45} />
       </instancedMesh>
+      <Instanced name="aircon" at={acs} />
+      <Instanced name="drum" at={drums} castShadow={!lowPower} />
       <instancedMesh ref={trunks} args={[undefined, undefined, Math.max(1, treeSpots.length)]}>
         <cylinderGeometry args={[0.18, 0.25, 2.2, 6]} />
         <meshStandardMaterial color="#6b5440" roughness={1} />
       </instancedMesh>
       <instancedMesh ref={trees} args={[undefined, undefined, Math.max(1, treeSpots.length)]} castShadow>
-        <icosahedronGeometry args={[1, 1]} />
-        <meshStandardMaterial color="#5f8f4e" roughness={0.95} flatShading />
+        <icosahedronGeometry args={[1, 2]} />
+        <meshStandardMaterial color="#5a8a4a" roughness={0.9} flatShading />
       </instancedMesh>
     </group>
   );
@@ -560,42 +760,27 @@ function Kites() {
 /* Cameras                                                             */
 /* ------------------------------------------------------------------ */
 
-// Camera keyframes along the story: [t, azimuth°, polar°, radius, target lift]
-// Azimuth 0 = south of the house, 90 = east. Dawn looks east into the sunrise,
-// noon looks down on the panels, dusk looks west into the sunset.
-const CAM_KEYS: [number, number, number, number, number][] = [
-  [0, -58, 71, 40, 3.2],
-  [0.3, -22, 62, 34, 2],
-  [0.5, 28, 50, 27, 0.6],
-  [0.7, 52, 53, 26, 0.6],
-  [0.86, 96, 67, 34, 2.4],
-  [1, 112, 71, 42, 3.2],
-];
-
-function camAt(t: number) {
-  let i = 1;
-  while (i < CAM_KEYS.length - 1 && t > CAM_KEYS[i][0]) i++;
-  const a = CAM_KEYS[i - 1];
-  const b = CAM_KEYS[i];
-  const k = Math.max(0, Math.min(1, (t - a[0]) / (b[0] - a[0])));
-  const e = k * k * (3 - 2 * k);
-  return a.map((v, j) => (j === 0 ? 0 : v + (b[j] - v) * e)) as typeof a;
-}
-
 function HeroCamera({ state, roof }: { state: MutableRefObject<SceneState>; roof: RoofDims }) {
-  const { camera, pointer } = useThree();
+  const { camera, pointer, size } = useThree();
   const target = useMemo(() => new THREE.Vector3(), []);
   const tmp = useMemo(() => new THREE.Vector3(), []);
+  const view = useRef({ x: 0 });
   const roofY = roof.floors * FLOOR_H;
-  useFrame((_, dt) => {
+  useFrame(({ clock }, dt) => {
     const [, azD, polD, r, lift] = camAt(state.current.camT);
-    const az = THREE.MathUtils.degToRad(azD + pointer.x * 3);
+    // A slow breathing drift keeps the frame alive when nobody scrolls.
+    const drift = Math.sin(clock.elapsedTime * 0.15) * 1.5;
+    const az = THREE.MathUtils.degToRad(azD + drift + pointer.x * 3);
     const pol = THREE.MathUtils.degToRad(polD - pointer.y * 2);
     target.set(0, roofY + lift, 0);
     tmp.set(Math.sin(az) * Math.sin(pol) * r, Math.cos(pol) * r + target.y, Math.cos(az) * Math.sin(pol) * r);
     const k = 1 - Math.exp(-dt * 5);
     camera.position.lerp(tmp, k);
     camera.lookAt(target);
+    const cam = camera as THREE.PerspectiveCamera;
+    view.current.x += (state.current.viewX - view.current.x) * k;
+    if (Math.abs(view.current.x) > 1e-4) cam.setViewOffset(size.width, size.height, -view.current.x * size.width, 0, size.width, size.height);
+    else cam.clearViewOffset();
   });
   return null;
 }
@@ -624,40 +809,77 @@ function Orbit({ target }: { target: [number, number, number] }) {
   return null;
 }
 
-function Ready({ onReady }: { onReady?: () => void }) {
-  const done = useRef(false);
-  useFrame(() => {
-    if (!done.current) {
-      done.current = true;
-      onReady?.();
+/**
+ * Watches frame times and steps the render tier down (high → medium → low)
+ * when the device can't keep up. Never steps back up, so it can't flap.
+ */
+function PerfGuard({ tier, onDrop }: { tier: Quality; onDrop: () => void }) {
+  const acc = useRef({ warm: 6, t: 0, n: 0, streak: 0 });
+  useEffect(() => {
+    acc.current = { warm: 6, t: 0, n: 0, streak: 0 };
+  }, [tier]);
+  useFrame((_, dt) => {
+    if (tier === "low") return;
+    const a = acc.current;
+    // A gap over a second is a paused tab, not a slow GPU.
+    if (dt > 1) {
+      a.warm = 3;
+      return;
     }
+    // The first frames compile shaders and build the reflection map.
+    if (a.warm > 0) {
+      a.warm--;
+      return;
+    }
+    a.streak = dt > 0.2 ? a.streak + 1 : 0;
+    a.t += dt;
+    a.n++;
+    const slowAvg = a.n >= 45 && a.t / a.n > 1 / 24;
+    if (a.streak >= 3 || slowAvg) {
+      acc.current = { warm: 6, t: 0, n: 0, streak: 0 };
+      onDrop();
+    } else if (a.n >= 45) {
+      a.t = 0;
+      a.n = 0;
+    }
+  });
+  return null;
+}
+
+function Ready({ onReady }: { onReady?: () => void }) {
+  const frames = useRef(0);
+  useFrame(() => {
+    // Wait two frames so shaders are compiled and the first picture is on screen.
+    if (++frames.current === 2) onReady?.();
   });
   return null;
 }
 
 /* ------------------------------------------------------------------ */
 
-export default function RoofScene({ state, roof, interactive, panelsKey, lowPower, className, onReady, cameraPosition }: Props) {
+export default function RoofScene({ state, roof, interactive, panelsKey, lowPower, quality, className, onReady, cameraPosition, paused }: Props) {
   const H = roof.floors * FLOOR_H;
   const orbitTarget = useMemo<[number, number, number]>(() => [0, H + 1, 0], [H]);
+  const [tier, setTier] = useState<Quality>(() => quality ?? pickQuality(Boolean(lowPower)));
+  const drop = useCallback(() => setTier((t) => (t === "high" ? "medium" : "low")), []);
+  const tex = useSceneTextures();
   return (
     <Canvas
       className={className}
-      shadows={!lowPower}
-      dpr={lowPower ? [1, 1.25] : [1, 1.75]}
-      camera={{ position: cameraPosition ?? [24, 22, 26], fov: 38, near: 0.5, far: 1200 }}
-      gl={{ antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true }}
+      frameloop={paused ? "never" : "always"}
+      shadows={!lowPower ? "soft" : false}
+      dpr={tier === "high" ? [1, 1.5] : [1, 1.25]}
+      camera={{ position: cameraPosition ?? [24, 22, 26], fov: 36, near: 0.5, far: 1200 }}
+      gl={{ antialias: tier === "low", powerPreference: "high-performance", preserveDrawingBuffer: true, toneMapping: THREE.NeutralToneMapping }}
     >
       <Atmosphere state={state} lowPower={lowPower} />
-      <House roof={roof} />
+      <House roof={roof} tex={tex} />
       <SolarArray state={state} roof={roof} panelsKey={panelsKey} />
-      <City lowPower={lowPower} />
+      <City lowPower={lowPower} tex={tex} />
       <Kites />
-      {interactive ? (
-        <Orbit target={orbitTarget} />
-      ) : (
-        <HeroCamera state={state} roof={roof} />
-      )}
+      {interactive ? <Orbit target={orbitTarget} /> : <HeroCamera state={state} roof={roof} />}
+      {tier !== "low" && <Effects quality={tier} />}
+      <PerfGuard tier={tier} onDrop={drop} />
       <Ready onReady={onReady} />
     </Canvas>
   );

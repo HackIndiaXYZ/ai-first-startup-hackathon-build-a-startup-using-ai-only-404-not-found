@@ -11,8 +11,10 @@ export interface SceneState {
   drop: number;
   /** Hero camera path, 0..1 */
   camT: number;
+  /** Shift the picture sideways, as a fraction of the canvas width (hero layout) */
+  viewX: number;
 }
 
 export function makeSceneState(partial: Partial<SceneState> = {}): SceneState {
-  return { lat: 28.61, lon: 77.21, doy: 105, hour: 12.5, panels: 6, drop: 1, camT: 0, ...partial };
+  return { lat: 28.61, lon: 77.21, doy: 105, hour: 12.5, panels: 6, drop: 1, camT: 0, viewX: 0, ...partial };
 }

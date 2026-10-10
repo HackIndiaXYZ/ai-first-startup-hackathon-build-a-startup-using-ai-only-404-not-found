@@ -2,6 +2,8 @@ import { Fragment, lazy, Suspense, useState, type ReactNode } from "react";
 import { HashRouter, Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import { AskProvider } from "./components/AskChhat";
 import { ErrorBoundary, RouteError } from "./components/ErrorBoundary";
+import { Cursor } from "./components/Cursor";
+import { RouteCurtain } from "./components/RouteCurtain";
 import { Footer, Nav } from "./components/Shell";
 import { SmoothScroll } from "./lib/smooth";
 
@@ -75,6 +77,8 @@ export default function App() {
             </RouteBoundary>
           </main>
           <Footer />
+          <RouteCurtain />
+          <Cursor />
           <div className="grain" aria-hidden="true" />
         </AskProvider>
       </SmoothScroll>

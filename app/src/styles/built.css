@@ -19,6 +19,9 @@
   .built-stats {
     grid-template-columns: 1fr 1fr;
   }
+  .built-stats .stat:last-child {
+    grid-column: span 2;
+  }
 }
 .built-section {
   margin-top: var(--space-8);

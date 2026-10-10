@@ -8,3 +8,6 @@ app/dist/
 .vercel/
 *.tsbuildinfo
 app/e2e-out/
+app/test-results/
+app/playwright-report/
+pitch/.video-tmp/

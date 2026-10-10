@@ -1,13 +1,14 @@
 {
- "generated": "2026-10-09T16:48:45.898Z",
+ "generated": "2026-10-09T23:18:16.943Z",
  "stats": {
-  "commits": 9,
-  "files": 66,
-  "linesAdded": 14550,
-  "loc": 12474,
-  "tests": 34,
-  "docs": 6,
-  "docWords": 14213
+  "commits": 14,
+  "files": 92,
+  "linesAdded": 19692,
+  "loc": 16008,
+  "tests": 57,
+  "e2e": 67,
+  "docs": 8,
+  "docWords": 17826
  },
  "commits": [
   {
@@ -140,6 +141,82 @@
     "app/src/styles",
     "app/src/three",
     "app/vite.config.ts"
+   ]
+  },
+  {
+   "hash": "dc22e96",
+   "date": "2026-10-09T16:48:46+00:00",
+   "subject": "Keep committed build log on shallow clones; add Vercel deploy button and submission push steps",
+   "author": "Claude",
+   "added": 22,
+   "deleted": 1,
+   "files": 2,
+   "areas": [
+    "README.md",
+    "app/scripts/build-log.mjs"
+   ]
+  },
+  {
+   "hash": "3e64e93",
+   "date": "2026-10-09T16:49:02+00:00",
+   "subject": "Align selection doc with the shipped tool set",
+   "author": "Claude",
+   "added": 1,
+   "deleted": 1,
+   "files": 1,
+   "areas": [
+    "docs"
+   ]
+  },
+  {
+   "hash": "f25d38a",
+   "date": "2026-10-09T19:52:53+00:00",
+   "subject": "Awwwards-tier redesign: CC0 3D props, post-processing, preloader, route curtain, cursor",
+   "author": "Claude",
+   "added": 3382,
+   "deleted": 808,
+   "files": 38,
+   "areas": [
+    "app/package.json",
+    "app/public/models",
+    "app/public/textures",
+    "app/scripts/fetch-assets.mjs",
+    "app/scripts/shoot.mjs",
+    "app/src/App.tsx"
+   ]
+  },
+  {
+   "hash": "6c68102",
+   "date": "2026-10-09T20:46:37+00:00",
+   "subject": "Test phase: 23 design unit tests, 66 Playwright e2e tests, axe, Lighthouse, budgets, CI",
+   "author": "Claude",
+   "added": 1605,
+   "deleted": 369,
+   "files": 37,
+   "areas": [
+    ".github",
+    "README.md",
+    "app/e2e/a11y.spec.ts",
+    "app/e2e/fallbacks.spec.ts",
+    "app/e2e/fixtures.ts",
+    "app/e2e/landing.spec.ts"
+   ]
+  },
+  {
+   "hash": "3429c95",
+   "date": "2026-10-09T22:15:26+00:00",
+   "subject": "Curtain only on real page changes; stills, deck and docs refreshed",
+   "author": "Claude",
+   "added": 132,
+   "deleted": 35,
+   "files": 18,
+   "areas": [
+    "README.md",
+    "app/e2e/smoke.spec.ts",
+    "app/e2e/tools.spec.ts",
+    "app/public/deck",
+    "app/public/og.png",
+    "app/public/poster.jpg"
    ]
   }
  ]

@@ -12,7 +12,7 @@ This report covers two things the rules ask for: how AI built the startup, and h
 | | |
 |---|---|
 | Primary builder | **Claude Code** (Anthropic), running autonomously in a cloud session |
-| Human input | One written brief (below), a folder of design skills and the shadcn/ui source added to the repo as reference, and review |
+| Human input | Two written briefs (below), a folder of design skills and the shadcn/ui source added to the repo as reference, and review |
 | Code written by a human | **0 lines** |
 | Share of execution done by AI | Research, ideation, selection, planning, design, all code, tests, copy, 3D, financial model, business plan, deck, demo recording: **~100%** |
 | Model inside the product | Claude (`claude-opus-5-5`) via the Anthropic SDK, with an on-device fallback |
@@ -36,8 +36,10 @@ This report covers two things the rules ask for: how AI built the startup, and h
 | 11 | QA | Rendered pages in headless Chromium, read the screenshots, and fixed what it saw (contrast, scale, overflow, labels) | screenshots in session | None |
 | 12 | Business | Formula-driven model (235 formulas, recalculated with zero errors) and business plan | `business/*` | None |
 | 13 | Pitch | 15-slide deck built as a route in the app, exported to PDF | `pitch/*`, `app/src/routes/Deck.tsx` | None |
-| 14 | Demo | Wrote the script and recorded the walkthrough with a scripted browser | `pitch/chhat-demo.mp4`, `docs/demo-script.md` | Optional voice-over |
+| 14 | Demo | Wrote the script and recorded the walkthrough with a scripted browser; in the second pass re-recorded it on a virtual clock so the 3D scene plays smoothly at full quality without a GPU | `pitch/chhat-demo.mp4`, `docs/demo-script.md` | Optional voice-over |
 | 15 | Deploy | Static build plus serverless functions; configs for Vercel, Netlify and GitHub Pages | `vercel.json`, `netlify.toml`, `.github/workflows/` | Adds the API key and clicks deploy |
+| 16 | Design overhaul | Second brief: re-read the Awwwards, taste, GSAP and motion skills; wrote a design brief; sourced CC0 models through the Poly Haven API and built an optimising pipeline; rebuilt the 3D renderer and the landing; added a motion system, preloader, route curtain and cursor | `docs/05-design.md`, `app/scripts/fetch-assets.mjs`, `app/src/three/*`, `app/src/lib/motion.ts` | Second brief |
+| 17 | Test phase | Wrote 23 new unit tests and a Playwright suite (smoke, flows, accessibility with axe-core, keyboard, reduced motion, no-WebGL, mobile, 4-width viewport sweep); fixed every failure it found | `app/tests/design.test.ts`, `app/e2e/*`, `docs/test-report.md` | None |
 
 ---
 
@@ -47,9 +49,14 @@ This report covers two things the rules ask for: how AI built the startup, and h
 |---|---|
 | Claude Code | Everything above: planning, coding, testing, browsing, file generation |
 | Web search + fetch (inside Claude Code) | Hackathon page, market data, regulations, prices |
-| Skills from the repo's `skills/` folder | `impeccable`, `awwwards` (two variants), `design-taste-frontend`, `stop-slop`, `emil-design-eng` |
+| Skills from the repo's `skills/` folder | `impeccable`, `awwwards` (three variants incl. `awwwards-designer`), `design-taste-frontend`, `stop-slop`, `emil-design-eng`, `gsap-web` |
 | Built-in skills | `claude-api` (SDK usage), `dataviz` (chart method and palette validation), `xlsx` (financial model and LibreOffice recalc) |
-| Playwright + headless Chromium | Screenshots for self-review, deck PDF export, demo video recording |
+| Playwright + headless Chromium | Screenshots for self-review, deck PDF export, demo video recording, the end-to-end test suite |
+| Poly Haven API (CC0) | Six 3D models and three PBR texture sets for the rooftop |
+| glTF-Transform, meshoptimizer, sharp | Simplifying, compressing and re-texturing the models for the web (738 KB total) |
+| GSAP (ScrollTrigger, SplitText, CustomEase), Lenis | Scroll story, text reveals, the motion vocabulary |
+| postprocessing + N8AO | Ambient occlusion, bloom, SMAA, tone mapping |
+| axe-core | Automated WCAG 2.1 AA checks on every route |
 | LibreOffice | Recalculating and error-checking the financial model |
 | NASA POWER API | Irradiance and temperature data |
 
@@ -83,6 +90,14 @@ This report covers two things the rules ask for: how AI built the startup, and h
 > After planning, you will implement that plan in absolute entirety, doing absolutely everything perfectly. Also, do not make it look like AI. Make it look very good, make it fully functional, make it fully ready, and make everything ready. After doing that, making it isn't the only thing. There are other aspects to this hackathon, such as financials and a business plan that you have to To research thoroughly in the shoes of a financial advisor while making the website in the shoes of a web designer, the absolute best of the best: you have to act as your best agency in the world, and you have to map out every aspect needed. You not only map out, but you have to create a fully functioning, ship-ready, perfect multimillion-dollar idea, perfect finance, everything done. … You have to behave completely autonomously. If there is a roadblock or contradiction in the prompt, or something you can't get done, find out 10 different ways to get it done. If you still can't, find viable alternatives, all autonomously working, never asking for human input.
 
 Accompanying chat message (verbatim): *"ALONG WIT THIS USE GITHUB AND EXSTING CODEBASES AND ANIMATION 3js opne gl webgl and 3d moldes form the web and tkae intpration for deing from awwwards site veryiporants to make desing v rey ood form going to github and getting dood desing elments and react componet and gspa smooth scroll and scrrool anumation for github other free 3d modles . lenis soomth scroll and option but highly recomned all the desing skills such as the ones in the skills folder aand u can use react comnets folder too so get to wrk"*
+
+### 4.1b The second brief (verbatim, typos kept)
+
+Sent with the same PDF as the first brief, after the first version shipped:
+
+> Registered ALONG WIT THIS USE GITHUB AND EXSTING CODEBASES AND ANIMATION 3js opne gl webgl and 3d moldes form the web and tkae intpration for deing from awwwards site veryiporants to make desing v rey ood form going to github and getting dood desing elments and react componet and gspa smooth scroll and scrrool anumation for github other free 3d modles . lenis soomth scroll and option but highly recomned all the desing skills such as the ones in the skills folder aand u can use react comnets folder too so get to wrk AND A EXTENSIVE TEST PAHSE AND READ THE DOCUMENT ABOVE
+
+How Claude read it: keep the product and research (they already followed the first brief), raise the design to Awwwards level using open-source code and free 3D assets from the web, and prove it with an extensive test phase. The design brief it wrote for itself is `docs/05-design.md`.
 
 ### 4.2 Research queries the AI ran (selection)
 
@@ -156,6 +171,7 @@ Why two modes: judges can open the link with no key and every feature works; hom
 
 ## 6. How we checked the AI's work
 
+- Second pass: 57 unit tests (23 new, including a WCAG contrast check across the whole day and the asset budget), 67 Playwright end-to-end tests on desktop and a Pixel 7 profile, axe-core on every route (0 serious or critical violations), Lighthouse (100 accessibility, best practices and SEO on all four audited routes), and a bundle budget in CI. The tests and the demo recording found eleven real issues, all fixed; the list is in `docs/test-report.md` §3.
 - 34 unit tests against hand-checked values (e.g. extraterrestrial irradiance at the equator ≈ 10.4 kWh/m²/day; Delhi solar noon on 21 June ≈ 12:20 IST; subsidy slabs; EMI formula).
 - Parser tests on every sample document; agent tests for English, Hindi, Hinglish and multi-turn context.
 - The financial model recalculated in LibreOffice: 235 formulas, 0 errors.
