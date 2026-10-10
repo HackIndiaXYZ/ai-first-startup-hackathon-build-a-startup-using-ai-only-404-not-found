@@ -16,7 +16,7 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 | Design rationale | [`docs/05-design.md`](docs/05-design.md): direction, palette, type, motion system, 3D pipeline, CC0 asset credits |
 | Test report | [`docs/test-report.md`](docs/test-report.md): unit, end-to-end, accessibility, responsive, fallbacks, budgets |
 | Live deployment | See [Deploy](#deploy). One click on Vercel; GitHub Pages workflow included |
-| Demo video (4:48) | [`pitch/chhat-demo.mp4`](pitch/chhat-demo.mp4) · script: [`docs/demo-script.md`](docs/demo-script.md) |
+| Demo video (3:46) | [`pitch/chhat-demo.mp4`](pitch/chhat-demo.mp4), recorded at full render quality on a virtual clock · script and voice-over: [`docs/demo-script.md`](docs/demo-script.md) |
 | Pitch deck (15 slides) | [`pitch/Chhat-pitch-deck.pdf`](pitch/Chhat-pitch-deck.pdf) · live at `/#/deck` |
 | AI usage report | [`docs/ai-usage-report.md`](docs/ai-usage-report.md) · live at `/#/built-with-ai` |
 | Business plan | [`business/business-plan.md`](business/business-plan.md) |
