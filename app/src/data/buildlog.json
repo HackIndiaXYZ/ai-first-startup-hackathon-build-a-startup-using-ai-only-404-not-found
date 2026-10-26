@@ -1,0 +1,223 @@
+{
+ "generated": "2026-10-09T23:18:16.943Z",
+ "stats": {
+  "commits": 14,
+  "files": 92,
+  "linesAdded": 19692,
+  "loc": 16008,
+  "tests": 57,
+  "e2e": 67,
+  "docs": 8,
+  "docWords": 17826
+ },
+ "commits": [
+  {
+   "hash": "2e581c6",
+   "date": "2026-10-09T15:22:20+00:00",
+   "subject": "Research, 25-idea tournament, selection and build plan for Chhat",
+   "author": "Claude",
+   "added": 1006,
+   "deleted": 0,
+   "files": 4,
+   "areas": [
+    "docs"
+   ]
+  },
+  {
+   "hash": "35355db",
+   "date": "2026-10-09T15:42:25+00:00",
+   "subject": "Chhat engine: NASA-backed PV model, subsidy, finance, quote and bill audits, agent tools",
+   "author": "Claude",
+   "added": 3492,
+   "deleted": 0,
+   "files": 32,
+   "areas": [
+    "app/api/agent.ts",
+    "app/api/extract.ts",
+    "app/api/health.ts",
+    "app/package.json",
+    "app/scripts/cities-seed.json",
+    "app/scripts/fetch-nasa.mjs"
+   ]
+  },
+  {
+   "hash": "c0f74e2",
+   "date": "2026-10-09T16:09:16+00:00",
+   "subject": "Chhat web app: 3D day-cycle landing, Roof Report, Quote Check, Bill Audit, Ask Chhat, Built-with-AI",
+   "author": "Claude",
+   "added": 7660,
+   "deleted": 3,
+   "files": 36,
+   "areas": [
+    "app/index.html",
+    "app/package.json",
+    "app/public/favicon.svg",
+    "app/scripts/build-log.mjs",
+    "app/scripts/shoot.mjs",
+    "app/src/App.tsx"
+   ]
+  },
+  {
+   "hash": "e29b07c",
+   "date": "2026-10-09T16:16:43+00:00",
+   "subject": "Business plan, formula-driven financial model, and pitch deck (/deck route + PDF)",
+   "author": "Claude",
+   "added": 1595,
+   "deleted": 1,
+   "files": 24,
+   "areas": [
+    "app/public/deck",
+    "app/scripts/export-deck.mjs",
+    "app/src/routes",
+    "app/src/styles",
+    "business",
+    "pitch"
+   ]
+  },
+  {
+   "hash": "357228f",
+   "date": "2026-10-09T16:41:29+00:00",
+   "subject": "Demo video, AI usage report, deploy configs, accessibility fixes, README",
+   "author": "Claude",
+   "added": 728,
+   "deleted": 27,
+   "files": 26,
+   "areas": [
+    ".github",
+    "README.md",
+    "app/.env.example",
+    "app/package.json",
+    "app/public/og.png",
+    "app/public/poster.jpg"
+   ]
+  },
+  {
+   "hash": "e24cc2d",
+   "date": "2026-10-09T16:41:42+00:00",
+   "subject": "Ignore TypeScript build info",
+   "author": "Claude",
+   "added": 0,
+   "deleted": 1,
+   "files": 1,
+   "areas": [
+    "app/tsconfig.tsbuildinfo"
+   ]
+  },
+  {
+   "hash": "fec5aa1",
+   "date": "2026-10-09T16:43:39+00:00",
+   "subject": "Add live-preview packaging script and npm scripts for deck export and demo recording",
+   "author": "Claude",
+   "added": 35,
+   "deleted": 2,
+   "files": 2,
+   "areas": [
+    "app/package.json",
+    "app/scripts/artifact-entry.mjs"
+   ]
+  },
+  {
+   "hash": "30d915b",
+   "date": "2026-10-09T16:44:08+00:00",
+   "subject": "Refresh build log and deck with final stats",
+   "author": "Claude",
+   "added": 0,
+   "deleted": 0,
+   "files": 2,
+   "areas": [
+    "pitch"
+   ]
+  },
+  {
+   "hash": "9392e07",
+   "date": "2026-10-09T16:47:37+00:00",
+   "subject": "Lazy-load three.js with the 3D scene, drop drei, fix deck centring and 404 layout",
+   "author": "Claude",
+   "added": 34,
+   "deleted": 18,
+   "files": 5,
+   "areas": [
+    "app/package.json",
+    "app/src/styles",
+    "app/src/three",
+    "app/vite.config.ts"
+   ]
+  },
+  {
+   "hash": "dc22e96",
+   "date": "2026-10-09T16:48:46+00:00",
+   "subject": "Keep committed build log on shallow clones; add Vercel deploy button and submission push steps",
+   "author": "Claude",
+   "added": 22,
+   "deleted": 1,
+   "files": 2,
+   "areas": [
+    "README.md",
+    "app/scripts/build-log.mjs"
+   ]
+  },
+  {
+   "hash": "3e64e93",
+   "date": "2026-10-09T16:49:02+00:00",
+   "subject": "Align selection doc with the shipped tool set",
+   "author": "Claude",
+   "added": 1,
+   "deleted": 1,
+   "files": 1,
+   "areas": [
+    "docs"
+   ]
+  },
+  {
+   "hash": "f25d38a",
+   "date": "2026-10-09T19:52:53+00:00",
+   "subject": "Awwwards-tier redesign: CC0 3D props, post-processing, preloader, route curtain, cursor",
+   "author": "Claude",
+   "added": 3382,
+   "deleted": 808,
+   "files": 38,
+   "areas": [
+    "app/package.json",
+    "app/public/models",
+    "app/public/textures",
+    "app/scripts/fetch-assets.mjs",
+    "app/scripts/shoot.mjs",
+    "app/src/App.tsx"
+   ]
+  },
+  {
+   "hash": "6c68102",
+   "date": "2026-10-09T20:46:37+00:00",
+   "subject": "Test phase: 23 design unit tests, 66 Playwright e2e tests, axe, Lighthouse, budgets, CI",
+   "author": "Claude",
+   "added": 1605,
+   "deleted": 369,
+   "files": 37,
+   "areas": [
+    ".github",
+    "README.md",
+    "app/e2e/a11y.spec.ts",
+    "app/e2e/fallbacks.spec.ts",
+    "app/e2e/fixtures.ts",
+    "app/e2e/landing.spec.ts"
+   ]
+  },
+  {
+   "hash": "3429c95",
+   "date": "2026-10-09T22:15:26+00:00",
+   "subject": "Curtain only on real page changes; stills, deck and docs refreshed",
+   "author": "Claude",
+   "added": 132,
+   "deleted": 35,
+   "files": 18,
+   "areas": [
+    "README.md",
+    "app/e2e/smoke.spec.ts",
+    "app/e2e/tools.spec.ts",
+    "app/public/deck",
+    "app/public/og.png",
+    "app/public/poster.jpg"
+   ]
+  }
+ ]
+}

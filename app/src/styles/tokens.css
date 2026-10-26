@@ -1,0 +1,71 @@
+/* Chhat design tokens.
+   The palette comes from an Indian rooftop: night ink, limewash, Jodhpur blue
+   (neel), turmeric (haldi) and sindoor for warnings. */
+
+:root {
+  --ink: oklch(0.19 0.03 258);
+  --ink-2: oklch(0.255 0.035 258);
+  --ink-3: oklch(0.33 0.035 258);
+  --paper: oklch(0.968 0.007 235);
+  --paper-2: oklch(0.935 0.011 235);
+  --paper-3: oklch(0.895 0.015 238);
+  --neel: oklch(0.52 0.135 257);
+  --neel-2: oklch(0.42 0.12 258);
+  --neel-soft: oklch(0.88 0.04 250);
+  --haldi: oklch(0.84 0.165 80);
+  --haldi-2: oklch(0.76 0.165 68);
+  --haldi-soft: oklch(0.95 0.06 88);
+  --sindoor: oklch(0.58 0.2 30);
+  --sindoor-soft: oklch(0.94 0.04 30);
+  --leaf: oklch(0.58 0.12 155);
+  --leaf-soft: oklch(0.94 0.04 155);
+
+  --text: var(--ink);
+  --text-2: oklch(0.38 0.03 258);
+  --text-3: oklch(0.5 0.025 258);
+  --line: oklch(0.19 0.03 258 / 0.12);
+  --line-2: oklch(0.19 0.03 258 / 0.22);
+  --bg: var(--paper);
+  --surface: oklch(0.985 0.005 235);
+
+  --font-display: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-deva: "Tiro Devanagari Hindi", "Noto Serif Devanagari", serif;
+
+  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.86rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+  --step-1: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+  --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2.1rem);
+  --step-3: clamp(2rem, 1.6rem + 1.9vw, 3.3rem);
+  --step-4: clamp(2.6rem, 1.8rem + 3.6vw, 5.4rem);
+  --step-5: clamp(3.2rem, 1.9rem + 6vw, 8.4rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  --radius-1: 6px;
+  --radius-2: 10px;
+  --radius-3: 16px;
+  --radius-4: 26px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --shadow-1: 0 1px 0 oklch(0.19 0.03 258 / 0.06), 0 1px 3px oklch(0.19 0.03 258 / 0.06);
+  --shadow-2: 0 2px 0 oklch(0.19 0.03 258 / 0.05), 0 12px 32px -12px oklch(0.19 0.03 258 / 0.22);
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --maxw: 1360px;
+  --nav-h: 64px;
+
+  color-scheme: light;
+}
