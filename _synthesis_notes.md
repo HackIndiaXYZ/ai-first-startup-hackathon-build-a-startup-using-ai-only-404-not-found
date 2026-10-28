@@ -1,0 +1,126 @@
+# Running synthesis notes (main session; distilled from digests + verification files)
+
+## W2: 1998–99 primary documents (digest read 2026-10-28)
+- **PIB Jan 1999 backgrounder FOUND** (S032, archive.pib.gov.in/focus/fojan99/fo1201991.html). It gives 19,020 of 2,20,674 ha acquired, "a mere 9 per cent"; 56,640 ha s.20; 5,327 ha s.21; "led to corruption and unnecessary harassment of the people holding small parcels of land"; and three shortcomings (discretionary exemptions, "Highly expropriatory nature", no fiscal mechanism). Committee recommended repeal "with certain safeguards for the poor and the low income group".
+- **CORRECTION to the brief:** PIB does NOT print 26%, 2% or 0.4%. 26% and 2% are CCS arithmetic (S034). **0.4% traces to a Times of India report of 16 Aug 2000 via CCS, not an official figure.** It is a share of total estimated excess land (about 883 ha) and conflicts with the Standing Committee's 10,909.85 ha "put to use for the purposes of the Act" (4.9% of excess; 57.2% of possessed). Opp can attack Prop's "0.4%" as unofficial and contradicted.
+- RS SQ 172 (8 Jun 1998) wording and figures confirmed through two independent secondaries (K.C. Jain S030; CCS Vaid 2006 S031, exact PDF): "failed to achieve its objectives due to its poor performance"; 220,675 / 50,046 / 19,020. Minister Ram Jethmalani (tenure 19 Mar 1998–14 Jun 1999; not shown on the 8 Jun doc).
+- Standing Committee Report 12 (19 Dec 1998, primary not read): 171 memoranda; 14 witnesses; recommended repeal with safeguards; possessed-but-unused land "should not be restored". **Dissent by Shabana Azmi and N.R. Dasari ("a serious attempt to amend the principal Act")**. Azmi + 63 MPs wrote to the PM. Azmi (HT, 29 May 1998): **"Can we blame a legislation for its non-implementation by the Government?"** (via S030). The 52,508.54 ha figure: meaning unknown; don't use.
+- **Repeal Act s.3(1)(a)** kept possessed land vested; **s.3(1)(b)** protected s.20 exemption orders "notwithstanding any judgment of any court to the contrary"; s.4 abated pending proceedings (S036, primary). *Opp angle: repeal protected the exempted holders more than the public stock.*
+- Minister's written reply (Mar 1999, S033): it is "not possible to estimate the number of dwelling units" gained from repeal; "Guidelines have been issued to the State Governments/Union Territories to protect the interests of the EWS and LIG categories". *The benefit of repeal was asserted, not measured.*
+- SOR of the Repeal Bill: "pushed up land prices, practically brought the housing industry to a stop"; "Public opinion is nearly unanimous..." (S030). The "corruption" wording is less certain. The PIB backgrounder has no price claim (per extraction), so the price claim appears only in the SOR and ministerial statements (H2).
+- Long title verbatim (S035): "...preventing the concentration of urban land in the hands of a few persons and speculation and profiteering therein ... equitable distribution of land in urban agglomerations to subserve the common good." 1976 Bill SOR (second-hand): "taking measures for exercising social control over the scarce resource of urban land".
+- s.23(1) allows allotment of acquired land to industry, so the statute never guaranteed land for the poor (Prop).
+- Dates: Bill No. 17 of 1999 tabled in LS 5 Mar 1999; RS passed 15 Mar 1999 (snippet); assent 22 Mar 1999; deemed in force 11 Jan 1999 for Haryana, Punjab and UTs. **Brief error:** "Delhi covered from March 1999" should read 11 Jan 1999 (deemed).
+- Lok Sabha UQ 4452 (19 May 2006, snippet): "out of the estimated 2,20,674.86 ha. surplus vacant land, only 19,082.22 ha. ... could be acquired".
+- DTE "Brakes on bill" is a 2008 WB article, irrelevant to 1999.
+- **Access blockers:** rsdebate.nic.in, eparlib (nic.in and sansad.in), indiacode, mohua, business-standard and web.archive.org are blocked or unreachable from the fetch tool. archive.pib.gov.in works. **Candidate manual downloads for the user:** Standing Committee Report 12 (eparlib udrd_12_12_1998.pdf); RS debate 15 Mar 1999 (PD_186_15031999). The in-app browser was also refused for eparlib.sansad.in.
+
+## W4: causal and quantitative evidence (digest read 2026-10-28)
+- **THE key study (S070): Dutta, Gandhi & Green, *Real Estate Economics* 54(5), 2025** (AREUEA Mills best-paper award). DiD on 201 cities; ULC-enacting-then-repealing vs never-ULC; Census 2001–2011. **Repeal "did not lead to housing supply growth."** Mechanism: ownership disputes and litigation over vacant parcels; land-related legal proceedings "substantially higher" in ULC cities after repeal (the WP said "almost six times"). Only the abstract was read (403 everywhere).
+  - **Opp use:** the one causal study shows removing ULCRA did not unlock supply, so "ULCRA was the binding constraint" is unsupported, and repeal's promised benefits didn't arrive (H3).
+  - **Prop use:** the legacy of *how ULCRA was implemented* (paper vesting, exemptions, disputes) kept freezing construction a decade after repeal. That is a lasting harm of the implementation itself. **Opp must pre-empt:** the disputes come from the repeal regime and savings/abatement rules plus the state's failure to take possession. That's an argument about *how it ended*, and the paper doesn't test "no ULCRA ever" against "ULCRA".
+  - Check: whether Kolkata/WB is coded as treated (unknown).
+- **No study credibly estimates ULCRA's effect on prices or supply while in force (1976–99)** (H2 supported, medium-high). Sridhar 2010 (S071) abstract reports a significant FAR effect and no ULC effect. The World Bank 2013 (S079) and McKinsey 2010 quantify FSI and rent control, not ULCRA. Bertaud 2002 (S073) asserts a "consensus" with no data.
+- **INFLATION CORRECTION (hurts the wqe line "price rises came from inflation"):** CPI was about 11.8%/yr in 1970–75 and about 8.2%/yr in 1976–81 (S075). Ahmedabad's +18.4%/yr nominal in 1976–81 is about +9.4%/yr real; the fringe is +20–39% real. Delhi's 1976–81 rise of 3.3–7.5x is about 2.2–5x real. **Pre-Act Delhi 10x (1960–75) is about 3.2x real**, still a real pre-1976 problem (Opp).
+  - Better Opp confounders: urban population **+46% in 1971–81** (fastest decade; S076); post-oil-shock hedging (S050); the Emergency (S081); **Gujarat's own 1972 Vacant Lands (Prohibition of Alienation) Act already voided transfers in Ahmedabad's "pre-Act" baseline** and was replaced by ULCRA (S082). The comparison is one transfer ban against another.
+- **Kolkata descriptive (S077, NHB RESIDEX):** 2007–10 average price Rs 2,500/sq ft, among the lowest of 15 cities and equal to Ahmedabad (repealed 1999). 2001–07 growth: Kolkata 2.37x vs Bangalore 3.13x, Bhopal 2.60x, Mumbai 2.68x. JLL 2026 (S080): Kolkata launches 9,194 (2021) → 17,164 (2025) with ULCRA in force; affordable units 46% of launches in 2021–23. **No study uses Kolkata as a control.**
+- Sood 2020 (S072): raw means suggest early-repeal states got more large manufacturing entry (weak; dates don't match). Pal et al. 2021 (S078) is about **agricultural** ceilings (Prop may misuse it by analogy).
+- No study finds POSITIVE effects of ULCRA. Bertaud also lists low property taxes as a cause of hoarding (S073), which supports the missing-vacant-land-tax design gap (Opp).
+
+## W3: pre-1976 context and counterfactual (digest read 2026-10-28)
+- **DELHI 10x TRAP CONFIRMED.** It is real (Gartler 1978 via Acharya, S050; about 16.6%/yr nominal, about 3.2x real), but every scholar read attributes Delhi's scarcity to the **DDA 1957/1961 acquisition-and-freeze monopoly**:
+  - Acharya S051 ("the DDA created an artificial scarcity"; ULCRA in Delhi "had the effect of reducing the supply of land drastically, thereby increasing the land values", p.113)
+  - Sivam S054 (Cities 2003; private development "effectively frozen"; DDA "near monopoly")
+  - Bertaud S060 (Brookings 2010; "monopolistic Urban Development Authority ... unresponsive to demand"; ULCRA "partially responsible for very high land prices"; "neither complete laissez faire nor a government monopoly")
+  - NCU S056 (DDA "push[ed] the entire urban land market underground")
+  - PAC 1980 snippet (DDA "contributed to the exorbitant rise in land prices")
+  - **Nuance (Opp):** the 1961 scheme was itself designed "to check undesirable speculation" and keep prices "within reasonable limits", so 1950s speculation was recognised. Acharya: rises were "not only due to its scarcity but also due to speculative activity". **Prop turn:** Delhi shows state land monopoly creates scarcity, which undercuts Opp's "strong state role in land" and Singapore lines.
+  - Delhi under ULCRA: 1.99 ha acquired vs DDA 18,185 ha, so ULCRA was a minor actor in Delhi.
+- **Pre-Act prices elsewhere:** "quite moderate" except Gauhati, Kota and Trichur (Chaudhari via Acharya). Ahmedabad land market grew 8.2%/yr in 1970–75, then "froze into inaction in 1976" (S050 p.47). No pre-1976 series for Bombay, Calcutta, Madras or Bangalore exists online. NCU TCPO 1980–83 data are post-Act.
+- **Concentration:** Madras had 1,700 ha potential excess, of which 700 ha was with individuals and 1,000 ha with industry (S050 p.47). Acharya: individual large-holding estimates "unrealistic". DCM and Birla mills held >100 ha of central Delhi (NCU). Bombay: about 2.5 sq km held by 58 mills. No pre-1976 ownership distribution exists.
+- **LEGISLATIVE HISTORY (Opp vs the "Emergency law" charge):**
+  - AP Council and Assembly resolutions on **7 and 8 April 1972** (S063), before the Emergency. Third Five Year Plan (1961) ch.33 proposed ceilings. Working Group report 25 Jul 1970; draft Bill 1971. Valuation ceilings were found impractical, so the Act covers vacant land only. Late adopters: Rajasthan 9 Mar 1976, Manipur 12 Mar, Assam 25 Mar, Bihar 1 Apr, Meghalaya 7 Apr, MP 9 Sep 1976.
+  - **Prop counter:** Bill introduced in LS 28 Jan 1976; **LS passed it 2 Feb 1976 "in under seven hours"** with Select Committee and circulation motions defeated; RS passed 5 Feb; assent 17 Feb 1976. A Supreme Court judgment (S053) called it "undue haste" (check which case). Minister: K. Raghu Ramaiah (snippet).
+  - Ninth Schedule **Item 132** via Constitution (40th Amendment) Act 1976 (S053). Commencement: 17 Feb vs 28 Jan 1976 (likely the s.2(a) "appointed day" = Bill introduction date; check W11).
+- **"Vacant Lands (Prohibition of Alienation) Act 1972"** = STATE acts: AP 1972, Gujarat Act 12 of 1972, Karnataka 1975; Delhi Lands (Restrictions on Transfer) Act 1972. Temporary transfer bans "to prevent speculative alienations before the necessary legislation is enacted" (S059). Not supply tools.
+- **HOUSING SHORTAGE CORRECTION:** 14.5m/21.3m is **all-India**. NBO urban shortage was **3.0m (1971), 7.0m (1981), 8.23m (1991)** (S055). Urban population 109.1m (1971) → 159.5m (1981); slum population 27.91m (1981).
+- **COMPENSATION CORRECTION:** ULCRA paid **8⅓ times net annual income** (not "8%" as in the brief), or Rs 10/sq m (Rs 5 for categories C and D), capped at **Rs 2 lakh** (S053). That was below LAA 1894 (market value + 15% solatium, 30% after 1984).
+- Gujarat town-planning/land-readjustment schemes date from 1915; Bertaud and UN-Habitat call them a workable alternative (Prop's counterfactual).
+
+## W5: constitutional record (digest read 2026-10-28)
+- **Bhim Singhji** (S090, S097), (1981) 1 SCC 166, decided 13 Nov 1980.
+  - Bench: Chandrachud CJ, Bhagwati, Krishna Iyer, Tulzapurkar and A.P. Sen JJ.
+  - Order: "entire Urban Land (Ceiling and Regulation) Act of 1976 is valid save and except Section 27(1)", struck only "insofar as it imposes a restriction on transfer of any urban or urbanisable land with a building" within the ceiling.
+  - **Votes:** Act upheld 4:1 (only Tulzapurkar would void it); s.23 upheld 3:2 (Tulzapurkar and Sen dissenting); s.11(6) Rs 2 lakh cap 4:1; Art 39(b)/(c) nexus 4:1.
+  - AG "was unable to justify" s.27(1). (1986) 4 SCC 615: CJ and Bhagwati J adopted Krishna Iyer J's reasons.
+- **CORRECTION:** "undue haste" is **Tulzapurkar J's DISSENT** (para 49), not "the Court". The majority (Krishna Iyer J) spoke of **"the long gestation of pre-legislative consideration"**. So S053/W3 needs fixing, and Opp can neutralise the Emergency-haste attack.
+- **Opp quotes (Krishna Iyer J):**
+  - "concentration of urban land in private hands is an effective forbiddance of the maximum use of such land"
+  - **"The taking over of large conglomerations of vacant land is a national necessity if Article 39 is a constitutional reality."**
+  - **"It is not and never can be compulsory taking from some private owners to favour by transfer other private owners."**
+  - "If the power is used for favouring [a] private industrialist ... the oblique act will meet with its judicial waterloo."
+  - So exemption and allotment abuse *violated* Bhim Singhji; the ruling didn't license it.
+- **Sen J:** "A majority of the people in the urban areas are living in abject poverty." "I find no justification to strike down the whole Act as it would be against the national interest." "By no standard can an amount of Rs. 2 lacs be considered to be illusory."
+- **Prop quotes:**
+  - Tulzapurkar J: "private purposes receive precedence over common good".
+  - Sen J (dissenting on s.23): "The whole emphasis is on industrialisation."
+  - The urban vs agrarian contrast is Tulzapurkar's, made AGAINST the Act.
+- **Valluri Basavaiah Chaudhary** (1979) 3 SCC 324 (S091): unanimous five judges (Sen J writing) upheld Parliament's Art 252 competence. Entry 18 "land" includes buildings.
+- **S. Vasudeva v. State of Karnataka** (1993) 3 SCC 467 (S092): s.20(1)(b) can't be used to exempt excess land so it can be sold, as that "would militate against one of the objects of the Act, viz., to prevent speculation and profiteering". Opp: courts corrected the abuse. Prop: 17 years late.
+- **Shantistar Builders** (31 Jan 1990) (S093):
+  - The exemption was under **s.20** (granted 11 Jan 1978), conditional on 17,000 weaker-section tenements in 5 years at ≤ Rs 50/sq ft.
+  - **Shelter is part of Art 21:** "a reasonable residence ... should be taken as included in 'life' in Article 21, greater social control is called for and exemptions granted under Section 20 and 21 should have to be appropriately monitored". The Act is "beneficial legislation".
+  - The "racket" language is the respondents' allegation, not a finding.
+  - Prop side: "weaker sections" was undefined after 14 years; prices "sky-high"; housing "impossible" for the weaker sections.
+  - Directions: an income test up to Rs 18,000 (annual); "one family - one flat"; monitoring committees chaired by an Additional District Judge.
+- **40th Amendment (27 May 1976):** Ninth Schedule Item 132. SOR (H.R. Gokhale): "If these legislations are allowed to be challenged in courts of law thereby delaying the implementation of these laws" (S094). Prop: Emergency-era court-proofing.
+- **I.R. Coelho (2007)** (S095): laws already upheld can't be re-challenged, so ULCRA is insulated.
+- **Property Owners' Assn v. State of Maharashtra** (5 Nov 2024, 2024 INSC 835) (S096–S099):
+  - Votes: 7 in the majority (Chandrachud CJI), Nagarathna J partly concurring/dissenting, Dhulia J dissenting.
+  - Four factors: nature/characteristics; impact on community well-being; **scarcity**; **consequences of concentration in private hands**; plus public trust. Distribution "may include the vesting of the concerned resources in the state".
+  - The Court was "unable to subscribe to" Krishna Iyer's Ranganatha Reddy view; Sanjeev Coke "erred"; "doctrinal error"; "particular economic ideology"; "In Bhim Singhji, Justice Krishna Iyer cited Karl Marx" (**Prop**).
+  - **BUT** it did not say Bhim Singhji was wrongly decided, kept Art 31C alive by relying on Bhim Singhji, and quoted Abu Kavur Bai treating "urban and rural ceiling Acts" as a paradigm of distribution.
+  - **Nagarathna J listed "the Urban Land Ceiling Act since repealed" as a lawful vesting example.** Dhulia J: "What has not changed, however, is the inequality."
+  - **Net (Opp):** the reasoning is narrowed but the result is intact, and the four-factor test fits scarce, concentrated urban vacant land.
+  - Use "unable to subscribe"/"erred", NOT "overruled".
+
+## W1: repeal status and West Bengal (digest read 2026-10-28)
+- **WB, as of 28 Oct 2026: NOT repealed.** No bill, ordinance, cabinet decision, **Art. 252(2) resolution** (the correct instrument) or gazette notification. Gazetted WB 2026 bills to No. 21 (9 Sep) are unrelated (S216). The ULC NOC portal still operates. A s.20 exemption order was issued 13 Jun 2025 (S015).
+- **WB timeline:**
+  - 9 May 2026: BJP government sworn in (CM Suvendu Adhikari).
+  - 14 May: BJP president Samik Bhattacharya says the party is "considering" removal (S013).
+  - 22 Jun: Budget says the Act "will be re-examined to unlock the potential of developable land" (S219, snippet).
+  - 26 Jun: FM Dasgupta, "We are going to scrap the land ceiling Act" (S011; BS snippet).
+  - 13 Jul: IANS reports "more likely to pursue targeted amendments" "retaining safeguards against land speculation"; FM calls the Act "quite archaic and a relic of the old socialist days" (S012).
+  - 2 Oct, CREDAI NATCON: "It is an impediment and a deterrent to development. It has to go." Also **"We need an organised system, we need accountability, we need the law."** and "We need the RERA to be put into full operation here." (S010)
+  - **Opp:** even the repealers concede that anti-speculation safeguards and regulation are needed.
+- **No 2026 reactions from TMC, CPI(M) or Congress were found** (a search gap, not a fact). Historical: TMC Urban Development Minister Firhad Hakim (18 Apr 2012) said the government "would not abolish the Act", with buying above 7.5 cottah allowed if developers "reserve 30 per cent housing for low-income housing segment" (S017; a proposal, never shown to be enacted). Dec 2014 (S019, snippet): Hakim rejected Adi Godrej's call; the Act protects the poor. Mamata Banerjee: "What will happen if someone wants to buy the city?" (secondhand). Left Front reasons were not found. **Both Left Front (1977–2011) and TMC (2011–26) kept it**: a cross-party choice.
+- **The "Land Ceiling Bill finds no place on list" story (Deccan Chronicle, 11 Mar 2008) is about ANDHRA PRADESH** (S018). AP delayed repeal to collect "hundreds of crores" from regularising ULC lands. Prop: revenue-driven discretion. Opp: repeal was not an evidence-based consensus.
+- **REPEAL TIMELINE (court records):**
+  - Haryana, Punjab and UTs: 11 Jan 1999 (deemed)
+  - UP: 18 Mar 1999
+  - Gujarat: 30 Mar 1999
+  - Tamil Nadu: own Act repealed 16 Jun 1999
+  - Karnataka: 8 Jul 1999
+  - MP: 17 Feb 2000
+  - Orissa: 5 Apr 2002
+  - Assam: 6 Aug 2003
+  - Bihar: 26 Sep 2006
+  - **Maharashtra: 29 Nov 2007** (Bombay HC FB; S021–S023)
+  - **AP: 27 Mar 2008** (G.O.Ms.No.603 of 22 Apr 2008; SC 2025, S020)
+  - **Jharkhand: 24 Jan 2011** (S028)
+  - **WB: never**
+  - Rajasthan: before Aug 2002 (date unknown)
+  - HP, Tripura, Manipur, Meghalaya, Chhattisgarh, Uttarakhand: not found
+- **Maharashtra's reason:** repealed under "severe pressure from the Centre" (JNNURM funds); its stated reason was "the basic purpose of the act was not fulfilled" (S023).
+- **New Prop ammunition:**
+  - **SC, AP Electrical Equipment Corp v. Tahsildar (27 Feb 2025):** "out of ten matters in nine matters it was apparent that the cases were one of paper possession"; "bogus paper panchnamas", ante-dated documents (S020). *Opp:* two judges' recollection of AP/Telangana litigated cases, about state administration.
+  - **SC, Kewal Court (9 Oct 2023):** "the miserable failure of a reformatory legislation" (S016; obiter in a reference order).
+  - Hari Ram (S025): "mere paper possession" doesn't save the State.
+- **WB use of ULC land:**
+  - A 1992 Left Front order let sick industrial units surrender excess land, auctioned at market reserve price to fund BIFR revivals, with no housing clause (S215).
+  - Canal Circular Road vested land was leased in 1991 to what became Apollo Gleneagles Hospitals (30-year lease), followed by 29 years of litigation (S027).
+  - A 2017 report says vested plots were unusable because of a "faulty" procedure, and the department vested nothing for about 10 years (S214).
+  - NIUA WB row: 5,007 ha excess; 315.9 vested (6.3%); 98.22 acquired (1.96%); exemptions 1,141 ha (22.8%).
+- **Opp confounder:** WB's decline predates 1976. Its share of national GDP fell from 10.5% (1960–61) to 5.6% (2023–24); per-capita income went from 127.5% to 83.7% of the national average (S217). Maharashtra kept the Act until 2007 and did not decline. **No empirical support exists for CREDAI's "sub-500 sq m fragmentation" claim**; it is lobby assertion.
+- **Gujarat** paired its 30 Mar 1999 repeal with a promised land bank and "shelter fund" for the urban poor in six urban areas (S210). Delivery unknown. (Opp: successor social obligation.)
