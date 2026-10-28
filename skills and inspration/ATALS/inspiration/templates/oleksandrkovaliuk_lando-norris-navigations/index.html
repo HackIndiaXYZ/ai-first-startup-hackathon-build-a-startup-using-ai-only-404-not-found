@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LN recreated nav</title>
+</head>
+
+
+
+<body>
+
+    <a href="https://github.com/oleksandrkovaliuk" target="_blank" aria-label="Github">
+        <span>G</span>
+        <span>i</span>
+        <span>t</span>
+        <span>h</span>
+        <span>u</span>
+        <span>b</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-move-up-right-icon lucide-move-up-right">
+            <path d="M13 5H19V11" />
+            <path d="M19 5L5 19" />
+        </svg>
+    </a>
+
+    <a href="https://www.linkedin.com/in/oleksandrkovaliuk/" target="_blank" aria-label="LinkedIn">
+        <span>L</span>
+        <span>i</span>
+        <span>n</span>
+        <span>k</span>
+        <span>e</span>
+        <span>d</span>
+        <span>i</span>
+        <span>n</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-move-up-right-icon lucide-move-up-right">
+            <path d="M13 5H19V11" />
+            <path d="M19 5L5 19" />
+        </svg>
+    </a>
+
+    <a href="https://x.com/okovaliukk" target="_blank" aria-label="X">
+        <span>X</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-move-up-right-icon lucide-move-up-right">
+            <path d="M13 5H19V11" />
+            <path d="M19 5L5 19" />
+        </svg>
+    </a>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+
+        :root {
+            --font-sans: 'Mona Sans', sans-serif;
+            --font-size: 7rem;
+            --font-weight: 700;
+            --color-text: hsl(0, 0%, 10%);
+        }
+
+        body {
+            height: 100svh;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+
+            background-color: #D0FE00;
+            font-family: var(--font-sans);
+        }
+
+        a {
+            text-shadow: 0 2ex var(--color-text);
+
+            font-size: var(--font-size);
+            font-weight: var(--font-weight);
+
+            line-height: 1;
+            letter-spacing: -0.05em;
+
+            text-decoration: none;
+            text-transform: uppercase;
+
+            color: var(--color-text);
+
+            overflow: hidden;
+
+
+
+            span {
+                position: relative;
+                display: inline-block;
+            }
+
+            &:not(:hover),
+            &:not(:focus-visible) {
+                span {
+                    animation: slide-down 0.25s forwards;
+                    animation-delay: calc(sibling-index() * 0.05s);
+                }
+            }
+
+
+            &:hover,
+            &:focus-visible {
+                span {
+                    animation: slide-up 0.25s forwards;
+                    animation-delay: calc(sibling-index() * 0.05s);
+                }
+            }
+
+            &:focus-visible {
+                outline: 2px solid green;
+                outline-offset: 2px;
+            }
+        }
+
+        [data-slot="controllers"] {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+        select {
+            padding: 4px 8px;
+            border-radius: 8px;
+            background-color: hsl(0, 0%, 100%);
+
+        }
+
+
+
+
+        @keyframes slide-up {
+            100% {
+                translate: 0 -2ex;
+            }
+        }
+
+        @keyframes slide-down {
+            0% {
+                translate: 0 -2ex;
+            }
+        }
+    </style>
+</body>
+
+</html>

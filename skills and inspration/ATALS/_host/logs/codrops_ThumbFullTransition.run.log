@@ -1,0 +1,6 @@
+
+> ThumbFullTransition@1.0.0 start
+> parcel src/index.html --open
+
+Server running at http://localhost:9025 - configured port 9025 could not be used.
+✨  Built in 14.93s.

@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  /* Forced Black Background for the site */
+  --background: #000000;
+  --foreground: #ffffff;
+  /* Mobile Viewport Height Variable */
+  --vh: 1vh;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Fix for Mobile: Disable standard scrolling and pull-to-refresh */
+html, body {
+  background: #000000;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  /* Stops the browser address bar from shifting the content */
+  overflow: hidden; 
+  position: fixed;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  /* Uses the script-calculated height from your Showroom component */
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Ensure the Canvas container fills exactly what we want */
+main, #root {
+  height: 100%;
+  width: 100%;
+}

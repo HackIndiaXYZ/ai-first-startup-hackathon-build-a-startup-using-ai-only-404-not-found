@@ -1,0 +1,25 @@
+/* .cursor {
+    height: 1.9vw;
+    width: 1.9vw;
+    border-radius: 50%;
+    border: 1.1px solid #646464;
+    position: fixed;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+} */
+
+.cursor {
+  --circle-size: 24px;
+  position: fixed;
+  height: var(--circle-size);
+  width: var(--circle-size);
+  border: 1px solid white;
+  border-radius: 100%;
+  top: calc(var(--circle-size) / 2 * -1);
+  left: calc(var(--circle-size) / 2 * -1);
+  pointer-events: none;
+  mix-blend-mode: difference;
+  z-index: 9999;
+
+}
+

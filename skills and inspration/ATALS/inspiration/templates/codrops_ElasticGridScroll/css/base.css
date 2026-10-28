@@ -1,0 +1,380 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 14px;
+  --color-text: #333;
+  --color-bg: #fff;
+  --color-link: #767676;
+  --color-link-hover: #000;
+  --page-padding: 5vw;
+  --c-gap: 5vw;
+  --r-gap: 5vw;
+  --column-size: 80px;
+  --column-count: 3;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-family: 'halyard-display', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.demo-3 {
+  --color-text: #ffffff;
+  --color-bg: #5e5d59;
+  --color-link: #d9d9d9;
+  --color-link-hover: #d63937;
+}
+
+.demo-4,
+.demo-6,
+.demo-7,
+.demo-8,
+.demo-9 {
+  --color-text: #ffffff;
+  --color-link: #fece5c;
+  --color-link-hover: #ffffff;
+}
+
+@media (scripting: enabled) {
+  .loading {
+    &::before,
+    &::after {
+      content: '';
+      position: fixed;
+      z-index: 10000;
+    }
+
+    &::before {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-bg);
+    }
+
+    &::after {
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 1px;
+      margin: 0 0 0 -50px;
+      background: var(--color-link);
+      animation: loaderAnim 1.5s ease-in-out infinite alternate forwards;
+    }
+  }
+}
+
+@keyframes loaderAnim {
+  0% {
+    transform: scaleX(0);
+    transform-origin: 0% 50%;
+  }
+
+  50% {
+    transform: scaleX(1);
+    transform-origin: 0% 50%;
+  }
+
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: 100% 50%;
+  }
+
+  100% {
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-link);
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--color-link-hover);
+  }
+
+  &:focus {
+    outline: none;
+    background: lightgrey;
+
+    &:not(:focus-visible) {
+      background: transparent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid red;
+      background: transparent;
+    }
+  }
+}
+
+.frame {
+  padding: 2rem var(--page-padding) 0;
+  display: grid;
+  z-index: 1000;
+  position: relative;
+  grid-row-gap: 1rem;
+  pointer-events: none;
+  justify-items: start;
+  grid-template-columns: 100%;
+  grid-template-areas:
+    'title'
+    'links'
+    'demos'
+    'info'
+    'tags'
+    'sponsor';
+
+  #cdawrap {
+    justify-self: start;
+    grid-area: sponsor;
+  }
+
+  a,
+  button {
+    pointer-events: auto;
+  }
+
+  .frame__title {
+    grid-area: title;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
+  }
+
+  .frame__links {
+    grid-area: links;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+  }
+
+  .frame__tags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .frame__demos {
+    grid-area: demos;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .frame__demos-label {
+    color: var(--color-link);
+  }
+
+  .frame__info {
+    grid-area: info;
+    margin: 0;
+    padding: 2px 3px 4px;
+    border: 1px solid;
+    border-radius: 3px;
+    line-height: 0.8;
+  }
+
+  @media screen and (min-width: 53em) {
+    grid-template-columns: auto auto auto 1fr;
+    grid-template-rows: auto auto auto;
+    grid-column-gap: 2rem;
+    grid-template-areas:
+      'title links tags sponsor'
+      'demos demos ... sponsor'
+      'info info ... sponsor';
+
+    /* A little more room between the links and the tags than the other columns get */
+    .frame__tags {
+      margin-left: 1.5rem;
+    }
+
+    #cdawrap {
+      justify-self: end;
+      text-align: right;
+      max-width: 300px;
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  padding: 10rem var(--page-padding);
+  margin: 0 auto;
+  grid-template-columns: repeat(var(--column-count), minmax(var(--column-size), 1fr));
+  grid-column-gap: var(--c-gap);
+  grid-row-gap: var(--r-gap);
+  @media screen and (min-width: 65em) {
+    --column-count: 7;
+  }
+}
+
+.grid__item {
+  margin: 0;
+}
+
+.grid__item-img {
+  aspect-ratio: 128 / 160;
+  background-size: cover;
+  background-position: center;
+}
+
+.grid__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--c-gap);
+}
+
+.grid__item-caption {
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 0.15rem;
+}
+
+/* Demo variations */
+
+.demo-2 .grid__item {
+  transform: scaleX(var(--si, 1)) scaleY(var(--sy, 1));
+  transform-origin: var(--to, 50% 50%);
+  will-change: transform;
+}
+
+.demo-2 .grid {
+  @media screen and (min-width: 65em) {
+    --column-count: 7;
+  }
+}
+
+.demo-3 {
+  --c-gap: 5px;
+}
+
+.demo-3 .grid {
+  @media screen and (min-width: 65em) {
+    --column-count: 5;
+  }
+}
+
+.demo-4,
+.demo-6,
+.demo-7,
+.demo-8,
+.demo-9 {
+  --c-gap: 0vw;
+}
+
+.demo-4 .grid__item-caption,
+.demo-6 .grid__item-caption,
+.demo-7 .grid__item-caption,
+.demo-8 .grid__item-caption,
+.demo-9 .grid__item-caption {
+  display: none;
+}
+
+.demo-4 .grid,
+.demo-6 .grid,
+.demo-7 .grid,
+.demo-8 .grid,
+.demo-9 .grid {
+  padding: 0;
+  @media screen and (min-width: 65em) {
+    --column-count: 9;
+    --page-padding: 0;
+  }
+}
+
+.demo-4 .frame,
+.demo-6 .frame,
+.demo-7 .frame,
+.demo-8 .frame,
+.demo-9 .frame {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  align-content: start;
+  height: 100svh;
+  /* On phones the frame stacks, so the top shade holds under it before fading */
+  --shade-hold: 13rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.85) 0rem,
+    rgba(0, 0, 0, 0.85) var(--shade-hold),
+    rgba(0, 0, 0, 0) calc(var(--shade-hold) + 20rem),
+    rgba(0, 0, 0, 0) calc(100% - 20rem),
+    rgba(0, 0, 0, 0.85) 100%
+  );
+
+  @media screen and (min-width: 53em) {
+    --shade-hold: 0rem;
+  }
+}
+
+/* 7 to 9 have different image sizes than 4 and 6, and the window's edges cut through the middle of their outer
+   columns. The grid stays exactly as wide as the window (nothing overflows, so phones never widen the page):
+   its outer tracks are half as wide and show the inner half of their images.
+   7: 6 columns' worth show on desktop (7 columns), 2 on phones (3). 8 and 9: 10 on desktop (11 columns), 4 on phones (5). */
+.demo-7 .grid,
+.demo-8 .grid,
+.demo-9 .grid {
+  --inner-columns: 1;
+  grid-template-columns: 0.5fr repeat(var(--inner-columns), 1fr) 0.5fr;
+
+  @media screen and (min-width: 65em) {
+    --inner-columns: 5;
+  }
+}
+
+.demo-8 .grid,
+.demo-9 .grid {
+  --inner-columns: 3;
+
+  @media screen and (min-width: 65em) {
+    --inner-columns: 9;
+  }
+}
+
+.demo-7 .grid__column:first-child,
+.demo-7 .grid__column:last-child,
+.demo-8 .grid__column:first-child,
+.demo-8 .grid__column:last-child,
+.demo-9 .grid__column:first-child,
+.demo-9 .grid__column:last-child {
+  overflow: clip;
+
+  .grid__item {
+    width: 200%;
+  }
+}
+
+.demo-7 .grid__column:first-child .grid__item,
+.demo-8 .grid__column:first-child .grid__item,
+.demo-9 .grid__column:first-child .grid__item {
+  margin-left: -100%;
+}
+
+/* Variations 6 to 9 draw the grid with WebGL, on a canvas behind the page (the frame stays on top) */
+
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.is-webgl .grid__item-img {
+  visibility: hidden;
+}

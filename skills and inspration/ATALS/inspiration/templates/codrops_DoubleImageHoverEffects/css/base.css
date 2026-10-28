@@ -1,0 +1,245 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
+:root {
+	font-size: 16px;
+	--color-text: #ada9a5;
+	--color-title: #ada9a5;
+	--color-bg: #111;
+	--color-link: #9d7a4c;
+	--color-link-hover: #fff;
+	--page-padding: 1.5rem 2rem;
+}
+
+body {
+	margin: 0;
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	font-family: "sigurd-variable", sans-serif;
+	font-variation-settings: "slnt" 0, "wght" 300;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-transform: uppercase;
+}
+
+/* Page Loader */
+.js .loading::before,
+.js .loading::after {
+	content: '';
+	position: fixed;
+	z-index: 1000;
+}
+
+.js .loading::before {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: var(--color-bg);
+}
+
+.js .loading::after {
+	top: 50%;
+	left: 50%;
+	width: 60px;
+	height: 60px;
+	margin: -30px 0 0 -30px;
+	border-radius: 50%;
+	opacity: 0.4;
+	background: var(--color-link);
+	animation: loaderAnim 0.7s linear infinite alternate forwards;
+
+}
+
+@keyframes loaderAnim {
+	to {
+		opacity: 1;
+		transform: scale3d(0.5,0.5,1);
+	}
+}
+
+a {
+	text-decoration: none;
+	color: var(--color-link);
+	cursor: pointer;
+}
+
+a:hover {
+	color: var(--color-link-hover);
+}
+
+a:focus-visible {
+	outline: 2px solid red;
+}
+
+main {
+	min-height: 100vh;
+	min-height: 100svh;
+	display: flex;
+	flex-direction: column;
+}
+
+.intro {
+	height: 100vh;
+	height: 100svh;
+	display: grid;
+	padding: var(--page-padding);
+	margin-bottom: 50vh;
+	align-content: space-between;
+}
+
+.frame {
+	color: var(--color-title);
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-areas: 'links' 'tags' 'sponsor';
+	justify-content: start;
+	margin-bottom: 3rem;
+	gap: 1rem;
+	align-items: start;
+	justify-items: start;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.frame a {
+	white-space: nowrap;
+	overflow: hidden;
+	position: relative;
+}
+
+.frame a::before {
+	content: '';
+	height: 1px;
+	width: 100%;
+	background: currentColor;
+	position: absolute;
+	top: 90%;
+	transition: transform 0.3s;
+	transform-origin: 0% 50%;
+}
+
+.frame a:hover::before {
+	transform: scaleX(0);
+	transform-origin: 100% 50%;
+}
+
+.frame__links,
+.frame__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.frame__links {
+	grid-area: links;
+}
+
+.frame__tags {
+	grid-area: tags;
+}
+
+.intro__title {
+	margin: 0;
+	line-height: 0.9;
+	text-transform: uppercase;
+	font-weight: 300;
+	font-size: clamp(2rem,10vw,9rem);
+}
+
+.intro__info {
+	position: relative;
+	align-self: end;
+}
+
+.content {
+	flex: 1;
+	display: grid;
+	align-items: center;
+	grid-template-columns: auto minmax(50%,600px);
+	margin-bottom: 10vh;
+}
+
+.content__title {
+	position: relative;
+	font-size: 1.85rem;
+	margin: 0;
+	line-height: 1;
+	padding: var(--page-padding);
+	font-weight: 300;
+	color: var(--color-title);
+}
+
+.double {
+	display: grid;
+	aspect-ratio: 4 / 2.5;
+	position: relative;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+/* The focus ring sits on top of the image layers, which would cover an outline */
+.double:focus-visible {
+	outline: none;
+}
+
+.double:focus-visible::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border: 2px solid red;
+	pointer-events: none;
+}
+
+.double__img {
+	grid-area: 1 / 1 / -1 / -1;
+	background: no-repeat 50% 50%;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+/* The WebGL effects draw the image into a canvas over it */
+.double__gl {
+	grid-area: 1 / 1 / -1 / -1;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+/* All the effects again at the end, smaller and side by side */
+.grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1rem;
+	padding: var(--page-padding);
+	margin-bottom: 10vh;
+}
+
+.credit {
+	padding: var(--page-padding);
+	text-align: center;
+}
+
+@media screen and (min-width: 53em) {
+	.frame {
+		gap: 4rem;
+		grid-template-columns: auto auto 1fr;
+		align-items: center;
+		grid-template-areas: 'links tags sponsor';
+	}
+	.grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+	}
+}
+
+@media screen and (min-width: 80em) {
+	.grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}

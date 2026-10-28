@@ -1,0 +1,9 @@
+
+> onscrolltypographyanimations@1.0.0 start
+> parcel src/index.html --open
+
+Building...
+Bundling...
+Packaging & Optimizing...
+Server running at http://localhost:9024
+✨ Built in 10.12s

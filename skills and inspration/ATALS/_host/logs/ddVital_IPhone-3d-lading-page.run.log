@@ -1,0 +1,16 @@
+
+> iphone@0.0.0 dev
+> vite --port 9029 --host 127.0.0.1
+
+
+  [32m[1mVITE[22m v5.2.10[39m  [2mready in [0m[1m2108[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m9029[22m/[39m
+Error: The following dependencies are imported but could not be resolved:
+
+  [36m@react-three/fiber[39m [37m[2m(imported by C:/Users/zephe/Downloads/ATALS/inspiration/templates/ddVital_IPhone-3d-lading-page/src/components/Model.jsx)[22m[39m
+
+Are they installed?
+    at file:///C:/Users/zephe/Downloads/ATALS/inspiration/templates/ddVital_IPhone-3d-lading-page/node_modules/vite/dist/node/chunks/dep-DkOS1hkm.js:52532:23
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/zephe/Downloads/ATALS/inspiration/templates/ddVital_IPhone-3d-lading-page/node_modules/vite/dist/node/chunks/dep-DkOS1hkm.js:51998:38

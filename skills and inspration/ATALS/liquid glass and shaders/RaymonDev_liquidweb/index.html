@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LiquidWeb - Interactive Glass</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width:100%; height:100%;
+  background:#000;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;
+  overflow:hidden;
+}
+
+#scene {
+  position:relative;
+  width:100vw; height:100vh;
+  overflow:hidden;
+}
+
+#bg {
+  position:absolute; inset:0;
+  background-size:cover;
+  background-position:center;
+  transition: background-image 0.5s ease-in-out;
+}
+
+#glc {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  pointer-events:none;
+}
+
+#ui {
+  position:absolute; inset:0;
+  z-index:20;
+  pointer-events:none;
+}
+
+/* ── Navbar ── */
+#navbar {
+  position:absolute;
+  top:26px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:24px;
+  pointer-events:all;
+}
+
+.nbtn {
+  padding:8px 12px;
+  color:rgba(255,255,255,0.9); font-size:15px; font-weight:400;
+  cursor:pointer; user-select:none;
+  display:flex; align-items:center; gap:6px;
+  text-shadow:0 1px 5px rgba(0,0,0,0.55);
+  transition:color 0.15s;
+}
+.nbtn:hover { color:#fff; }
+.nbtn.active { font-weight:600; color:#fff; }
+.chev {
+  font-size:10px; opacity:0.8;
+  transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  display:inline-block;
+}
+.nbtn.open .chev { transform:rotate(180deg); }
+
+/* ── Dropdown ── */
+#dropdown {
+  position:absolute;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.15);
+  border-top-color:rgba(255,255,255,0.4);
+  pointer-events:all;
+  overflow:hidden;
+  transform-origin:top center;
+  transition:
+    opacity 0.22s ease,
+    transform 0.28s cubic-bezier(.34,1.5,.64,1);
+}
+#dropdown.closed {
+  opacity:0;
+  transform:scaleY(0.5) translateY(-10px);
+  pointer-events:none;
+}
+#dropdown.open {
+  opacity:1;
+  transform:scaleY(1) translateY(0);
+}
+
+.ditem {
+  padding:12px 24px;
+  color:rgba(255,255,255,0.9); font-size:14.5px;
+  text-shadow:0 1px 4px rgba(0,0,0,0.5);
+  cursor:pointer; letter-spacing:-0.01em;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  transition:background 0.1s;
+}
+.ditem:last-child { border-bottom:none; }
+.ditem:hover { background:rgba(255,255,255,0.1); }
+
+/* ── Control Panel ── */
+#control-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 20px;
+  border-radius: 16px;
+  color: #fff;
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 200px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ctrl-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+select, input[type="range"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+select option {
+  background: #222;
+  color: white;
+}
+</style>
+</head>
+<body>
+<div id="scene">
+  <div id="bg"></div>
+  <canvas id="glc"></canvas>
+
+  <div id="ui">
+    <div id="navbar">
+      <div class="nbtn" onclick="openMenu(this,'product')">Product <span class="chev">▾</span></div>
+      <div class="nbtn" onclick="openMenu(this,'resources')">Resources <span class="chev">▾</span></div>
+      <div class="nbtn" onclick="openMenu(this,'company')">Company <span class="chev">▾</span></div>
+    </div>
+
+    <div id="dropdown" class="closed" style="top:75px; left:245px; width:220px;"></div>
+    
+    <div id="control-panel">
+      <div class="ctrl-group">
+        <label>Lens Tint</label>
+        <input type="range" id="tint-slider" min="0" max="0.8" step="0.05" value="0.25">
+      </div>
+      
+      <div class="ctrl-group">
+        <label>Lens Shape</label>
+        <select id="shape-select">
+          <option value="circle">Circle</option>
+          <option value="square">Square (Soft edges)</option>
+        </select>
+      </div>
+
+      <div class="ctrl-group">
+        <label>Background</label>
+        <select id="bg-select">
+          <option value="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=90">Abstract Liquid</option>
+          <option value="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=1600&q=90">Multicolor Paint</option>
+          <option value="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=90">Nature (Original)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIG & RESIZE HANDLING
+// ─────────────────────────────────────────────────────────────────────────────
+let W = window.innerWidth;
+let H = window.innerHeight;
+const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+const MENUS = {
+  product:   { items:['Overview','Features','Integrations','Changelog','Pricing'] },
+  resources: { items:['Documentation','Guides','Blog','Support'] },
+  company:   { items:['About','Careers','Contact'] },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WEBGL SETUP
+// ─────────────────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('glc');
+const gl = canvas.getContext('webgl', { alpha:true, premultipliedAlpha:false });
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+function resizeCanvas() {
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width  = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  snap.width = W;
+  snap.height = H;
+  drawBgToSnap(); 
+  uploadTex();
+}
+window.addEventListener('resize', resizeCanvas);
+
+const VS = `
+attribute vec2 a_pos;
+attribute vec2 a_uv;
+varying vec2 v_uv;
+void main(){
+  v_uv = a_uv;
+  gl_Position = vec4(a_pos, 0.0, 1.0);
+}`;
+
+const FS = `
+precision highp float;
+varying vec2 v_uv;
+
+uniform sampler2D u_bg;
+uniform vec2  u_res;
+uniform vec4  u_bgBounds;
+uniform float u_radius;
+uniform float u_refraction;
+uniform float u_bevelW;
+uniform float u_bevelDepth;
+uniform float u_tint; // Controls the darkness of the glass
+
+float sdRR(vec2 p, vec2 b, float r){
+  vec2 q = abs(p) - b + r;
+  return length(max(q,0.0)) + min(max(q.x,q.y),0.0) - r;
+}
+
+float edgeFactor(){
+  vec2 p_px = (v_uv - 0.5) * u_res;
+  vec2 b_px = 0.5 * u_res;
+  float d = -sdRR(p_px, b_px, u_radius);
+  float bevel_px = u_bevelW * min(u_res.x, u_res.y);
+  return 1.0 - smoothstep(0.0, bevel_px, d);
+}
+
+void main(){
+  vec2 p = v_uv - 0.5;
+  p.x *= u_res.x / u_res.y;
+
+  float edge = edgeFactor();
+  float centreBlend = smoothstep(0.0, 0.6, length(p));
+
+  float offsetAmt = (edge * u_refraction + pow(edge, 5.0) * u_bevelDepth);
+  vec2  offset    = normalize(p + 0.0001) * offsetAmt * centreBlend;
+
+  vec2 localUV   = v_uv;
+  vec2 bgUV      = u_bgBounds.xy + localUV * u_bgBounds.zw;
+
+  float ca = edge * 0.005;
+  vec2 rUV = clamp(bgUV + offset * (1.0 + ca), 0.001, 0.999);
+  vec2 gUV = clamp(bgUV + offset, 0.001, 0.999);
+  vec2 bUV = clamp(bgUV + offset * (1.0 - ca), 0.001, 0.999);
+
+  vec4 colR = texture2D(u_bg, rUV);
+  vec4 colG = texture2D(u_bg, gUV);
+  vec4 colB = texture2D(u_bg, bUV);
+  
+  vec4 blurG = (colG + texture2D(u_bg, gUV + vec2(0.002)) + texture2D(u_bg, gUV - vec2(0.002))) / 3.0;
+  vec4 col = vec4(colR.r, blurG.g, colB.b, blurG.a);
+
+  // Tinting is driven by the UI control (u_tint)
+  col.rgb = mix(col.rgb, vec3(0.0, 0.05, 0.1), u_tint);
+  col.rgb *= (1.0 - edge * 0.3);
+
+  float rimMask = smoothstep(1.5, 0.0, abs(sdRR((v_uv-0.5)*u_res, u_res*0.5, u_radius) + 0.5));
+  float topArc  = smoothstep(-0.1, -0.6, p.y);
+  col.rgb += rimMask * topArc * 0.7;
+
+  float botArc  = smoothstep(0.1, 0.5, p.y);
+  col.rgb -= rimMask * botArc * 0.2;
+
+  vec2 p_px = (v_uv-0.5)*u_res;
+  vec2 b_px = u_res*0.5;
+  float dmask = sdRR(p_px, b_px, u_radius);
+  float alpha  = 1.0 - smoothstep(-0.5, 0.5, dmask);
+
+  gl_FragColor = vec4(col.rgb * alpha, alpha);
+}
+`;
+
+function mkShader(type, src){
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+  return s;
+}
+const prog = gl.createProgram();
+gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, VS));
+gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FS));
+gl.linkProgram(prog);
+gl.useProgram(prog);
+
+const aPos = gl.getAttribLocation(prog,'a_pos');
+const aUV  = gl.getAttribLocation(prog,'a_uv');
+gl.enableVertexAttribArray(aPos);
+gl.enableVertexAttribArray(aUV);
+
+const U = n => gl.getUniformLocation(prog, n);
+const u = {
+  bg:         U('u_bg'),
+  res:        U('u_res'),
+  bgBounds:   U('u_bgBounds'),
+  radius:     U('u_radius'),
+  refraction: U('u_refraction'),
+  bevelW:     U('u_bevelW'),
+  bevelDepth: U('u_bevelDepth'),
+  tint:       U('u_tint')
+};
+
+const tex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, tex);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+const snap = document.createElement('canvas');
+const snapCtx = snap.getContext('2d');
+
+let bgImg = null;
+resizeCanvas();
+
+function loadBackground(url) {
+  const tmp = new Image();
+  tmp.crossOrigin = 'anonymous';
+  tmp.src = url;
+  document.getElementById('bg').style.backgroundImage = `url('${url}')`;
+  tmp.onload = () => { 
+    bgImg = tmp; 
+    drawBgToSnap();
+    uploadTex();
+  };
+}
+
+// Initial background load
+loadBackground(document.getElementById('bg-select').value);
+
+function drawBgToSnap(){
+  if(!bgImg) return;
+  const iw=bgImg.naturalWidth, ih=bgImg.naturalHeight;
+  const scale=Math.max(W/iw, H/ih);
+  const dw=iw*scale, dh=ih*scale;
+  const ox=(W-dw)/2;
+  const oy=(H-dh)/2;
+  snapCtx.clearRect(0,0,W,H);
+  snapCtx.drawImage(bgImg,ox,oy,dw,dh);
+}
+
+function uploadTex(){
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,snap);
+}
+
+function quadVerts(x,y,w,h){
+  const x0= x/W*2-1, x1=(x+w)/W*2-1;
+  const y0= 1-y/H*2, y1= 1-(y+h)/H*2;
+  return new Float32Array([
+    x0,y0, 0,0,  x1,y0, 1,0,  x0,y1, 0,1,
+    x0,y1, 0,1,  x1,y0, 1,0,  x1,y1, 1,1,
+  ]);
+}
+
+const vbuf = gl.createBuffer();
+// Added tint parameter
+function drawGlassRect(x, y, w, h, radiusPx, refr, bevelW, bevelDepth, tint){
+  const verts = quadVerts(x,y,w,h);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbuf);
+  gl.bufferData(gl.ARRAY_BUFFER, verts, gl.DYNAMIC_DRAW);
+
+  const stride = 4*4;
+  gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,stride,0);
+  gl.vertexAttribPointer(aUV, 2,gl.FLOAT,false,stride,8);
+
+  const bx=x/W, by=y/H, bw=w/W, bh=h/H;
+  gl.uniform2f(u.res, w, h);
+  gl.uniform4f(u.bgBounds, bx, by, bw, bh);
+  gl.uniform1f(u.radius, radiusPx);
+  gl.uniform1f(u.refraction, refr);
+  gl.uniform1f(u.bevelW, bevelW);
+  gl.uniform1f(u.bevelDepth, bevelDepth);
+  gl.uniform1f(u.tint, tint); // Send darkness opacity
+
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UI & LENS STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let activeKey = null;
+let ddProgress = 0, ddProgressTarget = 0;
+const DD_W = 220;
+let ddLeft = 240, ddLeftTarget = 240;
+let ddH = 0, ddHTarget = 0;
+const DD_TOP = 75;
+
+// Interactive Lens Variables
+const LENS_SIZE = 180;
+let lensRadius = LENS_SIZE / 2; // Default to perfect circle
+let lensTint = 0.25; // Initial tint
+let lensX = W / 2 - (LENS_SIZE / 2);
+let lensY = H / 2 - (LENS_SIZE / 2) + 100;
+let isDraggingLens = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+// UI Event Listeners
+document.getElementById('tint-slider').addEventListener('input', (e) => {
+  lensTint = parseFloat(e.target.value);
+});
+
+document.getElementById('shape-select').addEventListener('change', (e) => {
+  // If square, leave a small radius so the shader doesn't visually break
+  lensRadius = e.target.value === 'circle' ? (LENS_SIZE / 2) : 20; 
+});
+
+document.getElementById('bg-select').addEventListener('change', (e) => {
+  loadBackground(e.target.value);
+});
+
+window.addEventListener('mousedown', e => {
+  if(e.target.closest('#ui')) return;
+  
+  const cx = lensX + (LENS_SIZE / 2);
+  const cy = lensY + (LENS_SIZE / 2);
+  
+  // Validate if the click is inside the area (circle or approximate square)
+  const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+  
+  if (dist <= (LENS_SIZE / 2)) {
+    isDraggingLens = true;
+    dragOffsetX = e.clientX - lensX;
+    dragOffsetY = e.clientY - lensY;
+    canvas.style.cursor = 'grabbing';
+  }
+});
+
+window.addEventListener('mousemove', e => {
+  if (isDraggingLens) {
+    lensX = e.clientX - dragOffsetX;
+    lensY = e.clientY - dragOffsetY;
+  }
+});
+
+window.addEventListener('mouseup', () => {
+  isDraggingLens = false;
+  canvas.style.cursor = 'default';
+});
+
+function openMenu(btn, key){
+  const allBtns = document.querySelectorAll('.nbtn');
+  const dd = document.getElementById('dropdown');
+
+  if(activeKey===key && ddProgressTarget>0.5){
+    ddProgressTarget=0;
+    btn.classList.remove('open','active');
+    dd.classList.remove('open'); dd.classList.add('closed');
+    activeKey=null;
+    return;
+  }
+
+  allBtns.forEach(b=>b.classList.remove('active','open'));
+  btn.classList.add('active','open');
+  dd.classList.remove('closed'); dd.classList.add('open');
+
+  const rect = btn.getBoundingClientRect();
+  const sceneRect = document.getElementById('scene').getBoundingClientRect();
+  const cx = rect.left - sceneRect.left + (rect.width / 2);
+
+  const m = MENUS[key];
+  ddLeftTarget = cx - DD_W/2;
+
+  dd.innerHTML = m.items.map(i=>`<div class="ditem">${i}</div>`).join('');
+
+  ddHTarget = m.items.length*44 + 12;
+  if(ddProgressTarget<0.05) ddProgress=0.001;
+  ddProgressTarget=1.0;
+  activeKey=key;
+}
+
+document.getElementById('scene').addEventListener('click',e=>{
+  if(!e.target.closest('#navbar') && !e.target.closest('#dropdown')){
+    const dd=document.getElementById('dropdown');
+    dd.classList.remove('open'); dd.classList.add('closed');
+    document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active','open'));
+    ddProgressTarget=0; activeKey=null;
+  }
+});
+
+function lerp(a,b,t){return a+(b-a)*t;}
+
+function frame(){
+  const sp=0.12;
+  ddProgress = lerp(ddProgress, ddProgressTarget, sp);
+  ddLeft     = lerp(ddLeft,     ddLeftTarget,     0.18);
+  ddH        = lerp(ddH,        ddHTarget,        sp);
+
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.clearColor(0,0,0,0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.uniform1i(u.bg, 0);
+
+  // 1. Draw Lens (Controlled by UI)
+  drawGlassRect(
+    lensX, lensY, LENS_SIZE, LENS_SIZE,
+    lensRadius,  // Radius modified by the selector
+    0.06,        
+    0.35,   
+    0.04,
+    lensTint     // Darkness modified by the slider
+  );
+
+  // 2. Draw Dropdown (Static at 0.25 tint)
+  if(ddProgress > 0.01){
+    const curH = ddH * ddProgress;
+    const curY = DD_TOP;
+    drawGlassRect(
+      ddLeft, curY, DD_W, curH,
+      Math.min(20, curH*0.5),
+      0.04,   
+      0.35,   
+      0.03,
+      0.25      // Fixed darkness for the menu
+    );
+
+    const ddEl=document.getElementById('dropdown');
+    ddEl.style.top    = curY+'px';
+    ddEl.style.left   = ddLeft+'px';
+    ddEl.style.width  = DD_W+'px';
+    ddEl.style.height = curH+'px';
+  }
+
+  requestAnimationFrame(frame);
+}
+
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

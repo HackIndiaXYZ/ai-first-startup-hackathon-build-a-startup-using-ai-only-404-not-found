@@ -1,0 +1,58 @@
+{
+  "hash": "7c6c7e99",
+  "configHash": "189d53f1",
+  "lockfileHash": "5a687290",
+  "browserHash": "6d7297b9",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "59ebd7f3",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "bf184525",
+      "needsInterop": true
+    },
+    "gsap/all": {
+      "src": "../../node_modules/gsap/all.js",
+      "file": "gsap_all.js",
+      "fileHash": "46520d1b",
+      "needsInterop": false
+    },
+    "gsap": {
+      "src": "../../node_modules/gsap/index.js",
+      "file": "gsap.js",
+      "fileHash": "1700e0c8",
+      "needsInterop": false
+    },
+    "@gsap/react": {
+      "src": "../../node_modules/@gsap/react/src/index.js",
+      "file": "@gsap_react.js",
+      "fileHash": "25b1135c",
+      "needsInterop": false
+    },
+    "react-responsive": {
+      "src": "../../node_modules/react-responsive/dist/esm/index.js",
+      "file": "react-responsive.js",
+      "fileHash": "88768cde",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-PRIVVIUP": {
+      "file": "chunk-PRIVVIUP.js"
+    },
+    "chunk-DN3JEOHO": {
+      "file": "chunk-DN3JEOHO.js"
+    },
+    "chunk-KS2M7ZJI": {
+      "file": "chunk-KS2M7ZJI.js"
+    },
+    "chunk-5WRI5ZAA": {
+      "file": "chunk-5WRI5ZAA.js"
+    }
+  }
+}

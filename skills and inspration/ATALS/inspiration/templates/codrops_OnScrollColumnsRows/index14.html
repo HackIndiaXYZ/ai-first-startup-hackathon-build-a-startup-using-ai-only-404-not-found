@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Folding Screen WebGL Scroll Animation | Codrops</title>
+		<meta name="description" content="The columns zigzag like the panels of a folding screen as they come in, opening flat as they rise. Made with three.js, GSAP and Lenis. Part of Codrops' On-Scroll Column & Row Animations." />
+		<meta name="keywords" content="scroll animation, grid, column, javascript, css, gsap, 3d, distort" />
+		<meta name="author" content="Codrops" />
+		<link rel="canonical" href="https://tympanus.net/Development/OnScrollColumnsRows/index14.html" />
+		<meta name="theme-color" content="#000" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Codrops" />
+		<meta property="og:title" content="Folding Screen WebGL Scroll Animation | Codrops" />
+		<meta property="og:description" content="The columns zigzag like the panels of a folding screen as they come in, opening flat as they rise. Made with three.js, GSAP and Lenis. Part of Codrops' On-Scroll Column & Row Animations." />
+		<meta property="og:url" content="https://tympanus.net/Development/OnScrollColumnsRows/index14.html" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@codrops" />
+		<meta name="twitter:title" content="Folding Screen WebGL Scroll Animation | Codrops" />
+		<meta name="twitter:description" content="The columns zigzag like the panels of a folding screen as they come in, opening flat as they rise. Made with three.js, GSAP and Lenis. Part of Codrops' On-Scroll Column & Row Animations." />
+		<link rel="icon" type="image/svg+xml" href="https://tympanus.net/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="https://tympanus.net/favicon/favicon.ico" />
+		<link rel="preconnect" href="https://use.typekit.net" crossorigin />
+		<link rel="preconnect" href="https://p.typekit.net" />
+		<link rel="preload" as="image" href="img/11.webp" fetchpriority="high" />
+		<link rel="stylesheet" href="https://use.typekit.net/rzt6nuu.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<script type="importmap">
+			{
+				"imports": {
+					"three/webgpu": "./js/three/three.webgpu.min.js",
+					"three/tsl": "./js/three/three.tsl.min.js",
+					"./js/three/three.core.js": "./js/three/three.core.min.js"
+				}
+			}
+		</script>
+		<script>document.documentElement.className = 'js';</script>
+		<!-- Added on the live server only, leave commented out in the repo -->
+		<!--script src="//tympanus.net/codrops/adpacks/analytics.js"></script-->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebPage",
+			"name": "Folding Screen WebGL Scroll Animation",
+			"description": "The columns zigzag like the panels of a folding screen as they come in, opening flat as they rise. Made with three.js, GSAP and Lenis. Part of Codrops' On-Scroll Column & Row Animations.",
+			"url": "https://tympanus.net/Development/OnScrollColumnsRows/index14.html",
+			"author": {
+				"@type": "Organization",
+				"name": "Codrops",
+				"url": "https://tympanus.net/codrops/"
+			},
+			"isPartOf": {
+				"@type": "WebSite",
+				"name": "Codrops",
+				"url": "https://tympanus.net/codrops/"
+			},
+			"relatedLink": [
+				"https://tympanus.net/codrops/2023/08/15/on-scroll-column-row-animations/",
+				"https://github.com/codrops/OnScrollColumnsRows"
+			]
+		}
+		</script>
+	</head>
+	<body class="demo-14 loading">
+		<main>
+			<header class="frame">
+				<h1 class="frame__title">On-Scroll Column & Row Animations</h1>
+				<nav class="frame__links" aria-label="Demo links">
+					<a href="https://tympanus.net/codrops/?p=73182">Article</a>
+					<a href="https://tympanus.net/codrops/hub/">All demos</a>
+					<a href="https://github.com/codrops/OnScrollColumnsRows/">GitHub</a>
+				</nav>
+				<nav class="frame__demos" aria-label="Variations">
+					<span class="frame__demos-label">Variations</span>
+					<a class="frame__demo" href="index.html">01</a>
+					<a class="frame__demo" href="index2.html">02</a>
+					<a class="frame__demo" href="index3.html">03</a>
+					<a class="frame__demo" href="index4.html">04</a>
+					<a class="frame__demo" href="index5.html">05</a>
+					<a class="frame__demo" href="index6.html">06</a>
+					<a class="frame__demo" href="index7.html">07</a>
+					<a class="frame__demo" href="index8.html">08</a>
+					<a class="frame__demo" href="index9.html">09</a>
+					<a class="frame__demo" href="index10.html">10</a>
+					<a class="frame__demo" href="index11.html">11</a>
+					<a class="frame__demo" href="index12.html">12</a>
+					<a class="frame__demo" href="index13.html">13</a>
+					<span class="frame__demo frame__demo--current" aria-current="page">14</span>
+					<a class="frame__demo" href="index15.html">15</a>
+					<a class="frame__demo" href="index16.html">16</a>
+					<a class="frame__demo" href="index17.html">17</a>
+					<a class="frame__demo" href="index18.html">18</a>
+				</nav>
+				<nav class="frame__tags" aria-label="Tags">
+					<a href="https://tympanus.net/codrops/hub/tag/scroll/">#scroll</a>
+					<a href="https://tympanus.net/codrops/hub/tag/gsap/">#gsap</a>
+					<a href="https://tympanus.net/codrops/hub/tag/grid/">#grid</a>
+					<a href="https://tympanus.net/codrops/hub/tag/webgl/">#webgl</a>
+					<a href="https://tympanus.net/codrops/hub/tag/three-js/">#three.js</a>
+					<a href="https://tympanus.net/codrops/hub/tag/webgpu/">#webgpu</a>
+					<a href="https://tympanus.net/codrops/hub/tag/tsl/">#tsl</a>
+				</nav>
+			</header>
+			<div class="columns">
+		        <div class="column">
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/11.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/46.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/9.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/44.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/7.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/42.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/5.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/40.webp)"></div>
+		                </div>
+		            </figure>
+		        </div><!-- /column -->
+		        <div class="column">
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/18.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/53.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/16.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/51.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/14.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/49.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/12.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/47.webp)"></div>
+		                </div>
+		            </figure>
+		        </div><!-- /column -->
+		        <div class="column">
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/25.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/60.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/23.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/58.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/21.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/56.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/19.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/54.webp)"></div>
+		                </div>
+		            </figure>
+		        </div><!-- /column -->
+		        <div class="column">
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/32.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/67.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/30.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/65.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/28.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/63.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/26.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/61.webp)"></div>
+		                </div>
+		            </figure>
+		        </div><!-- /column -->
+		        <div class="column">
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/39.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/2.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/37.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/72.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/35.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/70.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/33.webp)"></div>
+		                </div>
+		            </figure>
+		            <figure class="column__item">
+		                <div class="column__item-imgwrap">
+		                    <div class="column__item-img" style="background-image:url(img/68.webp)"></div>
+		                </div>
+		            </figure>
+		        </div><!-- /column -->
+			</div><!-- columns -->
+		<section class="outro">
+				<h2 class="outro__title">More you might like</h2>
+				<div class="card-wrap">
+					<div class="card">
+						<a href="https://tympanus.net/Development/TileScroll/" class="card__image" style="background-image:url(https://tympanus.net/codrops/wp-content/uploads/2020/10/ScrollAnimationLocomotive.jpg)" aria-hidden="true" tabindex="-1"></a>
+						<h3 class="card__title"><a href="https://tympanus.net/Development/TileScroll/">Scroll-Based Layout Animations</a></h3>
+					</div>
+					<div class="card">
+						<a href="https://tympanus.net/Development/ColumnScroll/" class="card__image" style="background-image:url(https://tympanus.net/codrops/wp-content/uploads/2021/12/columscroll_feat.jpg)" aria-hidden="true" tabindex="-1"></a>
+						<h3 class="card__title"><a href="https://tympanus.net/Development/ColumnScroll/">On-Scroll SVG Filter Effect</a></h3>
+					</div>
+				</div>
+			</section>
+			<p class="credits">Made by <a href="https://x.com/codrops">@codrops</a></p>
+		</main>
+		<!-- Added on the live server only, leave commented out in the repo -->
+		<!--script src="https://tympanus.net/codrops/adpacks/cda_sponsor.js"></script-->
+		<script src="js/gsap.min.js"></script>
+		<script src="js/ScrollTrigger.min.js"></script>
+		<script src="js/lenis.min.js"></script>
+		<script type="module" src="js/index14.js"></script>
+	</body>
+</html>

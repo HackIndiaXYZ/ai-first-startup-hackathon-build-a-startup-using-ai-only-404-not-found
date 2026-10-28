@@ -1,0 +1,290 @@
+127.0.0.1 - - [25/Oct/2026 20:51:18] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:51:57] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:51:57] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:51:57] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/svg-star-white.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/ELECTRICK-1.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/portraits-5_danibumba.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/peugeot_153.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/script.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/3g0a9005.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/denzelcurry14822.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/LARELEVE-1.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/AVE20231220_18444255_0090.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/LARELEVE-5.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/portraits-11_benoitmagimel.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/arrow.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/arrow-white.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/svg-star.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/come-up-img1.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:00] "GET /inspiration/templates/ChillMonger04_Axel-Vanhessche-Portfolio/images/come-up-img2.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:28] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:28] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:28] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/cursor/index.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:28] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/logo.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:28] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/webglball/index.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:28] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/webglball/shaders.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:33] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:52:33] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:52:44] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:57] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/pages/work.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:52:57] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:52:57] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/cursor/index.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:52:57] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/logo.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:53:12] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/pages/work.html HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:53:18] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/pages/about.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:53:18] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/profile.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:53:44] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:53:58] "GET /inspiration/templates/WebDevPie_Smooth-Scrolling-For-Your-Website---Lenis-GSAP-Animation-ScrollTrigger/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:53:58] "GET /inspiration/templates/WebDevPie_Smooth-Scrolling-For-Your-Website---Lenis-GSAP-Animation-ScrollTrigger/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:53:58] "GET /inspiration/templates/WebDevPie_Smooth-Scrolling-For-Your-Website---Lenis-GSAP-Animation-ScrollTrigger/script.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:53:58] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:53:58] "GET /fonts/Slussen-Compressed-Black.woff2 HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:53:58] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:53:58] "GET /fonts/Slussen-Expanded-Black.woff2 HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:53:58] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:53:58] "GET /fonts/Slussen-Regular.woff2 HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/css/normalize.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/css/demo.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/css/revealer.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/css/pater.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/sponsor/HackReactorLogo.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/1.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/2.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/3.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/related/PageRevealEffects.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/js/anime.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/js/scrollMonitor.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/js/main.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/related/ImageGridEffects.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/img/sponsor/terminal.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:12] "GET /inspiration/templates/codrops_BlockRevealers/favicon.ico HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:22] "GET /inspiration/templates/codrops_BlockRevealers/menu.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:23] "GET /inspiration/templates/codrops_BlockRevealers/modal.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:36] "GET /inspiration/templates/codrops_LineHoverStyles/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:36] "GET /inspiration/templates/codrops_LineHoverStyles/css/base.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:36] "GET /inspiration/templates/codrops_LineHoverStyles/favicon.ico HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/css/lando-offbrand.shared.5b4e934f7.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /avljl2rk9q5pNjdiNWEwMmRjNWQzMzg5NjBiMTdhN2U5/7ZblqsTeeE5q7zjxhGjeEUmRx4o HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/fonts/67bc6274c5b4108b123aa4d5_MonaSans-VariableFont_wdth,wght.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/images/67cecea4e9d311047dcb51e5_ln4-hw-signature2.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/images/67f517cdc5bb460c3c3b8e5b_ln4-LN-logo-svg.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/js/jquery-3.5.1.min.dc5e7f18c8.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/js/lando-offbrand.schunk.7321a5097fb66f41.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/js/lando-offbrand.751e0867.148dc658e77a3916.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/js/lando.OFF+BRAND.gold-android-fix-03.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/images/68ea48448e634fcc425b0e28_transp.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:54] "GET /inspiration/templates/vinay3254_landonorris-clone/fonts/67b6113a220f85ad6497495a_Brier-Bold.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:55] "GET /inspiration/templates/vinay3254_landonorris-clone/images/67b5a0969616f526f020ec0e_ln-favicon.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:54:55] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:54:55] "GET /rive/page-transition.riv HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/liquidGL-Preloader.gif HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/liquidGL-logo-dark-lc-nw.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/download-light.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/arrow-thin.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/orange-gradient-3d.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/play-icon.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/fonts/NeueHaasDisplayMedium.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/fonts/NeueHaasDisplayRoman.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/fonts/NeueHaasDisplayBold.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/fonts/PPSupplyMono-Regular.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/fonts/NeueHaasDisplayLight.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/scripts/liquidGL.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/sir-artwork.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/scripts/liquidGL-helper.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/lgl-menu-bar-poster.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/lucide-box.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/lgl-ai-search-poster.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/lgl-audio-player-poster.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/lucide-hand-coins.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/lucide-clock.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/sir-bkg.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/support-icon.svg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/images/liquidGL-License-Artwork-2026.webp HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/orange-gradient-anim.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:55:08] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/audio/Sir_D_Evils.mp3 HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 62595)
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 1342, in finish_request
+    self.RequestHandlerClass(request, client_address, self,
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             directory=args.directory)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 683, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 447, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 435, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 690, in do_GET
+    self.copyfile(f, self.wfile)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 892, in copyfile
+    shutil.copyfileobj(source, outputfile)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\shutil.py", line 204, in copyfileobj
+    fdst_write(buf)
+    ~~~~~~~~~~^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+----------------------------------------
+127.0.0.1 - - [25/Oct/2026 20:55:34] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:55:34] "GET /assets/images/favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:55:49] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/orange-gradient-anim.mp4 HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:55:51] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/audio/Sir_D_Evils.mp3 HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 50391)
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 1342, in finish_request
+    self.RequestHandlerClass(request, client_address, self,
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             directory=args.directory)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 683, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 447, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 435, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 690, in do_GET
+    self.copyfile(f, self.wfile)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 892, in copyfile
+    shutil.copyfileobj(source, outputfile)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\shutil.py", line 204, in copyfileobj
+    fdst_write(buf)
+    ~~~~~~~~~~^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+----------------------------------------
+127.0.0.1 - - [25/Oct/2026 20:55:51] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/audio/Sir_D_Evils.mp3 HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 56511)
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 1342, in finish_request
+    self.RequestHandlerClass(request, client_address, self,
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             directory=args.directory)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 683, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 447, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 435, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 690, in do_GET
+    self.copyfile(f, self.wfile)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\http\server.py", line 892, in copyfile
+    shutil.copyfileobj(source, outputfile)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\shutil.py", line 204, in copyfileobj
+    fdst_write(buf)
+    ~~~~~~~~~~^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+----------------------------------------
+127.0.0.1 - - [25/Oct/2026 20:56:01] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-menu-bar.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:01] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-ai-search.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:01] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-audio-player.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:01] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-fluid-interaction-1x1.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:01] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-chromatic-aberration-1x1.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:01] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-frost-specular-1x1.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:03] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/demos/menu-bar.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:03] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:56:03] "GET /scripts/liquidGL-helper.js HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:56:03] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:56:03] "GET /scripts/liquidGL.js HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:56:03] code 404, message File not found
+127.0.0.1 - - [25/Oct/2026 20:56:03] "GET /assets/videos/liquid-wave.mp4 HTTP/1.1" 404 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-true-refraction-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-chromatic-aberration-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-tinted-glass-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-fluid-interaction-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-frost-specular-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-stacked-lenses-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:09] "GET /liquid%20glass%20and%20shaders/naughtyduk_liquidgl/assets/videos/lgl-feature-multiple-lenses-16x9.mp4 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:56:26] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:01] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/ HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:01] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:01] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/cursor/index.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:01] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/logo.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:01] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/webglball/index.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:01] "GET /inspiration/templates/MAGGIx1404_webgl-portfolio/javascript/webglball/shaders.js HTTP/1.1" 304 -
+127.0.0.1 - - [25/Oct/2026 20:57:04] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/ HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:04] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/css/base.css HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:04] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/index.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/5.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/4.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/3.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/2.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/6.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/1.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/9.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/8.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/7.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/10.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/12.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/doubleImageEffect.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/img/11.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx1.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx2.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx3.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx5.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx6.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx4.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx7.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx8.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx9.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx10.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx11.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx12.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx13.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx14.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx15.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx16.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx17.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx18.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/fx19.js HTTP/1.1" 200 -
+127.0.0.1 - - [25/Oct/2026 20:57:06] "GET /inspiration/templates/codrops_DoubleImageHoverEffects/js/webgl/glImage.js HTTP/1.1" 200 -

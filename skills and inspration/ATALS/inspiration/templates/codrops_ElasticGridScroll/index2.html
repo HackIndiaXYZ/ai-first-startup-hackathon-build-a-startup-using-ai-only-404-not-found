@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elastic Grid Scroll | Demo 2 | Codrops</title>
+    <meta name="author" content="Codrops" />
+    <link rel="stylesheet" href="https://use.typekit.net/qvq2ysy.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <script>
+      document.documentElement.className = 'js';
+    </script>
+  </head>
+  <body class="demo-2 loading">
+    <!-- The smooth scroll wrappers -->
+    <div id="smooth-wrapper">
+      <main id="smooth-content">
+        <header class="frame">
+          <h1 class="frame__title">Elastic Grid Scroll</h1>
+          <nav class="frame__links">
+            <a href="https://tympanus.net/codrops/?p=94826">Article</a>
+            <a href="https://tympanus.net/codrops/hub/">All demos</a>
+            <a href="https://github.com/codrops/ElasticGridScroll/">GitHub</a>
+          </nav>
+          <nav class="frame__tags">
+            <a href="https://tympanus.net/codrops/hub/tag/scroll/">#scroll</a>
+            <a href="https://tympanus.net/codrops/hub/tag/grid/">#grid</a>
+            <a href="https://tympanus.net/codrops/hub/tag/gsap/">#gsap</a>
+            <a href="https://tympanus.net/codrops/hub/tag/elastic/">#elastic</a>
+            <a href="https://tympanus.net/codrops/hub/tag/three-js/">#three.js</a>
+            <a href="https://tympanus.net/codrops/hub/tag/webgl/">#webgl</a>
+          </nav>
+          <nav class="frame__demos">
+            <span class="frame__demos-label">Variations</span>
+            <a class="frame__demo" href="index.html">01</a>
+            <span class="frame__demo frame__demo--current" aria-current="page">02</span>
+            <a class="frame__demo" href="index3.html">03</a>
+            <a class="frame__demo" href="index4.html">04</a>
+            <a class="frame__demo" href="index5.html">05</a>
+            <a class="frame__demo" href="index6.html">06</a>
+            <a class="frame__demo" href="index7.html">07</a>
+            <a class="frame__demo" href="index8.html">08</a>
+            <a class="frame__demo" href="index9.html">09</a>
+          </nav>
+          <p class="frame__info">Squeezed on scroll</p>
+        </header>
+        <div class="grid">
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/1.webp)"></div>
+            <figcaption class="grid__item-caption">Zorith - L91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/2.webp)"></div>
+            <figcaption class="grid__item-caption">Mykar - L27</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/3.webp)"></div>
+            <figcaption class="grid__item-caption">Thalon - V75</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/4.webp)"></div>
+            <figcaption class="grid__item-caption">Vexra - N22</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/5.webp)"></div>
+            <figcaption class="grid__item-caption">Drosin - X29</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/6.webp)"></div>
+            <figcaption class="grid__item-caption">Ryndel - Y52</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/7.webp)"></div>
+            <figcaption class="grid__item-caption">Korin - T18</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/8.webp)"></div>
+            <figcaption class="grid__item-caption">Nymera - L50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/9.webp)"></div>
+            <figcaption class="grid__item-caption">Lektar - X43</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/10.webp)"></div>
+            <figcaption class="grid__item-caption">Fexil - R50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/11.webp)"></div>
+            <figcaption class="grid__item-caption">Jaleth - N49</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/12.webp)"></div>
+            <figcaption class="grid__item-caption">Torvik - Y15</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/13.webp)"></div>
+            <figcaption class="grid__item-caption">Lumora - X82</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/14.webp)"></div>
+            <figcaption class="grid__item-caption">Zekron - X99</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/15.webp)"></div>
+            <figcaption class="grid__item-caption">Brynd - Q89</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/16.webp)"></div>
+            <figcaption class="grid__item-caption">Solmir - Q91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/17.webp)"></div>
+            <figcaption class="grid__item-caption">Dareon - N38</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/18.webp)"></div>
+            <figcaption class="grid__item-caption">Noxil - T76</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/19.webp)"></div>
+            <figcaption class="grid__item-caption">Kairon - R28</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/20.webp)"></div>
+            <figcaption class="grid__item-caption">Voric - T97</figcaption>
+          </figure>
+
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/1.webp)"></div>
+            <figcaption class="grid__item-caption">Zorith - L91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/2.webp)"></div>
+            <figcaption class="grid__item-caption">Mykar - L27</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/3.webp)"></div>
+            <figcaption class="grid__item-caption">Thalon - V75</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/4.webp)"></div>
+            <figcaption class="grid__item-caption">Vexra - N22</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/5.webp)"></div>
+            <figcaption class="grid__item-caption">Drosin - X29</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/6.webp)"></div>
+            <figcaption class="grid__item-caption">Ryndel - Y52</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/7.webp)"></div>
+            <figcaption class="grid__item-caption">Korin - T18</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/8.webp)"></div>
+            <figcaption class="grid__item-caption">Nymera - L50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/9.webp)"></div>
+            <figcaption class="grid__item-caption">Lektar - X43</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/10.webp)"></div>
+            <figcaption class="grid__item-caption">Fexil - R50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/11.webp)"></div>
+            <figcaption class="grid__item-caption">Jaleth - N49</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/12.webp)"></div>
+            <figcaption class="grid__item-caption">Torvik - Y15</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/13.webp)"></div>
+            <figcaption class="grid__item-caption">Lumora - X82</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/14.webp)"></div>
+            <figcaption class="grid__item-caption">Zekron - X99</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/15.webp)"></div>
+            <figcaption class="grid__item-caption">Brynd - Q89</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/16.webp)"></div>
+            <figcaption class="grid__item-caption">Solmir - Q91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/17.webp)"></div>
+            <figcaption class="grid__item-caption">Dareon - N38</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/18.webp)"></div>
+            <figcaption class="grid__item-caption">Noxil - T76</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/19.webp)"></div>
+            <figcaption class="grid__item-caption">Kairon - R28</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/20.webp)"></div>
+            <figcaption class="grid__item-caption">Voric - T97</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/1.webp)"></div>
+            <figcaption class="grid__item-caption">Zorith - L91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/2.webp)"></div>
+            <figcaption class="grid__item-caption">Mykar - L27</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/3.webp)"></div>
+            <figcaption class="grid__item-caption">Thalon - V75</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/4.webp)"></div>
+            <figcaption class="grid__item-caption">Vexra - N22</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/5.webp)"></div>
+            <figcaption class="grid__item-caption">Drosin - X29</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/6.webp)"></div>
+            <figcaption class="grid__item-caption">Ryndel - Y52</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/7.webp)"></div>
+            <figcaption class="grid__item-caption">Korin - T18</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/8.webp)"></div>
+            <figcaption class="grid__item-caption">Nymera - L50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/9.webp)"></div>
+            <figcaption class="grid__item-caption">Lektar - X43</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/10.webp)"></div>
+            <figcaption class="grid__item-caption">Fexil - R50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/11.webp)"></div>
+            <figcaption class="grid__item-caption">Jaleth - N49</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/12.webp)"></div>
+            <figcaption class="grid__item-caption">Torvik - Y15</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/13.webp)"></div>
+            <figcaption class="grid__item-caption">Lumora - X82</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/14.webp)"></div>
+            <figcaption class="grid__item-caption">Zekron - X99</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/15.webp)"></div>
+            <figcaption class="grid__item-caption">Brynd - Q89</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/16.webp)"></div>
+            <figcaption class="grid__item-caption">Solmir - Q91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/17.webp)"></div>
+            <figcaption class="grid__item-caption">Dareon - N38</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/18.webp)"></div>
+            <figcaption class="grid__item-caption">Noxil - T76</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/19.webp)"></div>
+            <figcaption class="grid__item-caption">Kairon - R28</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/20.webp)"></div>
+            <figcaption class="grid__item-caption">Voric - T97</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/1.webp)"></div>
+            <figcaption class="grid__item-caption">Zorith - L91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/2.webp)"></div>
+            <figcaption class="grid__item-caption">Mykar - L27</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/3.webp)"></div>
+            <figcaption class="grid__item-caption">Thalon - V75</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/4.webp)"></div>
+            <figcaption class="grid__item-caption">Vexra - N22</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/5.webp)"></div>
+            <figcaption class="grid__item-caption">Drosin - X29</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/6.webp)"></div>
+            <figcaption class="grid__item-caption">Ryndel - Y52</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/7.webp)"></div>
+            <figcaption class="grid__item-caption">Korin - T18</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/8.webp)"></div>
+            <figcaption class="grid__item-caption">Nymera - L50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/9.webp)"></div>
+            <figcaption class="grid__item-caption">Lektar - X43</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/10.webp)"></div>
+            <figcaption class="grid__item-caption">Fexil - R50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/11.webp)"></div>
+            <figcaption class="grid__item-caption">Jaleth - N49</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/12.webp)"></div>
+            <figcaption class="grid__item-caption">Torvik - Y15</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/13.webp)"></div>
+            <figcaption class="grid__item-caption">Lumora - X82</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/14.webp)"></div>
+            <figcaption class="grid__item-caption">Zekron - X99</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/15.webp)"></div>
+            <figcaption class="grid__item-caption">Brynd - Q89</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/16.webp)"></div>
+            <figcaption class="grid__item-caption">Solmir - Q91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/17.webp)"></div>
+            <figcaption class="grid__item-caption">Dareon - N38</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/18.webp)"></div>
+            <figcaption class="grid__item-caption">Noxil - T76</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/19.webp)"></div>
+            <figcaption class="grid__item-caption">Kairon - R28</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/20.webp)"></div>
+            <figcaption class="grid__item-caption">Voric - T97</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/1.webp)"></div>
+            <figcaption class="grid__item-caption">Zorith - L91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/2.webp)"></div>
+            <figcaption class="grid__item-caption">Mykar - L27</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/3.webp)"></div>
+            <figcaption class="grid__item-caption">Thalon - V75</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/4.webp)"></div>
+            <figcaption class="grid__item-caption">Vexra - N22</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/5.webp)"></div>
+            <figcaption class="grid__item-caption">Drosin - X29</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/6.webp)"></div>
+            <figcaption class="grid__item-caption">Ryndel - Y52</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/7.webp)"></div>
+            <figcaption class="grid__item-caption">Korin - T18</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/8.webp)"></div>
+            <figcaption class="grid__item-caption">Nymera - L50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/9.webp)"></div>
+            <figcaption class="grid__item-caption">Lektar - X43</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/10.webp)"></div>
+            <figcaption class="grid__item-caption">Fexil - R50</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/11.webp)"></div>
+            <figcaption class="grid__item-caption">Jaleth - N49</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/12.webp)"></div>
+            <figcaption class="grid__item-caption">Torvik - Y15</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/13.webp)"></div>
+            <figcaption class="grid__item-caption">Lumora - X82</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/14.webp)"></div>
+            <figcaption class="grid__item-caption">Zekron - X99</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/15.webp)"></div>
+            <figcaption class="grid__item-caption">Brynd - Q89</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/16.webp)"></div>
+            <figcaption class="grid__item-caption">Solmir - Q91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/17.webp)"></div>
+            <figcaption class="grid__item-caption">Dareon - N38</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/18.webp)"></div>
+            <figcaption class="grid__item-caption">Noxil - T76</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/19.webp)"></div>
+            <figcaption class="grid__item-caption">Kairon - R28</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/20.webp)"></div>
+            <figcaption class="grid__item-caption">Voric - T97</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/1.webp)"></div>
+            <figcaption class="grid__item-caption">Zorith - L91</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/2.webp)"></div>
+            <figcaption class="grid__item-caption">Mykar - L27</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/3.webp)"></div>
+            <figcaption class="grid__item-caption">Thalon - V75</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/4.webp)"></div>
+            <figcaption class="grid__item-caption">Vexra - N22</figcaption>
+          </figure>
+          <figure class="grid__item">
+            <div class="grid__item-img" style="background-image: url(assets/5.webp)"></div>
+            <figcaption class="grid__item-caption">Drosin - X29</figcaption>
+          </figure>
+        </div>
+      </main>
+    </div>
+
+    <!-- GSAP library -->
+    <script src="js/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger plugin -->
+    <script src="js/ScrollTrigger.min.js"></script>
+    <!-- GSAP ScrollSmoother plugin -->
+    <script src="js/ScrollSmoother.min.js"></script>
+    <!-- Scripts for the effect -->
+    <script type="module" src="js/demo2/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+
+> lenis@1.3.27 dev
+> bun run --parallel dev:build dev:playground --port 9028 --host 127.0.0.1
+
+$ tsdown --watch dev:playground --port "9028" --host "127.0.0.1"
+ℹ tsdown v0.21.10 powered by rolldown v1.0.0-rc.17
+ℹ config file: C:\Users\zephe\Downloads\ATALS\inspiration\templates\darkroomengineering_lenis\tsdown.config.ts 
+ℹ entry: packages/vue/index.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/react/index.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/vue/nuxt/module.ts, packages/vue/nuxt/runtime/lenis.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/snap/browser.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/core/browser.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/core/browser.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/snap/browser.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ entry: packages/core/index.ts, packages/snap/index.ts
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ Build start
+ℹ [IIFE] dist\lenis-snap.js      10.61 kB │ gzip: 2.91 kB
+ℹ [IIFE] dist\lenis-snap.js.map  21.21 kB │ gzip: 5.68 kB
+ℹ [IIFE] 2 files, total: 31.83 kB
+✔ Rebuilt in 10134ms.
+ℹ [IIFE] dist\lenis-snap.min.js       5.84 kB │ gzip: 1.99 kB
+ℹ [IIFE] dist\lenis-snap.min.js.map  20.81 kB │ gzip: 5.61 kB
+ℹ [IIFE] 2 files, total: 26.64 kB
+ℹ [ESM] dist\lenis-vue-nuxt.mjs      0.66 kB │ gzip: 0.36 kB
+ℹ [ESM] dist\nuxt\runtime\lenis.mjs  0.28 kB │ gzip: 0.19 kB
+ℹ [ESM] 2 files, total: 0.94 kB
+ℹ [IIFE] dist\lenis.js      34.43 kB │ gzip:  8.33 kB
+ℹ [IIFE] dist\lenis.js.map  68.88 kB │ gzip: 16.84 kB
+ℹ [IIFE] 2 files, total: 103.31 kB
+ℹ [IIFE] dist\lenis.min.js      18.82 kB │ gzip:  5.43 kB
+ℹ [IIFE] dist\lenis.min.js.map  67.49 kB │ gzip: 16.64 kB
+ℹ [IIFE] 2 files, total: 86.31 kB
+✔ Rebuilt in 11048ms.
+✔ Rebuilt in 13022ms.
+✔ Rebuilt in 13022ms.
+✔ Rebuilt in 13022ms.
+ℹ [ESM] dist\lenis-vue.mjs      4.17 kB │ gzip: 1.34 kB
+ℹ [ESM] dist\lenis-vue.mjs.map  9.80 kB │ gzip: 2.98 kB
+ℹ [ESM] dist\lenis-vue.d.ts     1.84 kB │ gzip: 0.66 kB
+ℹ [ESM] 3 files, total: 15.81 kB
+✔ Rebuilt in 13558ms.
+ℹ [ESM] dist\lenis.mjs           33.27 kB │ gzip:  8.27 kB
+ℹ [ESM] dist\lenis-snap.mjs      10.22 kB │ gzip:  2.89 kB
+ℹ [ESM] dist\lenis.mjs.map       68.43 kB │ gzip: 16.70 kB
+ℹ [ESM] dist\lenis-snap.mjs.map  21.00 kB │ gzip:  5.60 kB
+ℹ [ESM] dist\lenis.d.ts          13.01 kB │ gzip:  3.61 kB
+ℹ [ESM] dist\lenis-snap.d.ts      4.42 kB │ gzip:  1.53 kB
+ℹ [ESM] 6 files, total: 150.36 kB
+✔ Rebuilt in 13590ms.
+ℹ [ESM] dist\lenis-react.mjs       5.17 kB │ gzip: 1.67 kB
+ℹ [ESM] dist\lenis-react.mjs.map  10.28 kB │ gzip: 3.21 kB
+ℹ [ESM] dist\lenis-react.d.ts      3.20 kB │ gzip: 1.07 kB
+ℹ [ESM] 3 files, total: 18.65 kB
+✔ Rebuilt in 13622ms.

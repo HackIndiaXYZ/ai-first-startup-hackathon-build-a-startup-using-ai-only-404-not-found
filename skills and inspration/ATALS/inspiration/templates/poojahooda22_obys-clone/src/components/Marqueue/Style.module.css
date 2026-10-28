@@ -1,0 +1,34 @@
+.elemh1 {
+    -webkit-text-stroke: 1px #fff;
+    color: transparent;
+    font-weight: 400;
+    display: inline-block ;
+    margin-right: 2.4vw; 
+}
+
+/* .dash {
+   
+   
+  
+    
+    
+} */
+
+@keyframes anime {
+    from{
+        transform: translateX(0);
+    }
+    to{
+        transform: translateX(calc(-100% - 20px));
+    }
+}
+
+.elem {
+    animation: anime 10s infinite linear;
+}
+
+
+.elem2 {
+    transform: translateX(calc(-100% - 20px));
+    animation: anime 10s infinite linear reverse;
+}

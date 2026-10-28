@@ -1,0 +1,6 @@
+
+> AnimatedCustomCursor@1.0.0 start
+> parcel src/index.html --open
+
+Server running at http://localhost:9019 - configured port 9019 could not be used.
+✨  Built in 12.77s.

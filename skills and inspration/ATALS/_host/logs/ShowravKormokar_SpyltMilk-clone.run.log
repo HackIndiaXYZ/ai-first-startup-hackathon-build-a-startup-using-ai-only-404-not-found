@@ -1,0 +1,15 @@
+
+> client@0.0.0 dev
+> vite --host --port 9009 --host 127.0.0.1
+
+[31merror when starting dev server:
+Error: Command failed: "C:\Users\zephe\.vite-plugin-mkcert\mkcert.exe" -install -key-file "C:\Users\zephe\.vite-plugin-mkcert\dev.pem" -cert-file "C:\Users\zephe\.vite-plugin-mkcert\cert.pem" localhost 192.168.1.4 127.0.0.1 172.18.240.1
+Created a new local CA 💥
+ERROR: add cert: failed adding cert: The operation was canceled by the user.
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at ChildProcess.exithandler (node:child_process:417:12)
+    at ChildProcess.emit (node:events:509:28)
+    at maybeClose (node:internal/child_process:1124:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:306:5)[39m

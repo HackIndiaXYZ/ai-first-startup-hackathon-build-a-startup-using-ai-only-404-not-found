@@ -1,0 +1,136 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Cossette+Titre:wght@400:700&display=swap"); */
+
+:root {
+  --tone-100: #000000;
+  --tone-200: #222222;
+  --tone-300: #5b5c57;
+  --tone-400: #e3e4d8;
+  --tone-500: #fe0100;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: var(--tone-400);
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+h1, p{
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1;
+}
+
+h1{
+  font-size: 6rem;
+  letter-spacing: -0.1rem;
+}
+
+p{
+  font-size: 3rem;
+  letter-spacing: -0.025rem;
+}
+
+nav{
+  position: fixed;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+  z-index: 2;
+}
+
+nav p{
+  font-size: 1.5rem;
+  color: var(--tone-400);
+}
+
+section{
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.section-bg{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+section h1{
+  width: 75%;
+}
+
+section p{
+  width: 60%;
+}
+
+.intro h1,
+.services h1,
+.outro h1 {
+  position: relative;
+  color: var(--tone-500);
+}
+
+section h1 .block-line-wrapper,
+section p .block-line-wrapper {
+  margin: 0 auto;
+}
+
+.block-line-wrapper {
+  position: relative;
+  width: max-content;
+  display: block;
+}
+
+.block-line{
+  position: relative;
+  display: block;
+}
+
+.block-revealer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 101%;
+  height: 101%;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 1;
+}
+
+@media (max-width: 1000px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  p {
+    font-size: 1.5rem;
+  }
+
+  section {
+    padding: 2rem;
+  }
+
+  section h1,
+  section p {
+    width: 100%;
+  }
+}

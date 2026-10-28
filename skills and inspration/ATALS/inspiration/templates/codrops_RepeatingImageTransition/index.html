@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Image Repetition Transition Effect | Codrops</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Codrops" />
+    <link rel="icon" type="image/svg+xml" href="https://tympanus.net/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="https://tympanus.net/favicon/favicon.ico" />
+    <link rel="stylesheet" href="https://use.typekit.net/qvq2ysy.css" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <script>
+      document.documentElement.className = 'js';
+    </script>
+  </head>
+  <body class="loading">
+    <main>
+      <header class="frame">
+        <h1 class="frame__title">Repeating Image Transition</h1>
+        <nav class="frame__links">
+          <a class="line" href="https://tympanus.net/codrops/?p=92571">More info,</a>
+          <a class="line" href="https://github.com/codrops/RepeatingImageTransition/">Code,</a>
+          <a class="line" href="https://tympanus.net/codrops/hub/">All demos</a>
+        </nav>
+        <nav class="frame__tags">
+          <a class="line" href="https://tympanus.net/codrops/hub/tag/page-transition/">page-transition,</a>
+          <a class="line" href="https://tympanus.net/codrops/hub/tag/repetition/">repetition,</a>
+          <a class="line" href="https://tympanus.net/codrops/hub/tag/grid/">grid,</a>
+          <a class="line" href="https://tympanus.net/codrops/hub/tag/webgl/">webgl</a>
+        </nav>
+      </header>
+      <div class="heading">
+        <h2 class="heading__title">Shane Weber</h2>
+        <span class="heading__meta">
+          effect 01: straight linear paths, smooth easing, clean timing, minimal rotation.
+        </span>
+      </div>
+      <div class="grid">
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption1">
+          <div class="grid__item-image" style="background-image: url(assets/img1.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption1">
+            <h3>Drift — A04</h3>
+            <p>Model: Amelia Hart</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption2">
+          <div class="grid__item-image" style="background-image: url(assets/img2.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption2">
+            <h3>Veil — K18</h3>
+            <p>Model: Irina Volkova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption3">
+          <div class="grid__item-image" style="background-image: url(assets/img3.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption3">
+            <h3>Ember — M45</h3>
+            <p>Model: Charlotte Byrne</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption4">
+          <div class="grid__item-image" style="background-image: url(assets/img4.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption4">
+            <h3>Gleam — S12</h3>
+            <p>Model: Anastasia Morozova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption5">
+          <div class="grid__item-image" style="background-image: url(assets/img5.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption5">
+            <h3>Bloom — J29</h3>
+            <p>Model: Eva Ramirez</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption6">
+          <div class="grid__item-image" style="background-image: url(assets/img6.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption6">
+            <h3>Whisper — V87</h3>
+            <p>Model: Milana Petrova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption7">
+          <div class="grid__item-image" style="background-image: url(assets/img7.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption7">
+            <h3>Trace — Z05</h3>
+            <p>Model: Sofia Carter</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption8">
+          <div class="grid__item-image" style="background-image: url(assets/img8.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption8">
+            <h3>Flicker — Q62</h3>
+            <p>Model: Alina Kuznetsova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption9">
+          <div class="grid__item-image" style="background-image: url(assets/img9.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption9">
+            <h3>Grain — H71</h3>
+            <p>Model: Isabella Novak</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption10">
+          <div class="grid__item-image" style="background-image: url(assets/img10.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption10">
+            <h3>Pulse — B90</h3>
+            <p>Model: Daria Sokolova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption11">
+          <div class="grid__item-image" style="background-image: url(assets/img11.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption11">
+            <h3>Mist — L36</h3>
+            <p>Model: Victoria Fields</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption12">
+          <div class="grid__item-image" style="background-image: url(assets/img12.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption12">
+            <h3>Shard — Y22</h3>
+            <p>Model: Natalia Popova & Emily Stone</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption13">
+          <div class="grid__item-image" style="background-image: url(assets/img13.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption13">
+            <h3>Vapor — X79</h3>
+            <p>Model: Yulia Orlova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption14">
+          <div class="grid__item-image" style="background-image: url(assets/img14.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption14">
+            <h3>Glow — F13</h3>
+            <p>Model: Camila Ford</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption15">
+          <div class="grid__item-image" style="background-image: url(assets/img15.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption15">
+            <h3>Flux — N48</h3>
+            <p>Model: Sofia Mikhailova</p>
+          </figcaption>
+        </figure>
+
+        <figure class="grid__item" role="button" tabindex="0" aria-labelledby="caption16">
+          <div class="grid__item-image" style="background-image: url(assets/img16.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption16">
+            <h3>Spire — C65</h3>
+            <p>Model: Ava Bennett</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="heading">
+        <h2 class="heading__title">Manika Jorge</h2>
+        <span class="heading__meta">effect 02: Adjusts mover count, rotation, timing, and animation feel.</span>
+      </div>
+      <div class="grid">
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption17"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img17.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption17">
+            <h3>Driftwood — W50</h3>
+            <p>Model: Valeria Smirnova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption18"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img18.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption18">
+            <h3>Fold — T81</h3>
+            <p>Model: Emma Chase</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption19"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img19.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption19">
+            <h3>Shroud — E26</h3>
+            <p>Model: Marina Belova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption20"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img20.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption20">
+            <h3>Ripple — P34</h3>
+            <p>Model: Chloe Martin</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption21"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img21.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption21">
+            <h3>Fray — U07</h3>
+            <p>Model: Alexandra Dmitrieva</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption22"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img22.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption22">
+            <h3>Wane — R52</h3>
+            <p>Model: Isabella Moore</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption23"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img23.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption23">
+            <h3>Tide — S33</h3>
+            <p>Model: Ksenia Egorova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption24"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img24.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption24">
+            <h3>Rift — G08</h3>
+            <p>Model: Mia Anderson</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption25"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img25.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption25">
+            <h3>Spool — H94</h3>
+            <p>Model: Anna Mikhailova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption26"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img26.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption26">
+            <h3>Glitch — M70</h3>
+            <p>Model: Emily Brown</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption27"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img27.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption27">
+            <h3>Slip — F02</h3>
+            <p>Model: Ekaterina Ivanova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption28"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img28.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption28">
+            <h3>Husk — C15</h3>
+            <p>Model: Olivia Reed</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption29"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img29.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption29">
+            <h3>Blur — V86</h3>
+            <p>Model: Sofia Lebedeva</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption30"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img30.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption30">
+            <h3>Fracture — A63</h3>
+            <p>Model: Harper Gray</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption31"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img31.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption31">
+            <h3>Mote — Y39</h3>
+            <p>Model: Elizaveta Petrova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption32"
+          data-steps="8"
+          data-rotation-range="7"
+          data-step-interval="0.05"
+          data-mover-pause-before-exit="0.25"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="power2"
+          data-panel-reveal-ease="power2"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img32.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption32">
+            <h3>Aura — K21</h3>
+            <p>Model: Lily Cooper</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="heading">
+        <h2 class="heading__title">Angela Wong</h2>
+        <span class="heading__meta">effect 03: Big arcs, smooth start, powerful snap, slow reveal.</span>
+      </div>
+      <div class="grid">
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption33"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img33.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption33">
+            <h3>Whorl — B45</h3>
+            <p>Model: Anastasia Volkova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption34"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img1.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption34">
+            <h3>Flicker — D17</h3>
+            <p>Model: Sophia White</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption35"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img2.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption35">
+            <h3>Gleam — Z58</h3>
+            <p>Model: Polina Sokolova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption36"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img3.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption36">
+            <h3>Shard — J03</h3>
+            <p>Model: Ava Mitchell</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption37"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img4.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption37">
+            <h3>Trace — Q29</h3>
+            <p>Model: Maria Ivanenko</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption38"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img5.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption38">
+            <h3>Crush — W92</h3>
+            <p>Model: Ella Foster</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption39"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img6.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption39">
+            <h3>Veil — X16</h3>
+            <p>Model: Yulia Morozova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption40"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img7.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption40">
+            <h3>Clasp — S84</h3>
+            <p>Model: Charlotte Hayes</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption41"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img8.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption41">
+            <h3>Flint — T66</h3>
+            <p>Model: Viktoria Kuznetsova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption42"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img9.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption42">
+            <h3>Spire — E49</h3>
+            <p>Model: Amelia Parker</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption43"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img10.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption43">
+            <h3>Plume — N22</h3>
+            <p>Model: Daria Smirnova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption44"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img11.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption44">
+            <h3>Hollow — B75</h3>
+            <p>Model: Zoe Adams</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption45"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img12.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption45">
+            <h3>Brume — K10</h3>
+            <p>Model: Anastasiya Orlova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption46"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img13.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption46">
+            <h3>Crave — F37</h3>
+            <p>Model: Mia Bennett</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption47"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img14.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption47">
+            <h3>Quiver — R19</h3>
+            <p>Model: Natalia Volkova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption48"
+          data-steps="10"
+          data-step-duration="0.3"
+          data-path-motion="sine"
+          data-sine-amplitude="300"
+          data-clip-path-direction="left-right"
+          data-auto-adjust-horizontal-clip-path="true"
+          data-step-interval="0.07"
+          data-mover-pause-before-exit="0.3"
+          data-mover-enter-ease="sine"
+          data-mover-exit-ease="power4"
+          data-panel-reveal-ease="power4"
+          data-panel-reveal-duration-factor="4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img15.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption48">
+            <h3>Fathom — L52</h3>
+            <p>Model: Isabella Young</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="heading">
+        <h2 class="heading__title">Kaito Nakamo</h2>
+        <span class="heading__meta">effect 04: Quick upward motion with bold blending and smooth slow reveal.</span>
+      </div>
+      <div class="grid">
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption49"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img16.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption49">
+            <h3>Pulse — D61</h3>
+            <p>Model: Sofia Makarova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption50"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img17.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption50">
+            <h3>Fade — P42</h3>
+            <p>Model: Scarlett James</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption51"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img18.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption51">
+            <h3>Wisp — T14</h3>
+            <p>Model: Ekaterina Romanova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption52"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img19.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption52">
+            <h3>Fragment — G77</h3>
+            <p>Model: Aria Robinson</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption53"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img20.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption53">
+            <h3>Spiral — Y24</h3>
+            <p>Model: Daria Petrova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption54"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img21.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption54">
+            <h3>Trace — Z85</h3>
+            <p>Model: Chloe Evans</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption55"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img22.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption55">
+            <h3>Flare — C11</h3>
+            <p>Model: Sofia Orlova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption56"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img23.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption56">
+            <h3>Chasm — R05</h3>
+            <p>Model: Grace Walker</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption57"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img24.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption57">
+            <h3>Bloom — N38</h3>
+            <p>Model: Yana Melnikova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption58"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img25.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption58">
+            <h3>Shard — W20</h3>
+            <p>Model: Mila Scott</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption59"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img26.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption59">
+            <h3>Mist — S12</h3>
+            <p>Model: Natalia Ivanova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption60"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img27.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption60">
+            <h3>Crush — E31</h3>
+            <p>Model: Ava Thompson</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption61"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img28.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption61">
+            <h3>Ripple — F68</h3>
+            <p>Model: Anastasia Novikova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption62"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img29.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption62">
+            <h3>Gossamer — A07</h3>
+            <p>Model: Madison Brooks</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption63"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img30.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption63">
+            <h3>Floe — K96</h3>
+            <p>Model: Ekaterina Smirnova</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption64"
+          data-steps="4"
+          data-clip-path-direction="bottom-top"
+          data-step-duration="0.25"
+          data-step-interval="0.06"
+          data-mover-pause-before-exit="0.2"
+          data-mover-enter-ease="sine.in"
+          data-mover-exit-ease="expo"
+          data-panel-reveal-ease="expo"
+          data-panel-reveal-duration-factor="4"
+          data-mover-blend-mode="hard-light"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img31.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption64">
+            <h3>Shiver — V44</h3>
+            <p>Model: Emily Robinson</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="heading">
+        <h2 class="heading__title">Noor Halvorsen</h2>
+        <span class="heading__meta">effect 05: Silk sheets that ripple on a rising arc and unroll with a soft, wavy edge.</span>
+      </div>
+      <div class="grid">
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption65"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img8.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption65">
+            <h3>Sheer — H27</h3>
+            <p>Model: Nadia Karlsson</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption66"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img3.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption66">
+            <h3>Drape — O63</h3>
+            <p>Model: Freya Holm</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption67"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img22.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption67">
+            <h3>Satin — L08</h3>
+            <p>Model: Leonie Duval</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption68"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img27.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption68">
+            <h3>Billow — E54</h3>
+            <p>Model: Maja Berg</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption69"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img15.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption69">
+            <h3>Weft — J91</h3>
+            <p>Model: Iris Calder</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption70"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img17.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption70">
+            <h3>Sway — D30</h3>
+            <p>Model: Vera Lund</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption71"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img14.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption71">
+            <h3>Tulle — P17</h3>
+            <p>Model: Clara Weiss</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption72"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img29.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption72">
+            <h3>Ruffle — K72</h3>
+            <p>Model: Hana Kovač</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption73"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img2.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption73">
+            <h3>Loom — U46</h3>
+            <p>Model: Elise Marchand</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption74"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img31.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption74">
+            <h3>Chiffon — N05</h3>
+            <p>Model: Nora Falk</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption75"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img6.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption75">
+            <h3>Pleat — X38</h3>
+            <p>Model: Ingrid Vale</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption76"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img24.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption76">
+            <h3>Swathe — B83</h3>
+            <p>Model: Selma Aho</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption77"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img13.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption77">
+            <h3>Hem — G59</h3>
+            <p>Model: Juno Park</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption78"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img28.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption78">
+            <h3>Crepe — V14</h3>
+            <p>Model: Ada Lindgren</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption79"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img19.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption79">
+            <h3>Organza — R67</h3>
+            <p>Model: Rosa Quint</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption80"
+          data-mover-surface="silk"
+          data-steps="6"
+          data-step-duration="0.5"
+          data-step-interval="0.08"
+          data-mover-pause-before-exit="0.15"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.in"
+          data-panel-reveal-ease="power2.inOut"
+          data-panel-reveal-duration-factor="2.4"
+          data-path-motion="sine"
+          data-sine-amplitude="-140"
+          data-surface-strength="0.3"
+          data-edge-noise="0.4"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img30.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption80">
+            <h3>Selvage — T22</h3>
+            <p>Model: Tessa Moreau</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="heading">
+        <h2 class="heading__title">Mila Serrano</h2>
+        <span class="heading__meta">effect 06: Ink copies that bloom, swirl and dissolve into wisps as they sink toward the panel.</span>
+      </div>
+      <div class="grid">
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption81"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img21.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption81">
+            <h3>Bleed — Q14</h3>
+            <p>Model: Lucia Ferrand</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption82"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img7.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption82">
+            <h3>Wash — F62</h3>
+            <p>Model: Odile Brun</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption83"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img4.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption83">
+            <h3>Stain — A37</h3>
+            <p>Model: Saskia Veld</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption84"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img26.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption84">
+            <h3>Pool — M09</h3>
+            <p>Model: Mei Tanaka</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption85"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img11.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption85">
+            <h3>Tint — Z51</h3>
+            <p>Model: Anouk Laurent</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption86"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img16.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption86">
+            <h3>Blot — C28</h3>
+            <p>Model: Greta Sand</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption87"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img10.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption87">
+            <h3>Sumi — H70</h3>
+            <p>Model: Yara Costa</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption88"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img20.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption88">
+            <h3>Dye — S43</h3>
+            <p>Model: Lotte Maas</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption89"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img5.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption89">
+            <h3>Seep — N86</h3>
+            <p>Model: Pia Novak</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption90"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img32.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption90">
+            <h3>Wick — R25</h3>
+            <p>Model: Esme Hart</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption91"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img12.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption91">
+            <h3>Swirl — E07</h3>
+            <p>Model: Zofia Wren</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption92"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img18.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption92">
+            <h3>Pigment — V58</h3>
+            <p>Model: Ines Marlow</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption93"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img25.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption93">
+            <h3>Gouache — D16</h3>
+            <p>Model: Kira Solberg</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption94"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img1.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption94">
+            <h3>Sepia — K34</h3>
+            <p>Model: Amara Quinn</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption95"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img23.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption95">
+            <h3>Marble — T48</h3>
+            <p>Model: Delia Frost</p>
+          </figcaption>
+        </figure>
+
+        <figure
+          class="grid__item"
+          role="button"
+          tabindex="0"
+          aria-labelledby="caption96"
+          data-mover-surface="ink"
+          data-mover-enter-ease="sine.out"
+          data-mover-exit-ease="sine.inOut"
+          data-panel-reveal-ease="sine.inOut"
+          data-path-motion="sine"
+          data-sine-amplitude="90"
+          data-rotation-range="3"
+          data-surface-strength="0.8"
+          data-edge-noise="0.5"
+          data-mover-reveal-amount="0.58"
+        >
+          <div class="grid__item-image" style="background-image: url(assets/img9.webp)"></div>
+          <figcaption class="grid__item-caption" id="caption96">
+            <h3>Cloud — B61</h3>
+            <p>Model: Liv Ekberg</p>
+          </figcaption>
+        </figure>
+      </div>
+      <!-- panel for large preview -->
+      <figure class="panel" aria-labelledby="caption" inert>
+        <div class="panel__img" role="img" aria-label="murmur—207" style="background-image: url(assets/img1.webp)"></div>
+        <figcaption class="panel__content" id="caption">
+          <h3>murmur—207</h3>
+          <p>
+            Beneath the soft static of this lies a fragmented recollection of motion—faded pulses echoing through
+            time-warped layers of light and silence. A stillness wrapped in artifact.
+          </p>
+          <button type="button" class="panel__close" aria-label="Close preview">Close</button>
+        </figcaption>
+      </figure>
+      <footer class="frame frame--footer">
+        <span>
+          Made by
+          <a href="https://codrops.com/" class="line">@codrops</a>
+        </span>
+        <span><a href="https://tympanus.net/codrops/hub/" class="line">All demos</a></span>
+      </footer>
+    </main>
+    <!-- GSAP library -->
+    <script src="js/gsap.min.js"></script>
+    <!-- Add (Lenis) smooth scroll -->
+    <script src="js/lenis.min.js"></script>
+    <script src="js/smoothscroll.js"></script>
+    <!-- Scripts for the effect -->
+    <script type="module" src="js/index.js"></script>
+  </body>
+</html>

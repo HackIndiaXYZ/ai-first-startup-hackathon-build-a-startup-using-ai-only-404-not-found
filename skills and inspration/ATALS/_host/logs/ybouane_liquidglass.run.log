@@ -1,0 +1,6 @@
+
+> @ybouane/liquidglass@1.0.3 dev
+> tsc --watch --port 9040 --host 127.0.0.1
+
+error TS5023: Unknown compiler option '--port'.
+error TS5023: Unknown compiler option '--host'.

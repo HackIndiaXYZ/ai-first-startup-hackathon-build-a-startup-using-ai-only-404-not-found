@@ -1,0 +1,42 @@
+/* #151515 */
+
+@font-face {
+    font-family: 'PlainLight';
+    src: url(./assets/fonts/plainLight.ttf);
+}
+
+
+@font-face {
+    font-family: 'PlinaReg';
+    src: url(./assets/fonts/PlainReg.ttf);
+}
+
+
+@font-face {
+    font-family: 'silkSerif';
+    src: url(./assets/fonts/silkSerif.ttf);
+}
+
+
+@font-face {
+    font-family: 'silkSerifReg';
+    src: url(./assets/fonts/silkSerifReg.ttf);
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #151515;
+  }
+
+  /* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    height: 4px;
+    border-radius: 50px;
+  }

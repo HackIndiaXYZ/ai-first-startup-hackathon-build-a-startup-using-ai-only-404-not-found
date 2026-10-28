@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clip Menu with GSAP EaseReverse | Codrops</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Codrops" />
+    <link rel="icon" type="image/svg+xml" href="https://tympanus.net/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="https://tympanus.net/favicon/favicon.ico" />
+    <link rel="stylesheet" href="https://use.typekit.net/zvb8wfk.css" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <script>
+      document.documentElement.className = 'js';
+    </script>
+    <script src="//tympanus.net/codrops/adpacks/analytics.js"></script>
+  </head>
+
+  <body class="loading">
+    <main>
+      <header class="frame">
+        <h1 class="frame__title">
+          Clip <a href="https://tympanus.net/codrops/hub/tag/menu/">#Menu</a> with
+          <a href="https://tympanus.net/codrops/hub/tag/gsap/">#GSAP</a>
+          easeReverse
+        </h1>
+        <nav class="frame__links">
+          <a href="https://tympanus.net/codrops/?p=114731">Article</a>
+          <a href="https://tympanus.net/codrops/hub/">All demos</a>
+          <a href="https://github.com/codrops/EaseReverseMenu">GitHub</a>
+        </nav>
+        <p class="frame__credits">
+          Read more about <a href="https://gsap.com/blog/3-15/">easeReverse</a>. Check out the
+          <a href="https://gsap.com/docs/v3/GSAP/Tween#easeReverse">docs</a>.
+        </p>
+      </header>
+      <div class="toggle">
+        <button aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+          <svg viewBox="0 0 9 9" aria-hidden="true">
+            <rect x="0" y="0" width="9" height="1"></rect>
+            <rect x="0" y="4" width="9" height="1"></rect>
+            <rect x="0" y="8" width="9" height="1"></rect>
+          </svg>
+          <span>Toggle Menu</span>
+        </button>
+        <label>
+          <input type="checkbox" id="easeReverse" checked />
+          <span>ease.reverse</span>
+        </label>
+        <label>
+          <span>interrupt speed: <span id="exitSpeedValue">4×</span></span>
+          <input type="range" id="exitSpeed" min="1" max="4" step="0.25" value="1" />
+        </label>
+      </div>
+      <div class="cover">
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/1.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/2.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/3.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/4.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/5.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/6.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/7.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/8.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/9.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/10.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/11.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/12.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/13.webp')"></div>
+        </div>
+        <div class="cover__item">
+          <div class="cover__image" style="background-image: url('media/14.webp')"></div>
+        </div>
+      </div>
+      <h1 class="title">
+        <span>Human</span>
+        <span>Zero</span>
+      </h1>
+      <nav class="menu" id="menu">
+        <video class="bg-video" muted loop playsinline>
+          <source src="media/bgvideo.mp4" type="video/mp4" />
+        </video>
+        <a class="menu__item">NEW GAME</a>
+        <a class="menu__item">MISSIONS</a>
+        <a class="menu__item">SKILLS</a>
+        <a class="menu__item">QUEST LOG</a>
+        <a class="menu__item">ABOUT PLAYER</a>
+        <a class="menu__item">SETTINGS</a>
+        <a class="menu__item">EXIT</a>
+      </nav>
+    </main>
+    <!-- imagesloaded https://imagesloaded.desandro.com/ -->
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <!-- GSAP library https://gsap.com/ -->
+    <script src="js/gsap.min.js"></script>
+    <script type="module" src="js/index.js"></script>
+    <script src="https://tympanus.net/codrops/adpacks/cda_sponsor.js"></script>
+  </body>
+</html>

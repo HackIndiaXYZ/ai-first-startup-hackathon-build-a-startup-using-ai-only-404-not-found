@@ -1,0 +1,6 @@
+
+> block-reveal-text@0.1.0 dev
+> next dev --port 9010 --host 127.0.0.1
+
+error: unknown option '--host'
+(Did you mean --port?)

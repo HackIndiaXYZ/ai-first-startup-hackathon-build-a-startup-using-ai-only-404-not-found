@@ -1,0 +1,9 @@
+
+> KineticTypePageTransition@1.0.0 start
+> parcel src/index.html --open
+
+Building...
+Bundling...
+Packaging & Optimizing...
+Server running at http://localhost:9023
+✨ Built in 10.61s
