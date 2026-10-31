@@ -20,7 +20,7 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 | Pitch deck (15 slides) | [`pitch/Chhat-pitch-deck.pdf`](pitch/Chhat-pitch-deck.pdf) · live at `/#/deck` |
 | AI usage report | [`docs/ai-usage-report.md`](docs/ai-usage-report.md) · live at `/#/built-with-ai` |
 | Business plan | [`business/business-plan.md`](business/business-plan.md) |
-| Financial model | [`business/Chhat-financial-model.xlsx`](business/Chhat-financial-model.xlsx) (235 formulas, 0 errors) |
+| Financial model | [`business/Chhat-financial-model.xlsx`](business/Chhat-financial-model.xlsx): monthly cash, three scenarios, token-level AI cost; 9,453 formulas, 0 errors · [`business/finance-review.md`](business/finance-review.md) (what judges get, and why each number holds) |
 | Research → idea → plan | [`docs/01-research.md`](docs/01-research.md) · [`02-ideation.md`](docs/02-ideation.md) (25 ideas) · [`03-selection.md`](docs/03-selection.md) · [`04-plan.md`](docs/04-plan.md) |
 
 ---
@@ -28,9 +28,9 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 ## Why this idea
 
 - **The rubric rewards AI-first execution (25%) and AI workflow (10%).** Chhat was built end to end by Claude Code from two written briefs, and the product publishes its own build log.
-- **The problem is big, current and verifiable.** ~51 lakh PM Surya Ghar installs by Sep 2026, half the target; CEEW finds only 5% of households willing; MNRE acknowledged wrong post-solar DISCOM bills in Jul 2026; ALMM List-II rules since Jun 2026 make bad quotes forfeit the ₹78,000 subsidy.
+- **The problem is big, current and verifiable.** ~51 lakh PM Surya Ghar installs by Sep 2026, with the 1 crore-home target closing in Mar 2027; CEEW finds only 5% of households willing; MNRE acknowledged wrong post-solar DISCOM bills in Jul 2026; ALMM List-II rules since Jun 2026 make bad quotes forfeit the ₹78,000 subsidy.
 - **It works for a stranger in ten seconds.** No login, no key, real NASA data, sample documents.
-- **Someone pays.** Installers (₹1,500 per verified lead + 2%), lenders (1%), installer SaaS (₹2,999/month), states (₹40 lakh/year). EBITDA positive in FY29 in the base case.
+- **Someone pays.** Installers (₹1,500 per verified lead + 2%), lenders (1%), installer SaaS (₹2,999/month), states (₹40 lakh/year). A ₹6 crore seed reaches EBITDA break-even in April 2028 (FY29) in the base case, with ₹1.9 crore of cash at the low point.
 
 ## What's in the product
 

@@ -34,7 +34,7 @@ This report covers two things the rules ask for: how AI built the startup, and h
 | 9 | Design | Read the design skills in `skills/`, chose the visual world, palette, type and motion, built every page | `app/src/styles/*`, `app/src/routes/*` | Supplied skills |
 | 10 | 3D | Procedural Indian rooftop, neighbourhood, kites, sky shader, scroll-driven day cycle | `app/src/three/*` | None |
 | 11 | QA | Rendered pages in headless Chromium, read the screenshots, and fixed what it saw (contrast, scale, overflow, labels) | screenshots in session | None |
-| 12 | Business | Formula-driven model (235 formulas, recalculated with zero errors) and business plan | `business/*` | None |
+| 12 | Business | Formula-driven model and business plan. Refreshed on 31 Oct 2026 with the research-finance skill: monthly cash, three scenarios, token-level AI cost, tax under the Income-tax Act, 2025, working capital; current API prices, ₹/$, pay data and scheme counters (9,453 formulas, zero errors) | `business/*` | Asked for accurate, optimised finances |
 | 13 | Pitch | 15-slide deck built as a route in the app, exported to PDF | `pitch/*`, `app/src/routes/Deck.tsx` | None |
 | 14 | Demo | Wrote the script and recorded the walkthrough with a scripted browser; in the second pass re-recorded it on a virtual clock so the 3D scene plays smoothly at full quality without a GPU | `pitch/chhat-demo.mp4`, `docs/demo-script.md` | Optional voice-over |
 | 15 | Deploy | Static build plus serverless functions; configs for Vercel, Netlify and GitHub Pages | `vercel.json`, `netlify.toml`, `.github/workflows/` | Adds the API key and clicks deploy |
@@ -174,6 +174,6 @@ Why two modes: judges can open the link with no key and every feature works; hom
 - Second pass: 57 unit tests (23 new, including a WCAG contrast check across the whole day and the asset budget), 67 Playwright end-to-end tests on desktop and a Pixel 7 profile, axe-core on every route (0 serious or critical violations), Lighthouse (100 accessibility, best practices and SEO on all four audited routes), and a bundle budget in CI. The tests and the demo recording found eleven real issues, all fixed; the list is in `docs/test-report.md` §3.
 - 34 unit tests against hand-checked values (e.g. extraterrestrial irradiance at the equator ≈ 10.4 kWh/m²/day; Delhi solar noon on 21 June ≈ 12:20 IST; subsidy slabs; EMI formula).
 - Parser tests on every sample document; agent tests for English, Hindi, Hinglish and multi-turn context.
-- The financial model recalculated in LibreOffice: 235 formulas, 0 errors.
+- The financial model is recalculated by an independent formula engine (`python business/build_model.py --verify`): 9,453 formulas, 0 errors, and 123 key figures match a separate Python implementation of the same model.
 - Every page rendered in headless Chromium at desktop and mobile widths; the AI read the screenshots and fixed contrast, overflow, scale and labelling issues.
 - Every external number in the product links to its source; conflicts between sources are logged in `docs/01-research.md` §9.

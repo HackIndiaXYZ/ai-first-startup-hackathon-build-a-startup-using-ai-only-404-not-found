@@ -282,7 +282,7 @@ function Story({ state, intro, onReady, quality }: { state: React.MutableRefObje
               <p className="step__body">
                 CEEW counted 637 GW of solar potential on Indian homes. Only one household in twenty says it would install. The sunlight is there. Trust in the numbers isn't.
               </p>
-              <p className="step__src mono">CEEW, 2023 · 51 lakh PM Surya Ghar homes by Sep 2026</p>
+              <p className="step__src mono">CEEW, 2023 · 51 lakh PM Surya Ghar installations by Sep 2026</p>
             </div>
           </article>
 
@@ -801,7 +801,7 @@ function Payers() {
 /* ---------------- proof ---------------- */
 
 const FACTS = [
-  { big: "51 lakh", count: true, label: "PM Surya Ghar installations by late Sep 2026, half the 1 crore target", src: "DD India / MNRE", url: "https://ddindia.co.in/2026/08/pm-surya-ghar-scheme-crosses-50-lakh-rooftop-solar-installations/" },
+  { big: "51 lakh", count: true, label: "PM Surya Ghar installations by late Sep 2026; 1 crore homes targeted by Mar 2027", src: "DD India / MNRE", url: "https://ddindia.co.in/2026/08/pm-surya-ghar-scheme-crosses-50-lakh-rooftop-solar-installations/" },
   { big: "5%", count: true, label: "of households willing to install rooftop solar (13% in Gujarat)", src: "CEEW 2023", url: "https://pv-magazine-india.com/2023/11/16/indias-residential-rooftop-solar-potential-estimated-at-637-gw" },
   { big: "₹78,000", count: true, label: "central subsidy for 3 kW; ₹85,800 in special-category states", src: "MNRE", url: "https://www.cag.org.in/sites/default/files/database/2.%20PM%20Surya%20Ghar%20Scheme-%20A%20consumer%20manual%20%281%29.pdf" },
   { big: "Jul 2026", count: false, label: "MNRE acknowledges wrong DISCOM bills after rooftop installs", src: "Energetica India", url: "https://www.energetica-india.net/news/mnre-flags-incorrect-rooftop-solar-billing-by-discoms-refers-complaints-for-resolution" },

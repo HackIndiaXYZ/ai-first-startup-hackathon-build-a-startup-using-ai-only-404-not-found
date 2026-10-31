@@ -7,13 +7,14 @@ import { num } from "../engine/format";
 import "../styles/deck.css";
 
 // Figures come from business/Chhat-financial-model.xlsx (base case) and the
-// research log. Keep them in sync when the model changes.
+// research log. Keep them in sync when the model changes:
+// `python business/build_model.py --verify` prints every number used here.
 const FIN = [
-  { y: "FY27*", rev: 0.79, ebitda: -0.48 },
-  { y: "FY28", rev: 8.97, ebitda: -1.43 },
-  { y: "FY29", rev: 26.8, ebitda: 3.44 },
-  { y: "FY30", rev: 54.48, ebitda: 15.24 },
-  { y: "FY31", rev: 86.7, ebitda: 31.02 },
+  { y: "FY27*", rev: 0.59, ebitda: -0.82 },
+  { y: "FY28", rev: 7.84, ebitda: -2.13 },
+  { y: "FY29", rev: 24.13, ebitda: 2.64 },
+  { y: "FY30", rev: 49.35, ebitda: 13.58 },
+  { y: "FY31", rev: 79.76, ebitda: 28.0 },
 ];
 
 function Slide({ children, tone = "paper", n }: { children: ReactNode; tone?: "paper" | "ink" | "haldi" | "neel"; n: number }) {
@@ -101,7 +102,7 @@ export default function Deck() {
       <div className="s-stats">
         <div>
           <b>51 lakh</b>
-          <span>PM Surya Ghar homes by Sep 2026, half the 1 crore target</span>
+          <span>PM Surya Ghar installations by Sep 2026; 1 crore homes targeted by Mar 2027</span>
         </div>
         <div>
           <b>5%</b>
@@ -215,9 +216,9 @@ export default function Deck() {
       <div className="s-funnel">
         {[
           { w: 100, b: "₹1,82,400 cr", t: "TAM · installation value of India's 32 GW economic residential rooftop potential (CEEW)" },
-          { w: 49, b: "₹89,376 cr", t: "Scheme window · 49 lakh homes left to reach 1 crore" },
-          { w: 6.4, b: "₹11,708 cr", t: "SAM · Chhat's 6.4% take on the TAM" },
-          { w: 0.05, b: "₹87 cr", t: "SOM · FY31 revenue (0.7% of SAM)" },
+          { w: 20, b: "₹36,480 cr / yr", t: "Planning base · 20 lakh homes a year after the scheme, a third of the 2026 peak" },
+          { w: 1.25, b: "₹2,278 cr / yr", t: "SAM · Chhat's fees on that flow, plus installer SaaS and state analytics" },
+          { w: 0.05, b: "₹80 cr", t: "SOM · FY31 revenue: 3.5% of SAM, 3% of national installs" },
         ].map((r) => (
           <div key={r.b} className="s-funnel__row">
             <div className="s-funnel__track">
@@ -249,13 +250,13 @@ export default function Deck() {
             <td>Verified leads</td>
             <td>Installers</td>
             <td>₹1,500 / lead</td>
-            <td>48.0</td>
+            <td>45.6</td>
           </tr>
           <tr>
             <td>Success fee</td>
             <td>Installers</td>
             <td>2% of system value</td>
-            <td>22.1</td>
+            <td>17.8</td>
           </tr>
           <tr>
             <td>Installer SaaS</td>
@@ -273,7 +274,7 @@ export default function Deck() {
             <td>Loan origination</td>
             <td>Banks, NBFCs</td>
             <td>1% of loan</td>
-            <td>3.6</td>
+            <td>3.4</td>
           </tr>
         </tbody>
       </table>
@@ -281,26 +282,26 @@ export default function Deck() {
 
     <Slide n={9} key="unit">
       <p className="eyebrow">Unit economics, FY28</p>
-      <h2 className="s-h2">₹6,083 contribution on every installed home.</h2>
+      <h2 className="s-h2">₹4,803 contribution on every installed home.</h2>
       <div className="s-stats s-stats--4">
         <div>
-          <b>₹224</b>
+          <b>₹196</b>
           <span>revenue per report</span>
         </div>
         <div>
-          <b>₹90</b>
-          <span>variable cost per report (₹85 acquisition + ₹5 AI)</span>
+          <b>₹96</b>
+          <span>variable cost per report (₹85 acquisition, ₹10 calls &amp; payments, ₹2 AI)</span>
         </div>
         <div>
-          <b>2.5x</b>
+          <b>2.0x</b>
           <span>revenue to variable cost</span>
         </div>
         <div>
-          <b>1.6%</b>
+          <b>1.5%</b>
           <span>of the home's 25-year savings is Chhat's take</span>
         </div>
       </div>
-      <p className="s-note">Funnel: 8% of reports become verified leads; 20% of leads install. 62.5 reports per installed home.</p>
+      <p className="s-note">Funnel: 8% of reports become verified leads; 20% of leads install. 62.5 reports per installed home. AI is under 1% of revenue.</p>
     </Slide>,
 
     <Slide n={10} key="fin">
@@ -315,7 +316,7 @@ export default function Deck() {
           <span>
             <i className="k k--eb" /> EBITDA
           </span>
-          <p className="s-note">FY31: ₹86.7 cr revenue, 36% EBITDA margin, 150 people. *FY27 is Nov to Mar. Full model with every formula in the repo.</p>
+          <p className="s-note">FY31: ₹79.8 cr revenue, 35% EBITDA margin, ~124 people. Downside (30% less traffic): break-even Jan 2030, ~₹6 cr more needed. *FY27 is Nov to Mar.</p>
         </div>
       </div>
     </Slide>,
@@ -393,16 +394,16 @@ export default function Deck() {
           <b>Nov 2026</b> Live in Delhi NCR, UP, Maharashtra · first 20 installers
         </li>
         <li>
-          <b>Mar 2027</b> 40,000 reports · first lender · 640 homes influenced
+          <b>Mar 2027</b> 40,000 reports · 3,200 verified leads · first lender
         </li>
         <li>
           <b>Sep 2027</b> 10 states · “Chhat Verified” badge · first DISCOM pilot
         </li>
         <li>
-          <b>FY28</b> ₹9 crore revenue · 6,400 installs influenced
+          <b>FY28</b> ₹7.8 crore revenue · 4,900 installs
         </li>
         <li>
-          <b>FY29</b> EBITDA positive · Series A · C&amp;I and batteries
+          <b>FY29</b> EBITDA positive from Apr 2028 · optional Series A for C&amp;I and batteries
         </li>
       </ol>
       <p className="s-note">Growth loop: every report makes a shareable roof card for WhatsApp.</p>
@@ -438,20 +439,20 @@ export default function Deck() {
       <div className="s-split">
         <ul className="s-list">
           <li>
-            <b>45%</b> product & engineering
+            <b>38%</b> growth
           </li>
           <li>
-            <b>30%</b> growth
+            <b>34%</b> product & engineering
           </li>
           <li>
-            <b>15%</b> installer network & lead verification
+            <b>18%</b> G&amp;A, compliance & state sales
           </li>
           <li>
-            <b>10%</b> compliance & G&amp;A
+            <b>10%</b> installer network & lead verification
           </li>
         </ul>
         <div>
-          <p className="s-lede s-lede--ink">Gets us to EBITDA break-even in FY29 with ₹3.8 crore of cash at the low point.</p>
+          <p className="s-lede s-lede--ink">Gets us to EBITDA break-even in April 2028 with ₹1.9 crore of cash at the low point.</p>
           <p className="s-note">Try it: read your roof at the live link. Every number cites its source.</p>
         </div>
       </div>
