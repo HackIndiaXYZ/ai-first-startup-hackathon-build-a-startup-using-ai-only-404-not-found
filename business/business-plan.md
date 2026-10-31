@@ -27,7 +27,7 @@ Homeowners use it free. **Installers pay for verified leads (₹1,500) and 2% on
 India is in the middle of the largest residential solar push in its history, and the household making the decision has no one on their side.
 
 - **Scale.** By 9 Oct 2026, PM Surya Ghar had **51.7 lakh rooftop installations serving 61.4 lakh households** (national portal counter). The target is 1 crore households, and the scheme is due to close on **31 Mar 2027**. July 2026 set the record: 5.06 lakh homes in one month, 16,328 a day. The FY27 budget is ₹22,000 crore.
-- **Distrust is the bottleneck, not sunlight.** CEEW found 637 GW of technical residential rooftop potential and 32 GW of economic potential with subsidy, but **only 5% of households willing to install**.
+- **Distrust is the bottleneck, not sunlight.** CEEW found 637 GW of technical residential rooftop potential and 32 GW of economic potential with subsidy, but in its 2026 survey of 17,094 households **26% would consider rooftop solar, 5% have started and only 1.4% have finished**; 59% of those who start stall at early steps such as choosing a vendor. That stall is where Quote Check sits.
 - **Bad quotes cost real money.** Since 1 June 2026, subsidy requires DCR panels with ALMM List-II cells, and a non-DCR panel forfeits up to ₹78,000. Quotes still charge old GST rates (12-13.8% instead of ~8.9%) and under-deliver capacity.
 - **Bad bills after install.** In July 2026 MNRE acknowledged multiple complaints of incorrect DISCOM billing after rooftop installs. Consumer forums are striking down unexplained charges, and net meters go un-activated for months.
 - **Every existing calculator belongs to someone selling panels.** SolarSquare (a $53M Series C installer), Freyr and Loom all run calculators whose job is to close their sale.
@@ -69,7 +69,7 @@ Beyond the scheme, the 51.7 lakh systems already installed need bill audits for 
 
 Prices exclude GST.
 
-**Why installers pay a referee.** Leads arrive pre-qualified with a bill, a roof model and a buyer who already trusts the numbers. Installers whose quotes pass the audit get a "Chhat Verified" badge and rank higher. Cancellations fall because the buyer saw the numbers before the site visit.
+**Why installers pay a referee.** Leads arrive pre-qualified with a bill, a roof model and a buyer who already trusts the numbers. Installers whose quotes pass the audit can show a "Chhat Verified" badge. The badge comes from the audit, never from payment, and results are never ordered by who pays. Cancellations fall because the buyer saw the numbers before the site visit.
 
 **What it costs the installer.** Five leads plus the full success fee come to ₹10,773 per closed sale: **5.9% of a ₹1.82 lakh system**. US installers aim to keep cost per closed sale under $1,500, roughly 5-7% of a typical home system. Indian solar leads sell at ₹1,200-3,500 for medium-to-high quality, so ₹1,500 for a verified, sized, exclusive lead sits in that band.
 
@@ -194,8 +194,8 @@ Pay assumptions:
 | Risk | Likelihood | Mitigation |
 |---|---|---|
 | PM Surya Ghar closes on 31 Mar 2027 as scheduled and no successor follows. An extension of 3-4 months has been reported but not notified. | Medium | The planning base already assumes one-third of the 2026 peak. Economics stand without subsidy (payback ~6-7 years at ₹8/unit). Bill audits continue for 51.7 lakh+ installed systems. C&I and battery products. |
-| Installers refuse to pay a referee | Medium | Lead-quality data; "Verified" ranking; start with installers who already compete on quality |
-| Success fees leak (installs closed off-platform) | Medium | The model collects only 85%. Post-install bill audits reveal installs, and the "Verified" ranking rewards honest reporting. |
+| Installers refuse to pay a referee | Medium | Lead-quality data (verified, consented leads); start with installers who already compete on quality |
+| Success fees leak (installs closed off-platform) | Medium | The model collects only 85%. Post-install bill audits reveal installs, and only installers who report them keep the Verified badge. |
 | Data accuracy disputes | Medium | Every figure sourced in-app; all assumptions editable; quote audit shows rule and source per finding |
 | LLM cost or outage | Low | AI is under 1% of revenue; on-device mode is complete; model calls only for reading documents and chat |
 | Regulatory (advice liability) | Low | Clear "estimates, not financial advice"; no money handled; letters are drafts for the consumer |

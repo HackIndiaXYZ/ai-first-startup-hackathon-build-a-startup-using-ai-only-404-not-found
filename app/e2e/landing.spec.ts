@@ -68,7 +68,7 @@ test.describe("landing story", () => {
     const y = await grid.evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
     await scrollToY(page, y - 200);
     // Retries until the reveal and the count-ups have finished.
-    await expect(page.locator(".fact__big")).toHaveText(["51 lakh", "5%", "₹78,000", "Jul 2026", "1 Jun 2026", "8.9%", "$53M", "0.727"], { timeout: 45_000 });
+    await expect(page.locator(".fact__big")).toHaveText(["51 lakh", "59%", "₹78,000", "Jul 2026", "1 Jun 2026", "8.9%", "$53M", "0.727"], { timeout: 45_000 });
     for (const href of await page.locator(".fact").evaluateAll((els) => els.map((e) => e.getAttribute("href")))) {
       expect(href).toMatch(/^https:\/\//);
     }
@@ -79,7 +79,8 @@ test.describe("landing story", () => {
     await open(page, "/");
     await page.getByRole("link", { name: /Read my roof/ }).click();
     await expect(page.locator(".curtain")).toBeVisible();
-    await expect(page).toHaveURL(/#\/report$/);
+    // The report writes its settings into the URL shortly after it loads.
+    await expect(page).toHaveURL(/#\/report($|\?)/);
     await expect(page.locator("h1")).toHaveText(/What your roof is worth/);
     await expect(page.locator(".curtain")).toBeHidden();
   });

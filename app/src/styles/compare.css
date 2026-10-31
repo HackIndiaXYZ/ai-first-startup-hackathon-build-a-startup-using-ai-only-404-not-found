@@ -1,0 +1,170 @@
+/* ======================================================================
+   Compare quotes: three slots, a pick, and a side-by-side table
+   ====================================================================== */
+
+.compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  padding-bottom: var(--space-8);
+}
+.compare__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ---------- Slots ---------- */
+.compare__slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+@media (max-width: 900px) {
+  .compare__slots {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.cslot .card__title {
+  align-items: center;
+}
+.cslot .card__title > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.cslot__letter {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.8em;
+}
+.cslot__add,
+.cslot__fields {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+.cslot__add .textarea {
+  min-height: 120px;
+}
+.cslot__samples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+.cslot__sample {
+  cursor: pointer;
+  min-height: 32px;
+}
+.cslot__sample:hover {
+  border-color: var(--ink);
+}
+
+/* ---------- The pick ---------- */
+.pick {
+  border-color: oklch(0.58 0.12 155 / 0.45);
+  background: linear-gradient(180deg, var(--leaf-soft), var(--surface) 70%);
+}
+.pick--warn {
+  border-color: oklch(0.58 0.2 30 / 0.45);
+  background: linear-gradient(180deg, var(--sindoor-soft), var(--surface) 70%);
+}
+.pick__title {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: var(--step-2);
+  line-height: 1.1;
+  margin-bottom: var(--space-3);
+}
+.pick__title svg {
+  flex: none;
+  color: var(--leaf);
+}
+.pick--warn .pick__title svg {
+  color: var(--sindoor);
+}
+.pick__why {
+  display: grid;
+  gap: 6px;
+  padding-left: 1.2em;
+  max-width: 70ch;
+}
+.pick__ask {
+  margin-top: var(--space-3);
+  font-weight: 600;
+}
+.pick__not {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+.pick__not ul {
+  display: grid;
+  gap: 4px;
+  margin-top: 4px;
+  padding-left: 1.2em;
+}
+
+/* ---------- Table ---------- */
+.ctable__scroll {
+  overflow-x: auto;
+  margin: 0 calc(var(--space-4) * -1);
+  padding: 0 var(--space-4);
+}
+.ctable__scroll:focus-visible {
+  outline: 2px solid var(--neel);
+  outline-offset: 2px;
+}
+.ctable {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+.ctable th,
+.ctable td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.ctable thead th {
+  font-size: var(--step-0);
+  border-bottom: 1px solid var(--line-2);
+}
+.ctable tbody th {
+  font-weight: 500;
+  color: var(--text-2);
+  width: 30%;
+}
+.ctable .is-best {
+  background: oklch(0.58 0.12 155 / 0.08);
+}
+.ctable td.is-bad {
+  color: var(--sindoor);
+  font-weight: 600;
+}
+.ctable__badge {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.ctable__foot {
+  margin-top: var(--space-3);
+}
+.compare__empty a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

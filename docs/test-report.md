@@ -17,6 +17,7 @@ npm run test:all     # typecheck + unit + build + bundle budget + end-to-end
 | End-to-end | Playwright (`e2e/`), desktop + Pixel 7 | 67 | 67 passed, 0 flaky (first run: 62 of 66 passed, 4 failed; see §3) |
 | Accessibility | axe-core, WCAG 2.1 A + AA, 8 routes | in e2e | 0 serious or critical violations |
 | Bundle budget | `scripts/check-budget.mjs` | 6 budgets | all within budget |
+| **Third pass, 31 Oct 2026** | Vitest + Playwright (local Chrome) | 152 unit · 79 end-to-end | all passed. New: Groq agent path with mocked API (15), leads and pricing (20), quote comparison (7), Pro pre-check (5); e2e for the request → inbox → purchase flow, Compare quotes, the Pro pre-check, and `/installers` + `/compare` in the smoke, axe and phone-width sweeps |
 | Lighthouse | Lighthouse 12, desktop preset | 3 routes | see §5 |
 
 ## 2. What the suites cover

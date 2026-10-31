@@ -5,7 +5,7 @@ import { expect, open, test } from "./fixtures";
 const require = createRequire(import.meta.url);
 const AXE = readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 
-const ROUTES = ["/", "/report", "/quote?sample=overcharger", "/bill?sample=import-billed", "/ask", "/built-with-ai", "/deck", "/no-such-page"];
+const ROUTES = ["/", "/report", "/quote?sample=overcharger", "/bill?sample=import-billed", "/ask", "/built-with-ai", "/deck", "/installers", "/compare", "/no-such-page"];
 
 interface AxeResult {
   id: string;

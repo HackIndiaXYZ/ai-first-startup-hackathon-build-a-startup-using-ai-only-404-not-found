@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { detectMode, type Mode } from "../ai/client";
 import { parseSolarBill, type ParsedSolarBill } from "../ai/parsers";
 import { ModeBadge } from "../components/AskChhat";
+import { LeadForm } from "../components/LeadForm";
 import { DocIntake } from "../components/DocIntake";
 import { Findings } from "../components/Findings";
 import { Field, NumberInput, Select, TextInput } from "../components/ui";
@@ -262,6 +263,16 @@ export default function Bill() {
               </li>
             </ol>
           </section>
+
+          <LeadForm
+            source="bill"
+            context={{
+              city: c.name,
+              stateCode: c.state,
+              kw: kwp,
+              summary: a.overbilled > 0 ? `bill audit found ₹${Math.round(a.overbilled).toLocaleString("en-IN")} overbilled` : "existing solar home",
+            }}
+          />
         </div>
       </div>
     </div>

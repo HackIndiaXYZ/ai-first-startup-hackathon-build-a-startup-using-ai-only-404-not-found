@@ -1,5 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { EXTRACT_SCHEMAS, extractDocument, hasKey, type ExtractKind } from "../server/claude";
+import { errorResponse, EXTRACT_SCHEMAS, extractDocument, hasKey, type ExtractKind } from "../server/llm";
 import { allow, clientIp } from "../server/limit";
 
 const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"]);
@@ -28,8 +27,6 @@ export async function POST(request: Request): Promise<Response> {
     if (data.length > MAX_B64) return Response.json({ error: "too_large" }, { status: 413 });
     return Response.json({ fields: await extractDocument(kind as ExtractKind, { mediaType, data }) });
   } catch (err) {
-    if (err instanceof Anthropic.RateLimitError) return Response.json({ error: "rate_limited" }, { status: 429 });
-    if (err instanceof Anthropic.APIError) return Response.json({ error: "upstream", status: err.status }, { status: 502 });
-    return Response.json({ error: "extract_failed" }, { status: 500 });
+    return errorResponse(err, "extract_failed");
   }
 }

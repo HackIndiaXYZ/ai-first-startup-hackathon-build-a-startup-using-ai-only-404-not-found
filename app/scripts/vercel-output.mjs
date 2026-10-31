@@ -5,8 +5,9 @@
 import { build } from "esbuild";
 import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = new URL("..", import.meta.url).pathname;
+const root = fileURLToPath(new URL("..", import.meta.url));
 const out = join(root, ".vercel/output");
 rmSync(out, { recursive: true, force: true });
 mkdirSync(join(out, "static"), { recursive: true });
@@ -42,7 +43,7 @@ export default async function handler(req, res) {
     bundle: true,
     platform: "node",
     format: "esm",
-    target: "node20",
+    target: "node24",
     outfile: join(dir, "index.mjs"),
     banner: { js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);" },
     logLevel: "warning",
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
   rmSync(entry);
   writeFileSync(
     join(dir, ".vc-config.json"),
-    JSON.stringify({ runtime: "nodejs20.x", handler: "index.mjs", launcherType: "Nodejs", shouldAddHelpers: false, maxDuration: 60 }, null, 2),
+    JSON.stringify({ runtime: "nodejs24.x", handler: "index.mjs", launcherType: "Nodejs", shouldAddHelpers: false, maxDuration: 60 }, null, 2),
   );
 }
 writeFileSync(join(out, "config.json"), JSON.stringify({ version: 3 }, null, 2));

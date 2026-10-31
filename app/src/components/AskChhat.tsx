@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowUp, Microphone, Sparkle, Wrench, X } from "@phosphor-icons/react";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ask, detectMode, type AskResult, type Mode } from "../ai/client";
+import { ask, detectMode, liveLabel, liveModel, type AskResult, type Mode } from "../ai/client";
 import type { AgentTurn } from "../ai/localAgent";
 
 interface Msg {
@@ -26,12 +26,15 @@ export const useAsk = () => useContext(AskCtx);
 export function ModeBadge({ mode, model }: { mode: Mode | null; model?: string }) {
   if (!mode) return <span className="chip">Checking AI…</span>;
   return mode === "live" ? (
-    <span className="chip chip--live" title={model}>
-      <span className="dot" /> Live AI · Claude
+    <span className="chip chip--live" title={`${model ?? liveModel() ?? liveLabel()} picks the tools and writes the reply; every rupee comes from the tested engine.`}>
+      <span className="dot" /> Live AI · {liveLabel()}
     </span>
   ) : (
-    <span className="chip chip--local" title="No server key on this deployment, so Chhat runs its rules engine and models in your browser.">
-      <span className="dot" /> On-device engine
+    <span
+      className="chip chip--local"
+      title="Rules, search and a tested engine run in your browser. No language model is called, and your documents stay on this device. Live mode needs a server key."
+    >
+      <span className="dot" /> On-device mode · rules engine
     </span>
   );
 }

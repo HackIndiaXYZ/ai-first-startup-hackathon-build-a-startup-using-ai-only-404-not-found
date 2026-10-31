@@ -19,7 +19,8 @@
     "test:e2e": "playwright test",
     "test:all": "npm run typecheck && npm run lint && npm test && npm run build && npm run check:budget && playwright test",
     "check:budget": "node scripts/check-budget.mjs",
-    "shoot:stills": "node scripts/shoot-stills.mjs"
+    "shoot:stills": "node scripts/shoot-stills.mjs",
+    "smoke:llm": "node scripts/smoke-llm.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.1",

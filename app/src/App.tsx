@@ -14,6 +14,8 @@ const Bill = lazy(() => import("./routes/Bill"));
 const Ask = lazy(() => import("./routes/Ask"));
 const BuiltWithAI = lazy(() => import("./routes/BuiltWithAI"));
 const Deck = lazy(() => import("./routes/Deck"));
+const Installers = lazy(() => import("./routes/Installers"));
+const Compare = lazy(() => import("./routes/Compare"));
 const NotFound = lazy(() => import("./routes/NotFound"));
 
 /**
@@ -71,6 +73,8 @@ export default function App() {
                   <Route path="/ask" element={<Ask />} />
                   <Route path="/built-with-ai" element={<BuiltWithAI />} />
                   <Route path="/deck" element={<Deck />} />
+                  <Route path="/installers" element={<Installers />} />
+                  <Route path="/compare" element={<Compare />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

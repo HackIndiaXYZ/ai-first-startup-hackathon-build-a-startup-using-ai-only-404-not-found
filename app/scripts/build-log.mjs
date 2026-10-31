@@ -3,15 +3,18 @@
 import { execSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = new URL("..", import.meta.url).pathname;
+const root = fileURLToPath(new URL("..", import.meta.url));
 const repo = join(root, "..");
 const OUT = join(root, "src/data/buildlog.json");
 const PRODUCT = /^(app|docs|business|pitch|README\.md|\.github|vercel\.json|netlify\.toml)/;
 
 function git(cmd) {
   try {
-    return execSync(`git -C "${repo}" ${cmd}`, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    // The history includes one commit that added ~21,000 reference files, so
+    // the log is far bigger than execSync's 1 MB default buffer.
+    return execSync(`git -C "${repo}" ${cmd}`, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], maxBuffer: 512 * 1024 * 1024 });
   } catch {
     return "";
   }
@@ -43,6 +46,12 @@ for (const line of raw.split("\n")) {
   }
 }
 const product = commits.filter((c) => c.files > 0).map((c) => ({ ...c, areas: [...c.areas].slice(0, 6) }));
+// Some hosts clone a history this script can't read product files from. Then
+// the committed file is the better record, so keep it.
+if (product.length === 0) {
+  console.log("buildlog: no product commits visible in this checkout; keeping committed src/data/buildlog.json");
+  process.exit(0);
+}
 
 function walk(dir, acc = []) {
   if (!existsSync(dir)) return acc;

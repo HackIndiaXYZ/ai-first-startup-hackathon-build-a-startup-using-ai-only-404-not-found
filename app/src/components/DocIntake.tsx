@@ -1,15 +1,15 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { CheckCircle, ClipboardText, FileArrowUp, Files, SpinnerGap, WarningCircle } from "@phosphor-icons/react";
 import { useRef, useState, type ReactNode } from "react";
-import { extractFile, extractText, type ExtractKind, type ExtractResult, type Mode } from "../ai/client";
+import { extractFile, extractText, liveLabel, type ExtractKind, type ExtractResult, type Mode } from "../ai/client";
 import type { SampleDoc } from "../data/samples";
 
-const METHOD_LABEL: Record<ExtractResult<unknown>["method"], string> = {
-  "claude-vision": "Read by Claude (vision)",
-  "claude-text": "Read by Claude",
-  ocr: "Read on your device (OCR)",
-  "pdf-text": "Read on your device (PDF text)",
-  "text-rules": "Read on your device (text rules)",
+const METHOD_LABEL: Record<ExtractResult<unknown>["method"], () => string> = {
+  "ai-vision": () => `Read by ${liveLabel()} (vision)`,
+  "ai-text": () => `Read by ${liveLabel()}`,
+  ocr: () => "Read on your device (OCR)",
+  "pdf-text": () => "Read on your device (PDF text)",
+  "text-rules": () => "Read on your device (text rules)",
 };
 
 export interface IntakeMeta {
@@ -51,7 +51,7 @@ export function DocIntake<K extends ExtractKind>({
     try {
       const r = await p;
       onFields(r.fields as never, { mode: r.mode, method: r.method, ...extra });
-      setStatus({ state: "done", text: METHOD_LABEL[r.method] });
+      setStatus({ state: "done", text: METHOD_LABEL[r.method]() });
     } catch (e) {
       setStatus({ state: "error", text: (e as Error).message || "Couldn't read that file. Try a clearer photo, or type the numbers." });
     }
@@ -124,7 +124,7 @@ export function DocIntake<K extends ExtractKind>({
           >
             <FileArrowUp size={30} weight="duotone" />
             <span className="drop__title">Drop a photo or PDF of your {noun}</span>
-            <span className="drop__hint">JPG, PNG or PDF. With live AI, Claude reads it. Without, Chhat reads it on your device: nothing leaves your browser.</span>
+            <span className="drop__hint">JPG, PNG or PDF. With live AI, the model reads it. Without, Chhat reads it on your device: nothing leaves your browser.</span>
             <span className="btn btn--sm btn--ghost">Choose file</span>
             <input ref={fileRef} type="file" accept="image/*,application/pdf,text/plain" className="sr-only" onChange={(e) => onFile(e.target.files?.[0])} />
           </label>

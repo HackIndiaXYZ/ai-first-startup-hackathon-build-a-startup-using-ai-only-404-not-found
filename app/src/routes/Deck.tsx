@@ -105,8 +105,8 @@ export default function Deck() {
           <span>PM Surya Ghar installations by Sep 2026; 1 crore homes targeted by Mar 2027</span>
         </div>
         <div>
-          <b>5%</b>
-          <span>of households willing to install, though the economics work (CEEW)</span>
+          <b>59%</b>
+          <span>of households that start going solar stall at early steps such as choosing a vendor (CEEW 2026)</span>
         </div>
         <div>
           <b>Jul 2026</b>
@@ -192,7 +192,7 @@ export default function Deck() {
             <b>7 typed tools</b>: irradiance, sizing, subsidy, finance, quote audit, bill audit, sourced knowledge base
           </li>
           <li>
-            <b>Two agents, one toolset</b>: Claude Opus 5.5 on the server; an on-device router when there's no key or no network
+            <b>One toolset, two modes</b>: a live LLM agent on the server (Groq by default) when a key is set; an on-device rules assistant otherwise. In both, the model never computes a rupee
           </li>
           <li>
             <b>Document reading</b>: Claude structured output, or on-device OCR and PDF text, always into an editable form
@@ -427,7 +427,7 @@ export default function Deck() {
         </div>
         <div>
           <b>0</b>
-          <span>lines of code written by a human</span>
+          <span>lines of product code typed by a human</span>
         </div>
       </div>
       <p className="s-note">Research, idea tournament, plan, PV model, 3D world, copy, financial model, this deck: AI. The two briefs and the review: human. Receipts at /built-with-ai.</p>

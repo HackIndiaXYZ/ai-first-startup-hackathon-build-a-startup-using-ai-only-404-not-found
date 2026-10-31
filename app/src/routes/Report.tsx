@@ -9,6 +9,7 @@ import { AREA_MAX, AREA_MIN, AreaPlanner } from "../components/AreaPlanner";
 import { CashflowChart, MonthlyChart } from "../components/charts";
 import { DocIntake, type IntakeMeta } from "../components/DocIntake";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import { LeadForm } from "../components/LeadForm";
 import { Field, NumberInput, Segmented, Select, Slider, SourceTip, Stat } from "../components/ui";
 import { SAMPLE_BILLS } from "../data/samples";
 import { CITIES, CLIMATE_SOURCE, cityByName, climateFromCity, fetchClimate, nearestCity } from "../engine/climate";
@@ -584,6 +585,10 @@ export default function Report() {
               </Link>
             </div>
           </section>
+
+          <div className="no-print">
+            <LeadForm source="report" context={{ city: cityName, stateCode: st.code, kw: s.kwp, summary: `saves about ${rupees(s.net.savings)} a year` }} />
+          </div>
 
           <section className="share no-print">
             <button type="button" className="btn btn--ghost btn--sm" onClick={copyLink}>

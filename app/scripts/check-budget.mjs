@@ -2,8 +2,9 @@
 // Fails if the first paint gets heavier than it needs to be.
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { gzipSync } from "node:zlib";
+import { fileURLToPath } from "node:url";
 
-const DIST = new URL("../dist/", import.meta.url).pathname;
+const DIST = fileURLToPath(new URL("../dist/", import.meta.url));
 const html = readFileSync(`${DIST}index.html`, "utf8");
 const assets = readdirSync(`${DIST}assets`);
 const gz = (f) => gzipSync(readFileSync(`${DIST}assets/${f}`)).length;
@@ -15,7 +16,7 @@ const entryJs = entry.filter((f) => f.endsWith(".js")).reduce((n, f) => n + gz(f
 const entryCss = entry.filter((f) => f.endsWith(".css")).reduce((n, f) => n + gz(f), 0);
 const landing = assets.filter((f) => /^Landing-.*\.js$/.test(f)).reduce((n, f) => n + gz(f), 0);
 const three = assets.filter((f) => /^(assets|RoofScene)-.*\.js$/.test(f)).reduce((n, f) => n + gz(f), 0);
-const models = readdirSync(new URL("../public/models/", import.meta.url).pathname)
+const models = readdirSync(fileURLToPath(new URL("../public/models/", import.meta.url)))
   .filter((f) => f.endsWith(".glb"))
   .reduce((n, f) => n + statSync(new URL(`../public/models/${f}`, import.meta.url)).size, 0);
 

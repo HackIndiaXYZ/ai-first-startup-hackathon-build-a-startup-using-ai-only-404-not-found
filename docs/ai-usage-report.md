@@ -13,7 +13,7 @@ This report covers two things the rules ask for: how AI built the startup, and h
 |---|---|
 | Primary builder | **Claude Code** (Anthropic), running autonomously in a cloud session |
 | Human input | Two written briefs (below), a folder of design skills and the shadcn/ui source added to the repo as reference, and review |
-| Code written by a human | **0 lines** |
+| Product code typed by a human | **0 lines** (hand-made commits are housekeeping: uploads, deletions, merges) |
 | Share of execution done by AI | Research, ideation, selection, planning, design, all code, tests, copy, 3D, financial model, business plan, deck, demo recording: **~100%** |
 | Model inside the product | Claude (`claude-opus-5-5`) via the Anthropic SDK, with an on-device fallback |
 
@@ -172,6 +172,7 @@ Why two modes: judges can open the link with no key and every feature works; hom
 ## 6. How we checked the AI's work
 
 - Second pass: 57 unit tests (23 new, including a WCAG contrast check across the whole day and the asset budget), 67 Playwright end-to-end tests on desktop and a Pixel 7 profile, axe-core on every route (0 serious or critical violations), Lighthouse (100 accessibility, best practices and SEO on all four audited routes), and a bundle budget in CI. The tests and the demo recording found eleven real issues, all fixed; the list is in `docs/test-report.md` §3.
+- Third pass (31 Oct 2026): 152 unit tests and 79 end-to-end tests, all passing, after adding the Groq agent path, the paid-request flow, Compare quotes and the Chhat Pro pre-check. The pass found and fixed a CSS class clash between the installer page and the Roof Report, and a sideways scroll on Compare at phone width.
 - 34 unit tests against hand-checked values (e.g. extraterrestrial irradiance at the equator ≈ 10.4 kWh/m²/day; Delhi solar noon on 21 June ≈ 12:20 IST; subsidy slabs; EMI formula).
 - Parser tests on every sample document; agent tests for English, Hindi, Hinglish and multi-turn context.
 - The financial model is recalculated by an independent formula engine (`python business/build_model.py --verify`): 9,453 formulas, 0 errors, and 123 key figures match a separate Python implementation of the same model.

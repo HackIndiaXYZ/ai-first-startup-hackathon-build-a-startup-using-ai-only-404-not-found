@@ -1,5 +1,5 @@
-import { hasKey, MODEL } from "../server/claude";
+import { hasKey, modelName, provider } from "../server/llm";
 
 export function GET(): Response {
-  return Response.json({ live: hasKey(), model: hasKey() ? MODEL : null });
+  return Response.json({ live: hasKey(), provider: provider(), model: modelName() });
 }

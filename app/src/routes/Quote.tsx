@@ -8,6 +8,7 @@ import { ModeBadge } from "../components/AskChhat";
 import { PriceBand } from "../components/charts";
 import { DocIntake } from "../components/DocIntake";
 import { Findings } from "../components/Findings";
+import { LeadForm } from "../components/LeadForm";
 import { Field, NumberInput, Segmented, Select, TextInput, TriState } from "../components/ui";
 import { SAMPLE_QUOTES } from "../data/samples";
 import { CITIES } from "../engine/climate";
@@ -58,6 +59,9 @@ export default function Quote() {
         <p className="page__lede">Upload the installer's quotation. Chhat reads it, checks 14 things that cost people money, and writes the reply for you.</p>
         <div className="page__meta">
           <ModeBadge mode={mode} />
+          <Link className="btn btn--sm btn--ghost" to="/compare">
+            Got two or three quotes? Compare them
+          </Link>
         </div>
       </header>
 
@@ -261,6 +265,17 @@ export default function Quote() {
               ) : null}
             </div>
           </section>
+
+          <LeadForm
+            source="quote"
+            context={{
+              stateCode: q.stateCode,
+              city: CITIES.find((c) => c.state === q.stateCode)?.name ?? null,
+              kw: kwp ?? null,
+              grade: a.incomplete ? null : a.grade,
+              moneyAtRisk: a.incomplete ? null : a.moneyAtRisk || null,
+            }}
+          />
         </div>
       </div>
     </div>

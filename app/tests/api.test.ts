@@ -52,6 +52,8 @@ const post = (body: unknown, raw = false) =>
 
 beforeEach(() => {
   create.mockReset();
+  // These tests cover the Claude path; keys for other providers would win.
+  for (const k of ["GROQ_API_KEY", "XAI_API_KEY", "GROK_API_KEY"]) delete process.env[k];
   process.env.ANTHROPIC_API_KEY = "test-key";
 });
 
@@ -176,9 +178,9 @@ describe("extractDocument", () => {
 
 describe("HTTP handlers", () => {
   it("health reports live only with a key", async () => {
-    expect(await healthGET().json()).toEqual({ live: true, model: MODEL });
+    expect(await healthGET().json()).toEqual({ live: true, provider: "anthropic", model: MODEL });
     delete process.env.ANTHROPIC_API_KEY;
-    expect(await healthGET().json()).toEqual({ live: false, model: null });
+    expect(await healthGET().json()).toEqual({ live: false, provider: null, model: null });
   });
 
   it("agent: 503 without a key", async () => {

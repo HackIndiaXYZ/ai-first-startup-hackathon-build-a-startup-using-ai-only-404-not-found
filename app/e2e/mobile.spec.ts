@@ -18,7 +18,7 @@ test("landing on a phone: text sits under the scene, menu opens, no sideways scr
   expect(pos).toBe("relative");
 });
 
-for (const route of ["/report", "/quote?sample=overcharger", "/bill?sample=import-billed", "/built-with-ai"]) {
+for (const route of ["/report", "/quote?sample=overcharger", "/bill?sample=import-billed", "/built-with-ai", "/installers", "/compare"]) {
   test(`${route} fits a phone screen`, async ({ page, problems }) => {
     void problems;
     await open(page, route);

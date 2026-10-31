@@ -12,10 +12,10 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 
 | Deliverable | Where |
 |---|---|
-| Working product | `app/` (React + Three.js + GSAP + Lenis, Claude agent + on-device engine) |
+| Working product | `app/` (React + Three.js + GSAP + Lenis, LLM agent on Groq + on-device engine) |
 | Design rationale | [`docs/05-design.md`](docs/05-design.md): direction, palette, type, motion system, 3D pipeline, CC0 asset credits |
 | Test report | [`docs/test-report.md`](docs/test-report.md): unit, end-to-end, accessibility, responsive, fallbacks, budgets |
-| Live deployment | See [Deploy](#deploy). One click on Vercel; GitHub Pages workflow included |
+| Live deployment | [oo-theta-peach.vercel.app](https://oo-theta-peach.vercel.app/) · see [Deploy](#deploy) |
 | Demo video (3:46) | [`pitch/chhat-demo.mp4`](pitch/chhat-demo.mp4), recorded at full render quality on a virtual clock · script and voice-over: [`docs/demo-script.md`](docs/demo-script.md) |
 | Pitch deck (15 slides) | [`pitch/Chhat-pitch-deck.pdf`](pitch/Chhat-pitch-deck.pdf) · live at `/#/deck` |
 | AI usage report | [`docs/ai-usage-report.md`](docs/ai-usage-report.md) · live at `/#/built-with-ai` |
@@ -28,7 +28,7 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 ## Why this idea
 
 - **The rubric rewards AI-first execution (25%) and AI workflow (10%).** Chhat was built end to end by Claude Code from two written briefs, and the product publishes its own build log.
-- **The problem is big, current and verifiable.** ~51 lakh PM Surya Ghar installs by Sep 2026, with the 1 crore-home target closing in Mar 2027; CEEW finds only 5% of households willing; MNRE acknowledged wrong post-solar DISCOM bills in Jul 2026; ALMM List-II rules since Jun 2026 make bad quotes forfeit the ₹78,000 subsidy.
+- **The problem is big, current and verifiable.** ~51 lakh PM Surya Ghar installs by Sep 2026, with the 1 crore-home target closing in Mar 2027; CEEW's 2026 survey finds 26% would consider rooftop solar but only 1.4% have finished, and most who start stall at choosing a vendor; MNRE acknowledged wrong post-solar DISCOM bills in Jul 2026; ALMM List-II rules since Jun 2026 make bad quotes forfeit the ₹78,000 subsidy.
 - **It works for a stranger in ten seconds.** No login, no key, real NASA data, sample documents.
 - **Someone pays.** Installers (₹1,500 per verified lead + 2%), lenders (1%), installer SaaS (₹2,999/month), states (₹40 lakh/year). A ₹6 crore seed reaches EBITDA break-even in April 2028 (FY29) in the base case, with ₹1.9 crore of cash at the low point.
 
@@ -38,28 +38,31 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 |---|---|
 | `/` | A preloader that tracks real loading, then one day on a 3D Indian rooftop: the real sun path, a HUD with live roof output and a sun dial, panels dropping at noon, the quote getting stamped, the bill counting down, the city lighting up at night. Then a manifesto, a velocity marquee of 72 cities, stacking tool cards, sourced facts that count up, and the build log |
 | `/report` | Roof Report: bill intake (sample, upload, paste or type), live NASA climatology, 3D roof with sun scrubber and live kW meter, NPV-optimal panel count, month-by-month chart, subsidy, loan, 25-year cash flow, CO₂, next steps, share card, print |
-| `/quote` | Quote Check: 14-rule audit with grade, fair-price band, findings with sources, negotiation message in English or Hindi |
+| `/quote` | Quote Check: 14-rule audit with grade, fair-price band, findings with sources, negotiation message in English or Hindi, and "Get verified quotes" (the step a free check becomes a paid lead; also on the Roof Report and Bill Audit) |
 | `/bill` | Bill Audit: meter arithmetic, findings, DISCOM correction letter, escalation path |
 | `/ask` | Ask Chhat: agent in Hindi, Hinglish or English with a visible tool trace and voice input |
 | `/built-with-ai` | The AI build log: lifecycle, prompts, architecture, commits from git |
 | `/deck` | The pitch deck (arrow keys) |
+| `/compare` | Compare quotes: up to three installer quotes through the same audit, side by side, with a plain pick ("Sign with…") and why the others lose. Saved in the browser so quotes that arrive on different days line up |
+| `/installers` | For installers: prices (₹1,500 per verified request, 2% success fee, Pro at ₹2,999/month), the Chhat Pro quote pre-check (the home's audit on the installer's own quote, with the "Chhat Verified" badge only on a pass), what Chhat never sells, a cost-per-sale calculator, and the request inbox where a home's request unlocks on purchase |
 
 ## How the AI works
 
 ```
-Browser ─┬─ live mode ──> /api/agent ──> Claude (claude-opus-5-5) ─┐
+Browser ─┬─ live mode ──> /api/agent ──> Groq (llama-3.3-70b) ────┐
          └─ on-device ──> intent router + BM25 knowledge base ─────┤
                                                                    ▼
                      7 typed tools: get_irradiance · size_system · compute_subsidy
                      finance_options · audit_quote · audit_bill · search_knowledge
                                                                    ▼
-                     Deterministic engine (34 tests): NASA POWER · PV model ·
+                     Deterministic engine (unit-tested): NASA POWER · PV model ·
                      MNRE subsidy rules · net metering · finance · audits
 ```
 
 - The model never computes a rupee figure itself; both agents call the same tools.
-- Documents: Claude structured output (live) or on-device OCR (Tesseract.js) / PDF text (pdf.js) + parsing rules. Every extracted field lands in an editable form.
-- The page shows which mode is active. Without `ANTHROPIC_API_KEY` everything still works on-device.
+- Documents: the model's JSON output (live; photos need a vision model, PDFs are read on-device first) or on-device OCR (Tesseract.js) / PDF text (pdf.js) + parsing rules. Every extracted field lands in an editable form.
+- The page shows which mode is active and which provider answered. Without a key, or if the provider fails, everything still works on-device.
+- Provider order: `XAI_API_KEY` (Grok) → `GROQ_API_KEY` (Groq, the default) → `ANTHROPIC_API_KEY` (Claude). Keys live only in server environment variables, never in the browser bundle.
 
 ## The engine
 
@@ -75,23 +78,21 @@ Browser ─┬─ live mode ──> /api/agent ──> Claude (claude-opus-5-5) 
 cd app
 npm install
 npm run dev          # http://localhost:5173 (on-device mode)
-npm test             # 57 unit tests (engine, parsers, agent, design system, asset budget)
+npm test             # 152 unit tests (engine, parsers, agents, Groq path, leads, quote comparison, design system)
 npm run build        # static build in app/dist
 npm run test:e2e     # Playwright end-to-end suite against the production build
 npm run test:all     # typecheck + unit + build + end-to-end
 ```
 
-Live AI mode locally: `ANTHROPIC_API_KEY=... npm run dev` (the dev server serves `/api/*`).
+Live AI mode locally: put `GROQ_API_KEY=gsk_...` in `app/.env.local` (git-ignored), then `npm run dev` (the dev server serves `/api/*`). `npm run smoke:llm` makes two real calls and prints OK or FAIL without printing the key.
 
 ## Deploy
 
 **Vercel (recommended, enables live AI):**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FHackIndiaXYZ%2Fai-first-startup-hackathon-build-a-startup-using-ai-only-404-not-found&root-directory=app&env=ANTHROPIC_API_KEY&envDescription=Optional.%20Enables%20live%20Claude%20mode%3B%20without%20it%20Chhat%20runs%20on-device.)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FHackIndiaXYZ%2Fai-first-startup-hackathon-build-a-startup-using-ai-only-404-not-found&root-directory=app&env=GROQ_API_KEY&envDescription=Optional.%20Enables%20live%20AI%20on%20Groq%3B%20without%20it%20Chhat%20runs%20on-device.)
 
-Or by hand: import the repo, set **Root Directory = `app`**, add the environment variable `ANTHROPIC_API_KEY`, deploy. `app/vercel.json` runs `npm run build:vercel`, which packages the site and three bundled serverless functions in Vercel's Build Output format. Without the key the deploy still works, fully on-device.
-
-**GitHub Pages (static, on-device mode):** Settings → Pages → Source: GitHub Actions. `.github/workflows/pages.yml` tests, builds and deploys on every push to `main`.
+Or by hand: import the repo, set **Root Directory = `app`**, add the environment variable `GROQ_API_KEY` (Settings → Environment Variables, Production), deploy. `app/vercel.json` runs `npm run build:vercel`, which packages the site and three bundled serverless functions in Vercel's Build Output format. Without the key the deploy still works, fully on-device.
 
 **Netlify (static):** `netlify.toml` is included.
 
@@ -115,7 +116,7 @@ app/                 the product (Vite + React + TypeScript)
   src/three/         rooftop scene (React Three Fiber): CC0 props, PBR, post-processing, quality tiers
   src/lib/           Lenis + GSAP motion system, story timeline, count-ups
   src/routes/        pages, including the deck
-  server/, api/      Claude agent and document extraction (serverless)
+  server/, api/      LLM agent (Groq, Grok or Claude) and document extraction (serverless)
   scripts/           NASA fetch, CC0 asset pipeline, build log, deck export, demo recording, Vercel packaging
   public/models/     six CC0 Poly Haven models as meshopt GLBs (+ credits.json)
   tests/             Vitest unit tests

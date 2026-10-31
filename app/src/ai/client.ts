@@ -1,5 +1,5 @@
-// Browser-side AI client. Picks live mode (server + Claude) when the
-// deployment has a key, otherwise runs everything on-device. Each result
+// Browser-side AI client. Picks live mode (server + Groq, Grok or Claude) when
+// the deployment has a key, otherwise runs everything on-device. Each result
 // carries the mode that produced it so the UI can say so.
 
 import { localAgent, type AgentReply, type AgentTurn, type TraceStep } from "./localAgent";
@@ -10,6 +10,29 @@ export type ExtractKind = "bill" | "solar-bill" | "quote";
 
 let modePromise: Promise<Mode> | null = null;
 
+export type Provider = "groq" | "xai" | "anthropic";
+const PROVIDER_LABEL: Record<Provider, string> = { groq: "Groq", xai: "Grok", anthropic: "Claude" };
+let live: { provider: Provider | null; model: string | null } = { provider: null, model: null };
+
+/** Who answers in live mode, for labels: "Groq", "Grok" or "Claude". */
+export function liveLabel(): string {
+  return live.provider ? PROVIDER_LABEL[live.provider] : "AI";
+}
+export function liveModel(): string | null {
+  return live.model;
+}
+
+/** fetch with a deadline, so a slow model falls back to on-device instead of spinning. */
+async function fetchWithin(url: string, init: RequestInit, ms: number): Promise<Response> {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: ctrl.signal });
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 export function detectMode(): Promise<Mode> {
   modePromise ??= (async () => {
     try {
@@ -18,7 +41,8 @@ export function detectMode(): Promise<Mode> {
       const res = await fetch("./api/health", { signal: ctrl.signal });
       clearTimeout(t);
       if (!res.ok) return "local";
-      const j = await res.json();
+      const j = (await res.json()) as { live?: boolean; provider?: Provider | null; model?: string | null };
+      live = { provider: j.provider ?? (j.live ? "anthropic" : null), model: j.model ?? null };
       return j.live ? "live" : "local";
     } catch {
       return "local";
@@ -36,11 +60,15 @@ export async function ask(message: string, history: AgentTurn[]): Promise<AskRes
   const mode = await detectMode();
   if (mode === "live") {
     try {
-      const res = await fetch("./api/agent", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: [...history, { role: "user", text: message }] }),
-      });
+      const res = await fetchWithin(
+        "./api/agent",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messages: [...history, { role: "user", text: message }] }),
+        },
+        30_000,
+      );
       if (res.ok) {
         const j = (await res.json()) as { text: string; trace: TraceStep[]; model: string };
         const local = localAgent(message, history); // only for link suggestions
@@ -66,7 +94,7 @@ export interface ExtractProgress {
 export interface ExtractResult<T> {
   fields: T;
   mode: Mode;
-  method: "claude-vision" | "claude-text" | "ocr" | "pdf-text" | "text-rules";
+  method: "ai-vision" | "ai-text" | "ocr" | "pdf-text" | "text-rules";
   rawText?: string;
 }
 
@@ -147,11 +175,11 @@ export async function extractText<K extends ExtractKind>(kind: K, text: string):
   const mode = await detectMode();
   if (mode === "live") {
     try {
-      const res = await fetch("./api/extract", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind, text }) });
+      const res = await fetchWithin("./api/extract", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind, text }) }, 30_000);
       if (res.ok) {
         const j = await res.json();
         const local = parseFor(kind, text) as unknown as Record<string, unknown>;
-        return { fields: { ...local, ...fromServer(kind, j.fields) } as unknown as Parsed<K>, mode, method: "claude-text", rawText: text };
+        return { fields: { ...local, ...fromServer(kind, j.fields) } as unknown as Parsed<K>, mode, method: "ai-text", rawText: text };
       }
     } catch {
       /* on-device below */
@@ -167,20 +195,34 @@ export async function extractFile<K extends ExtractKind>(kind: K, file: File, on
     throw new Error("Chhat reads photos (JPG, PNG), PDFs and text files.");
   }
   const mode = await detectMode();
+  // Groq and Grok take text and photos, not PDFs: read the PDF's text here,
+  // then let the model structure it.
+  if (isPdf && mode === "live" && live.provider !== "anthropic") {
+    onProgress?.({ stage: "Reading PDF text on your device" });
+    const text = await pdfText(file);
+    if (text.trim()) {
+      onProgress?.({ stage: `Reading with ${liveLabel()}` });
+      return extractText(kind, text);
+    }
+  }
   if (mode === "live") {
     try {
-      onProgress?.({ stage: "Reading with Claude" });
+      onProgress?.({ stage: `Reading with ${liveLabel()}` });
       const blob = isPdf ? file : await shrinkImage(file);
       const mediaType = isPdf ? "application/pdf" : blob.type || "image/jpeg";
-      const res = await fetch("./api/extract", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ kind, mediaType, data: await fileToBase64(blob) }),
-      });
+      const res = await fetchWithin(
+        "./api/extract",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ kind, mediaType, data: await fileToBase64(blob) }),
+        },
+        30_000,
+      );
       if (res.ok) {
         const j = await res.json();
         const base = parseFor(kind, "") as unknown as Record<string, unknown>;
-        return { fields: { ...base, ...fromServer(kind, j.fields) } as unknown as Parsed<K>, mode, method: "claude-vision" };
+        return { fields: { ...base, ...fromServer(kind, j.fields) } as unknown as Parsed<K>, mode, method: "ai-vision" };
       }
     } catch {
       /* on-device below */

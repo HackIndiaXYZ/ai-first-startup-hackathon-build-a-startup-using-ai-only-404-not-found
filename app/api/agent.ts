@@ -1,5 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { hasKey, runAgent, type ChatTurn } from "../server/claude";
+import { errorResponse, hasKey, runAgent, type ChatTurn } from "../server/llm";
 import { allow, clientIp } from "../server/limit";
 
 const MAX_TEXT = 4000;
@@ -23,9 +22,6 @@ export async function POST(request: Request): Promise<Response> {
   try {
     return Response.json(await runAgent(messages));
   } catch (err) {
-    if (err instanceof Anthropic.RateLimitError) return Response.json({ error: "rate_limited" }, { status: 429 });
-    if (err instanceof Anthropic.APIError) return Response.json({ error: "upstream", status: err.status }, { status: 502 });
-    if ((err as Error).message === "empty_conversation") return Response.json({ error: "empty" }, { status: 400 });
-    return Response.json({ error: "internal" }, { status: 500 });
+    return errorResponse(err, "internal");
   }
 }

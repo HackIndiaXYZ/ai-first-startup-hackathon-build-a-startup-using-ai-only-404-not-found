@@ -52,7 +52,7 @@ const STAGES = [
   },
   {
     k: "AI layer",
-    ai: "Designed seven typed tools shared by two agents: a Claude agent loop on the server and an on-device intent router. Wrote the document extractors (Claude structured output, OCR, PDF text, rules) and a sourced knowledge base in English and Hindi.",
+    ai: "Designed seven typed tools shared by two modes: a server-side LLM agent loop (Groq, Grok or Claude; needs a key) and an on-device rules assistant (intent router and search). Wrote the document extractors (LLM structured output, OCR, PDF text, rules) and a sourced knowledge base in English and Hindi.",
     human: "None.",
     doc: "app/src/ai",
   },
@@ -137,7 +137,7 @@ export default function BuiltWithAI() {
           <Stat label="Lines of source" value={num(s.loc)} />
           <Stat label="Unit + end-to-end tests" value={s.e2e ? `${num(s.tests)} + ${num(s.e2e)}` : num(s.tests)} />
           <Stat label="Words of research & planning" value={num(s.docWords)} />
-          <Stat label="Code written by a human" value="0 lines" />
+          <Stat label="Product code typed by a human" value="0 lines" />
         </div>
       </section>
 

@@ -8,6 +8,7 @@ const LINKS = [
   { to: "/report", label: "Roof Report" },
   { to: "/quote", label: "Quote Check" },
   { to: "/bill", label: "Bill Audit" },
+  { to: "/installers", label: "For installers" },
   { to: "/built-with-ai", label: "Built with AI" },
 ];
 
@@ -79,6 +80,7 @@ export function Footer() {
             <p className="eyebrow">Tools</p>
             <Link to="/report">Roof Report</Link>
             <Link to="/quote">Quote Check</Link>
+            <Link to="/compare">Compare quotes</Link>
             <Link to="/bill">Bill Audit</Link>
             <Link to="/ask">Ask Chhat</Link>
           </div>
@@ -86,7 +88,7 @@ export function Footer() {
             <p className="eyebrow">Company</p>
             <Link to="/built-with-ai">Built with AI</Link>
             <Link to="/deck">Pitch deck</Link>
-            <a href="#/" onClick={(e) => { e.preventDefault(); document.getElementById("installers")?.scrollIntoView(); }}>For installers</a>
+            <Link to="/installers">For installers</Link>
           </div>
           <div>
             <p className="eyebrow">Data</p>

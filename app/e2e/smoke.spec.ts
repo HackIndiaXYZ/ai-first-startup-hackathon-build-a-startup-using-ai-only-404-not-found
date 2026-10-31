@@ -8,6 +8,8 @@ const ROUTES: [string, RegExp][] = [
   ["/ask", /Ask anything about going solar/],
   ["/built-with-ai", /Two briefs in/],
   ["/deck", /Solar, without the sales pitch/],
+  ["/installers", /Buy homes that are ready/],
+  ["/compare", /Which quote should you sign/],
   ["/no-such-page", /Nothing on this roof/],
 ];
 
