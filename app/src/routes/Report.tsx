@@ -1,10 +1,11 @@
-import { ArrowRight, Crosshair, DownloadSimple, LinkSimple, Printer, ShareNetwork, Sun } from "@phosphor-icons/react";
+import { ArrowRight, ArrowsOut, Crosshair, DownloadSimple, LinkSimple, Printer, ShareNetwork, Sun } from "@phosphor-icons/react";
 import { usePageIntro } from "../lib/motion";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { detectMode, type Mode } from "../ai/client";
 import { parseBill, type ParsedBill } from "../ai/parsers";
 import { ModeBadge } from "../components/AskChhat";
+import { AREA_MAX, AREA_MIN, AreaPlanner } from "../components/AreaPlanner";
 import { CashflowChart, MonthlyChart } from "../components/charts";
 import { DocIntake, type IntakeMeta } from "../components/DocIntake";
 import { ErrorBoundary } from "../components/ErrorBoundary";
@@ -16,6 +17,7 @@ import { kw, num, rupees, rupeesShort, years } from "../engine/format";
 import { instantOutput, PV_DEFAULTS, defaultTilt, type Shading } from "../engine/pv";
 import { buildReport, GRID_EMISSION_T_PER_MWH, KG_CO2_PER_TREE_YEAR } from "../engine/report";
 import { formatClock, REP_DAY, sunPosition, sunTimes } from "../engine/solar";
+import { areaForPanels, panelsFor, USABLE_ROOF } from "../engine/sizing";
 import { SUBSIDY_SOURCE } from "../engine/subsidy";
 import { MONTHS, type Climate } from "../engine/types";
 import { hasWebGL, isLowPower } from "../lib/env";
@@ -51,7 +53,8 @@ export default function Report() {
   const [periodMonths, setPeriodMonths] = useState<1 | 2>(params.get("period") === "2" ? 2 : 1);
   const [tariff, setTariff] = useState<number | null>(numParam(params, "tariff", 1, 30));
   const [load, setLoad] = useState<number | null>(numParam(params, "load", 0.5, 100));
-  const [roofArea, setRoofArea] = useState<number>(numParam(params, "roof", 200, 3000, true) ?? 900);
+  const [roofArea, setRoofArea] = useState<number>(numParam(params, "roof", AREA_MIN, AREA_MAX, true) ?? 900);
+  const [clearRoof, setClearRoof] = useState(params.get("clear") === "1");
   const [shading, setShading] = useState<Shading>(oneOf(params.get("shade"), ["none", "some", "heavy"] as const) ?? "none");
   const [panels, setPanels] = useState<number | null>(numParam(params, "panels", 2, MAX_PANELS, true));
   const [price, setPrice] = useState<number | null>(numParam(params, "price", 10000, 5000000));
@@ -120,12 +123,13 @@ export default function Report() {
         periodMonths,
         tariff: tariff ?? undefined,
         roofAreaSqft: roofArea,
+        roofUsableShare: clearRoof ? 1 : undefined,
         shading,
         sanctionedLoadKw: load ?? undefined,
         overridePanels: panels ?? undefined,
         grossCost: price && price >= 10000 ? price : undefined,
       }),
-    [climate, units, billMonth, periodMonths, tariff, roofArea, shading, load, panels, price],
+    [climate, units, billMonth, periodMonths, tariff, roofArea, clearRoof, shading, load, panels, price],
   );
 
   // Chhat's own recommendation, independent of the slider.
@@ -138,10 +142,33 @@ export default function Report() {
         periodMonths,
         tariff: tariff ?? undefined,
         roofAreaSqft: roofArea,
+        roofUsableShare: clearRoof ? 1 : undefined,
         shading,
         sanctionedLoadKw: load ?? undefined,
       }).panels,
-    [climate, units, billMonth, periodMonths, tariff, roofArea, shading, load],
+    [climate, units, billMonth, periodMonths, tariff, roofArea, clearRoof, shading, load],
+  );
+
+  // The same home with every panel the roof can hold, so people see what the space can do.
+  const roofFit = report.sizing.roofMaxPanels;
+  const fillPanels = Math.min(roofFit, MAX_PANELS);
+  const filled = useMemo(
+    () =>
+      fillPanels >= 2
+        ? buildReport({
+            climate,
+            units: Math.max(10, units || 0),
+            billMonth,
+            periodMonths,
+            tariff: tariff ?? undefined,
+            roofAreaSqft: roofArea,
+            roofUsableShare: clearRoof ? 1 : undefined,
+            shading,
+            sanctionedLoadKw: load ?? undefined,
+            overridePanels: fillPanels,
+          })
+        : null,
+    [climate, units, billMonth, periodMonths, tariff, roofArea, clearRoof, shading, load, fillPanels],
   );
 
   // Keep the URL shareable.
@@ -149,6 +176,7 @@ export default function Report() {
     const t = setTimeout(() => {
       const p: Record<string, string> = { city: cityName, units: String(units), month: String(billMonth + 1), roof: String(roofArea) };
       if (periodMonths === 2) p.period = "2";
+      if (clearRoof) p.clear = "1";
       if (tariff) p.tariff = String(tariff);
       if (load) p.load = String(load);
       if (shading !== "none") p.shade = shading;
@@ -157,14 +185,14 @@ export default function Report() {
       setParams(p, { replace: true });
     }, 400);
     return () => clearTimeout(t);
-  }, [cityName, units, billMonth, periodMonths, tariff, load, roofArea, shading, panels, price, setParams]);
+  }, [cityName, units, billMonth, periodMonths, tariff, load, roofArea, clearRoof, shading, panels, price, setParams]);
 
   // 3D scene state
   const scene = useRef(makeSceneState({ lat: climate.lat, lon: climate.lon, panels: report.panels, drop: 1, hour, doy: REP_DAY[simMonth] }));
   useEffect(() => {
     Object.assign(scene.current, { lat: climate.lat, lon: climate.lon, panels: report.panels, hour, doy: REP_DAY[simMonth] });
   }, [climate, report.panels, hour, simMonth]);
-  const roof = useMemo(() => roofFromArea(roofArea, 2), [roofArea]);
+  const roof = useMemo(() => roofFromArea(clearRoof ? roofArea / USABLE_ROOF : roofArea, 2), [roofArea, clearRoof]);
   const sunNow = sunPosition(climate.lat, climate.lon, REP_DAY[simMonth], hour);
   const times = sunTimes(climate.lat, climate.lon, REP_DAY[simMonth]);
   const liveKw = instantOutput(climate, report.kwp, simMonth, sunNow.elevation, times.sunset - times.sunrise);
@@ -372,11 +400,21 @@ export default function Report() {
 
           <section className="inbox">
             <h2 className="inbox__title">
-              <span className="inbox__n mono">3</span> The roof
+              <span className="inbox__n mono">3</span> Space for panels
             </h2>
-            <Field label="Open roof area" hint={`${num(roofArea)} sq ft · fits ~${s.sizing.roofMaxKw.toFixed(1)} kW`}>
-              <Slider value={roofArea} min={200} max={3000} step={50} onChange={(v) => setRoofArea(v)} ariaLabel="Roof area in square feet" />
-            </Field>
+            <AreaPlanner
+              areaSqft={roofArea}
+              onArea={(v) => {
+                setRoofArea(v);
+                setPanels(null);
+              }}
+              clearOnly={clearRoof}
+              onClearOnly={(v) => {
+                setClearRoof(v);
+                setPanels(null);
+              }}
+              planned={s.panels}
+            />
             <Field label="Shade in the middle of the day">
               <Segmented
                 value={shading}
@@ -409,6 +447,16 @@ export default function Report() {
             <Stat label="Saves a year" hi="बचत" value={rupees(s.net.savings)} hint={`≈ ${rupees(s.monthlySavingAvg)} a month`} />
             <Stat label="Pays back" value={years(s.payback)} hint={`IRR ${s.irr ? (s.irr * 100).toFixed(0) : "—"}%`} />
           </section>
+
+          <RoofCapacity
+            plan={s}
+            filled={filled}
+            fit={roofFit}
+            fillPanels={fillPanels}
+            areaSqft={roofArea}
+            onFill={() => setPanels(fillPanels)}
+            onReset={panels !== null ? () => setPanels(null) : undefined}
+          />
 
           <section className="card">
             <h2 className="card__title">
@@ -569,5 +617,102 @@ export default function Report() {
         </div>
       </div>
     </div>
+  );
+}
+
+type ReportT = ReturnType<typeof buildReport>;
+
+/** Your plan next to the roof filled edge to edge. */
+function RoofCapacity({
+  plan,
+  filled,
+  fit,
+  fillPanels,
+  areaSqft,
+  onFill,
+  onReset,
+}: {
+  plan: ReportT;
+  filled: ReportT | null;
+  fit: number;
+  fillPanels: number;
+  areaSqft: number;
+  onFill: () => void;
+  onReset?: () => void;
+}) {
+  const need = panelsFor(plan.sizing.consumptionKw, plan.sizing.moduleWatt);
+  const showFilled = filled !== null && fillPanels > plan.panels;
+  const rows: [string, (r: ReportT) => string][] = [
+    ["Panels", (r) => `${r.panels}`],
+    ["System", (r) => kw(r.kwp)],
+    ["Roof it takes", (r) => `${num(areaForPanels(r.panels, r.sizing.moduleWatt))} sq ft`],
+    ["Makes a year", (r) => `${num(r.annualGeneration)} units`],
+    ["Covers your use", (r) => `${Math.round(r.net.coverage * 100)}%`],
+    ["Saves a year", (r) => rupees(r.net.savings)],
+    ["You pay, net", (r) => rupees(r.netCost)],
+    ["Pays back", (r) => years(r.payback)],
+  ];
+  const lede =
+    fit < 2
+      ? "This space is too small for a grid-connected system. Measure again, or add the clear part of another roof or a shed."
+      : plan.panels > fit
+        ? `Your plan has ${plan.panels} panels but only ${fit} fit. Cut the plan or find more clear roof.`
+        : need > fit
+          ? `Your bill needs about ${need} panels (${num(areaForPanels(need))} sq ft of clear roof), but only ${fit} fit. The roof sets the limit, so fill it.`
+          : fit > plan.panels
+            ? `Your bill needs about ${need} panels. The roof has room for ${fit - plan.panels} more if you want to bank extra units or plan for an AC or an EV.`
+            : "Your plan already uses all the space.";
+  return (
+    <section className="card capacity" aria-labelledby="cap-title">
+      <h2 className="card__title" id="cap-title">
+        What this roof can do
+        <span className="muted small">
+          {fit} panel{fit === 1 ? "" : "s"} fit in {num(areaSqft)} sq ft
+        </span>
+      </h2>
+      <p className="capacity__lede">{lede}</p>
+      {fit >= 2 && (
+        <div className="capacity__table" role="table" aria-label="Your plan compared with the roof filled">
+          <div className="capacity__row capacity__row--head" role="row">
+            <span role="columnheader">
+              <span className="sr-only">Measure</span>
+            </span>
+            <span role="columnheader">Your plan</span>
+            {showFilled && <span role="columnheader">Roof filled</span>}
+          </div>
+          {rows.map(([label, f]) => (
+            <div className="capacity__row" role="row" key={label}>
+              <span role="rowheader">{label}</span>
+              <span role="cell" className="mono">
+                {f(plan)}
+              </span>
+              {showFilled && (
+                <span role="cell" className="mono capacity__max">
+                  {f(filled)}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      {showFilled && plan.input.sanctionedLoadKw !== undefined && filled.kwp > plan.input.sanctionedLoadKw && (
+        <p className="muted small">The full roof is above your {plan.input.sanctionedLoadKw} kW sanctioned load, so you would ask the DISCOM to raise it first.</p>
+      )}
+      {fit > MAX_PANELS && <p className="muted small">Chhat models up to {MAX_PANELS} panels for a home. A roof this size suits a commercial assessment.</p>}
+      {(showFilled || onReset) && (
+        <div className="actions">
+          {showFilled && (
+            <button type="button" className="btn btn--sm btn--ghost" onClick={onFill}>
+              <ArrowsOut size={16} /> Use the whole roof ({fillPanels} panels)
+            </button>
+          )}
+          {onReset && (
+            <button type="button" className="link-btn" onClick={onReset}>
+              back to Chhat&apos;s pick
+            </button>
+          )}
+        </div>
+      )}
+    </section>
   );
 }

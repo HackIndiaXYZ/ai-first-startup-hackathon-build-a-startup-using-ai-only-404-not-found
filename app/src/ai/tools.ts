@@ -54,12 +54,12 @@ export const TOOL_SCHEMAS = [
   {
     name: "size_system",
     description:
-      "Build a full rooftop-solar report for a home: recommended kWp and panel count, monthly generation, bill savings under net metering, central + state subsidy, fair price, payback, 25-year savings and CO₂. Use whenever the user asks whether solar is worth it, what size to install, or how much they'd save. Ask for monthly units if you don't have them; if they only give a bill amount, divide by the state tariff.",
+      "Build a full rooftop-solar report for a home: recommended kWp and panel count, monthly generation, bill savings under net metering, central + state subsidy, fair price, payback, 25-year savings and CO₂. Use whenever the user asks whether solar is worth it, what size to install, or how much they'd save. Ask for monthly units if you don't have them; if they only give a bill amount, divide by the state tariff. Also ask how much open, shade-free roof they have, because the roof caps how many panels fit; if they don't know, run it at 800 sq ft and say that you assumed it.",
     input_schema: obj({
       city: { type: "string" },
       monthly_units: { ...num, description: "Units (kWh) on one monthly bill" },
       bill_month: { type: "integer", description: "Month the bill covers, 1-12" },
-      roof_area_sqft: { ...nNum, description: "Usable roof area in sq ft, null if unknown (assumes 800)" },
+      roof_area_sqft: { ...nNum, description: "Open roof area in sq ft (whole terrace; 70% is treated as usable), null if unknown (assumes 800)" },
       shading: { type: "string", enum: ["none", "some", "heavy"] },
       tariff: { ...nNum, description: "₹ per unit from the user's bill, null to use the state default" },
       panels: { ...nInt, description: "Force a panel count (545 Wp each), null for Chhat's recommendation" },
@@ -174,13 +174,15 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
         if (!units) return { ok: false, summary: "Need monthly units (kWh) from a bill, between 1 and 1,00,000." };
         const month = Math.min(12, Math.max(1, Math.round(n(args.bill_month) ?? new Date().getMonth() + 1))) - 1;
         const shading = (["none", "some", "heavy"].includes(String(args.shading)) ? args.shading : "none") as Shading;
+        const givenArea = inRange(args.roof_area_sqft, 50, 20000);
+        const roofAreaSqft = givenArea ?? 800;
         const r = buildReport({
           climate: climateFromCity(c),
           units,
           billMonth: month,
           periodMonths: 1,
           tariff: inRange(args.tariff, 1, 30) ?? undefined,
-          roofAreaSqft: inRange(args.roof_area_sqft, 100, 20000) ?? 800,
+          roofAreaSqft,
           shading,
           overridePanels: inRange(args.panels, 2, 200) !== null ? Math.round(n(args.panels)!) : undefined,
         });
@@ -194,6 +196,9 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
             `Payback ${r.payback ? r.payback.toFixed(1) + " years" : "over 25 years"}; 25-year net savings ${rupees(r.lifetimeSavings)}.`,
             `Loan option: ${rupees(r.loan.upfront)} upfront, EMI ${rupees(r.loan.emiAfter)}/month after subsidy prepayment vs. average saving ${rupees(r.monthlySavingAvg)}/month.`,
             `CO₂ avoided ${r.co2TonnesYear.toFixed(1)} t/yr.`,
+            givenArea
+              ? `Roof: ${Math.round(givenArea)} sq ft fits up to ${r.sizing.roofMaxPanels} panels.`
+              : `Roof size not given: assumed 800 sq ft (fits up to ${r.sizing.roofMaxPanels} panels). Ask the user for their open roof area to confirm.`,
           ].join(" "),
           data: {
             city: c.name,
@@ -205,6 +210,9 @@ export function runTool(name: ToolName | string, args: Args): ToolResult {
             netCost: r.netCost,
             payback: r.payback,
             emi: r.loan.emiAfter,
+            roofAreaSqft,
+            roofAssumed: !givenArea,
+            roofMaxPanels: r.sizing.roofMaxPanels,
           },
         };
       }

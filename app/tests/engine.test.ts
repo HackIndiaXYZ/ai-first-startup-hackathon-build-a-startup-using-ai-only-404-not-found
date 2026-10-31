@@ -6,7 +6,7 @@ import { specificYield, monthlyPOA } from "../src/engine/pv";
 import { fairPriceBand } from "../src/engine/pricing";
 import { buildReport } from "../src/engine/report";
 import { netMetering } from "../src/engine/savings";
-import { recommendSize } from "../src/engine/sizing";
+import { areaForPanels, panelsThatFit, recommendSize, sqftPerPanel } from "../src/engine/sizing";
 import { extraterrestrialDaily, sunPosition, sunTimes } from "../src/engine/solar";
 import { centralSubsidy, subsidyFor } from "../src/engine/subsidy";
 import { stateInfo } from "../src/engine/states";
@@ -81,6 +81,24 @@ describe("consumption, sizing, net metering", () => {
     const r = recommendSize({ annualConsumption: 9000, specificYield: 1450, roofAreaSqft: 300 });
     expect(r.limitedBy).toBe("roof");
     expect(r.kwp).toBeLessThanOrEqual(2.4);
+  });
+  it("counts the panels that fit in a roof", () => {
+    // 545 W at MNRE's ~10 m2/kW is about 54.5 sq ft of clear roof per panel.
+    expect(sqftPerPanel()).toBeCloseTo(54.5, 5);
+    expect(panelsThatFit(900)).toBe(11); // 900 x 0.7 = 630 sq ft usable
+    expect(panelsThatFit(900, 1)).toBe(16); // measured only the clear part
+    expect(panelsThatFit(60)).toBe(0);
+    expect(panelsThatFit(-10)).toBe(0);
+    expect(areaForPanels(6)).toBeCloseTo(327, 0);
+  });
+  it("a clear-only measurement lets the same area hold more", () => {
+    const whole = recommendSize({ annualConsumption: 12000, specificYield: 1450, roofAreaSqft: 500 });
+    const clear = recommendSize({ annualConsumption: 12000, specificYield: 1450, roofAreaSqft: 500, usableShare: 1 });
+    expect(whole.limitedBy).toBe("roof");
+    expect(whole.roofMaxPanels).toBe(6);
+    expect(clear.roofMaxPanels).toBe(9);
+    expect(clear.panels).toBeGreaterThan(whole.panels);
+    expect(whole.panels).toBeLessThanOrEqual(whole.roofMaxPanels + 1);
   });
   it("banks summer surplus against winter deficit", () => {
     const cons = new Array(12).fill(300);

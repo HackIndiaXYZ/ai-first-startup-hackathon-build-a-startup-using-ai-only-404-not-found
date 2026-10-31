@@ -309,16 +309,23 @@ export function localAgent(message: string, history: AgentTurn[]): AgentReply {
             : `${u} units a month doesn't look right. Tell me the monthly units printed on your bill (usually somewhere between 100 and 2,000).`,
       };
     }
-    const d = r.data as { kwp: number; panels: number; annualGeneration: number; savings: number; subsidy: number; netCost: number; payback: number | null; emi: number };
+    const d = r.data as { kwp: number; panels: number; annualGeneration: number; savings: number; subsidy: number; netCost: number; payback: number | null; emi: number; roofAreaSqft: number; roofAssumed: boolean; roofMaxPanels: number };
+    const roofLine = d.roofAssumed
+      ? lang === "hi"
+        ? ` मैंने लगभग 800 वर्ग फ़ुट खुली छत मानी है (${d.roofMaxPanels} पैनल तक)। अपनी छत का खाली, धूप वाला हिस्सा बताइए, जैसे "600 sq ft", तो मैं देखूँगा कितने पैनल सच में आएँगे।`
+        : ` I assumed about 800 sq ft of open roof (room for ${d.roofMaxPanels} panels). Tell me your roof's open, sunny area, like "600 sq ft", and I'll check how many panels really fit.`
+      : lang === "hi"
+        ? ` आपकी ${Math.round(d.roofAreaSqft)} वर्ग फ़ुट छत पर ${d.roofMaxPanels} पैनल तक आ सकते हैं।`
+        : ` Your ${Math.round(d.roofAreaSqft)} sq ft roof fits up to ${d.roofMaxPanels} panels.`;
     const assumed = !units ? (lang === "hi" ? ` (आपके ₹ बिल से लगभग ${u} यूनिट मानकर)` : ` (assuming ~${u} units from your ₹ bill)`) : "";
     return {
       lang,
       trace,
       text:
         lang === "hi"
-          ? `${city} में${assumed} ${d.kwp.toFixed(2)} kW (${d.panels} पैनल) सही रहेगा। यह साल में लगभग ${Math.round(d.annualGeneration)} यूनिट बनाएगा और ${rupees(d.savings)} सालाना बचाएगा। सब्सिडी ${rupees(d.subsidy)}, सब्सिडी के बाद लागत ${rupees(d.netCost)}, और लागत ${d.payback ? d.payback.toFixed(1) + " साल" : "25 साल से ज़्यादा"} में वसूल।`
-          : `In ${city}${assumed}, go for ${d.kwp.toFixed(2)} kWp (${d.panels} panels). It should make about ${Math.round(d.annualGeneration)} units a year and save ${rupees(d.savings)} a year. Subsidy ${rupees(d.subsidy)}, so you pay about ${rupees(d.netCost)} net, and it pays back in ${d.payback ? d.payback.toFixed(1) + " years" : "over 25 years"}. On a PM Surya Ghar loan the EMI after subsidy is about ${rupees(d.emi)}/month.`,
-      links: [{ label: "See the full Roof Report", to: `/report?city=${encodeURIComponent(city)}&units=${u}` }],
+          ? `${city} में${assumed} ${d.kwp.toFixed(2)} kW (${d.panels} पैनल) सही रहेगा। यह साल में लगभग ${Math.round(d.annualGeneration)} यूनिट बनाएगा और ${rupees(d.savings)} सालाना बचाएगा। सब्सिडी ${rupees(d.subsidy)}, सब्सिडी के बाद लागत ${rupees(d.netCost)}, और लागत ${d.payback ? d.payback.toFixed(1) + " साल" : "25 साल से ज़्यादा"} में वसूल।${roofLine}`
+          : `In ${city}${assumed}, go for ${d.kwp.toFixed(2)} kWp (${d.panels} panels). It should make about ${Math.round(d.annualGeneration)} units a year and save ${rupees(d.savings)} a year. Subsidy ${rupees(d.subsidy)}, so you pay about ${rupees(d.netCost)} net, and it pays back in ${d.payback ? d.payback.toFixed(1) + " years" : "over 25 years"}. On a PM Surya Ghar loan the EMI after subsidy is about ${rupees(d.emi)}/month.${roofLine}`,
+      links: [{ label: "See the full Roof Report", to: `/report?city=${encodeURIComponent(city)}&units=${u}${d.roofAssumed ? "" : `&roof=${Math.round(d.roofAreaSqft)}`}` }],
     };
   }
 

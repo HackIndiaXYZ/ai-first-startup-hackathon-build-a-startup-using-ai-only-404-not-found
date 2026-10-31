@@ -21,6 +21,8 @@ export interface ReportInput {
   /** Effective energy rate from the bill, ₹/kWh. Falls back to the state default. */
   tariff?: number;
   roofAreaSqft: number;
+  /** Share of roofAreaSqft that can take panels (default 0.7, or 1 if the user measured only the clear part) */
+  roofUsableShare?: number;
   shading: Shading;
   sanctionedLoadKw?: number;
   /** Force a size instead of the recommendation (live slider) */
@@ -88,6 +90,7 @@ function computeReport(input: ReportInput, panelsOverride: number | undefined): 
     annualConsumption,
     specificYield: sy,
     roofAreaSqft: input.roofAreaSqft,
+    usableShare: input.roofUsableShare,
     sanctionedLoadKw: input.sanctionedLoadKw,
   });
   const panels = panelsOverride ?? sizing.panels;
