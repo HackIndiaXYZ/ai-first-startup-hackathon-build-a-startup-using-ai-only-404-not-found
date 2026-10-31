@@ -58,7 +58,7 @@ export const TOOL_SCHEMAS = [
     input_schema: obj({
       city: { type: "string" },
       monthly_units: { ...num, description: "Units (kWh) on one monthly bill" },
-      bill_month: { type: "integer", description: "Month the bill covers, 1-12" },
+      bill_month: { type: "integer", description: "Month the bill covers, 1-12. If the user didn't say, use the current month; don't ask for it." },
       roof_area_sqft: { ...nNum, description: "Open roof area in sq ft (whole terrace; 70% is treated as usable), null if unknown (assumes 800)" },
       shading: { type: "string", enum: ["none", "some", "heavy"] },
       tariff: { ...nNum, description: "₹ per unit from the user's bill, null to use the state default" },

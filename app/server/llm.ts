@@ -1,7 +1,7 @@
 // Which language model the server talks to, picked from environment variables.
 //
 //   XAI_API_KEY (or GROK_API_KEY)  → xAI Grok      (model: XAI_MODEL,  default grok-4)
-//   GROQ_API_KEY                   → GroqCloud     (model: GROQ_MODEL, default llama-3.3-70b-versatile)
+//   GROQ_API_KEY                   → GroqCloud     (model: GROQ_MODEL, default openai/gpt-oss-120b)
 //   ANTHROPIC_API_KEY              → Claude        (see claude.ts)
 //
 // The first one set wins. With none set, the site runs fully on-device.
@@ -44,7 +44,7 @@ function openAIConfig(): OpenAIConfig | null {
       provider: "groq",
       baseUrl: "https://api.groq.com/openai/v1",
       key: groq,
-      model: env("GROQ_MODEL") ?? "llama-3.3-70b-versatile",
+      model: env("GROQ_MODEL") ?? "openai/gpt-oss-120b",
       visionModel: env("GROQ_VISION_MODEL") ?? null,
     };
   }
@@ -119,8 +119,8 @@ const SYSTEM = `You are Chhat, an independent rooftop-solar advisor for Indian h
 How you work:
 - Every rupee figure, kW size, unit count, subsidy or payback you state must come from a tool result in this conversation. Call size_system, compute_subsidy, finance_options, audit_quote, audit_bill or get_irradiance instead of estimating. Never do the arithmetic yourself.
 - For rules and process questions (subsidy rules, DCR, ALMM, net metering, loans, vendors, GST, timelines, maintenance, wrong bills), call search_knowledge first and cite the source it returns.
-- If you need a number the user hasn't given (city, monthly units), ask one short question. If they give a bill amount instead of units, you may estimate units by dividing by the state tariff and say you did.
-- Reply in the user's language and script. Hindi in Devanagari if they write Hindi; Hinglish if they write Hinglish; English otherwise. Use gender-neutral Hindi phrasing for yourself.
+- If you need a number the user hasn't given (city, monthly units), ask one short question. If they give a bill amount instead of units, you may estimate units by dividing by the state tariff and say you did. Don't ask which month a bill is from; use the current month.
+- Reply in the language and script of the user's latest message. Default to English: a city name or an Indian context is not a reason to switch. Hindi in Devanagari only if the message is written in Hindi; Hinglish only if it is written in Hinglish. Use gender-neutral Hindi phrasing for yourself.
 - Be brief and concrete: 2 to 6 sentences, or a short list. Indian number formatting (₹1,23,456; lakh).
 - Mention that figures are estimates when giving money projections, once, briefly.
 - When a quote or bill needs a full audit, suggest the Quote Check or Bill Audit page in the app.`;
@@ -137,7 +137,8 @@ function parseArgs(raw: string): Record<string, unknown> {
 async function runOpenAIAgent(c: OpenAIConfig, history: ChatTurn[]): Promise<AgentResult> {
   const turns = claude.toMessages(history) as { role: "user" | "assistant"; content: string }[];
   if (!turns.length) throw new Error("empty_conversation");
-  const messages: OAMessage[] = [{ role: "system", content: SYSTEM }, ...turns];
+  const today = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Kolkata" });
+  const messages: OAMessage[] = [{ role: "system", content: `${SYSTEM}\n\nToday is ${today} (India). The current month number is ${Number(new Date().toLocaleDateString("en-US", { month: "numeric", timeZone: "Asia/Kolkata" }))}.` }, ...turns];
   const trace: TraceStep[] = [];
   let model = c.model;
 

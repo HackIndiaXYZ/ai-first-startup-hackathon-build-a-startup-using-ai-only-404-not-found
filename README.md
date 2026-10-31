@@ -49,7 +49,7 @@ Chhat reads your electricity bill, models your roof on 20 years of NASA sunlight
 ## How the AI works
 
 ```
-Browser ─┬─ live mode ──> /api/agent ──> Groq (llama-3.3-70b) ────┐
+Browser ─┬─ live mode ──> /api/agent ──> Groq (gpt-oss-120b) ─────┐
          └─ on-device ──> intent router + BM25 knowledge base ─────┤
                                                                    ▼
                      7 typed tools: get_irradiance · size_system · compute_subsidy

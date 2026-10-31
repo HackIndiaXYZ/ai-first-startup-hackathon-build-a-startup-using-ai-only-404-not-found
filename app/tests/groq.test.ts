@@ -14,7 +14,7 @@ type Call = { id: string; name: string; args: Record<string, unknown> | string }
 const answer = (content: string | null, calls: Call[] = []) =>
   new Response(
     JSON.stringify({
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       choices: [
         {
           finish_reason: calls.length ? "tool_calls" : "stop",
@@ -51,7 +51,7 @@ describe("provider choice", () => {
     expect(provider()).toBe("anthropic");
     process.env.GROQ_API_KEY = "g";
     expect(provider()).toBe("groq");
-    expect(modelName()).toBe("llama-3.3-70b-versatile");
+    expect(modelName()).toBe("openai/gpt-oss-120b");
     process.env.GROK_API_KEY = "x";
     expect(provider()).toBe("xai");
     process.env.XAI_MODEL = "grok-test";

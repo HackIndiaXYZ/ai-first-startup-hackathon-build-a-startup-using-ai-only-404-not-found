@@ -1,13 +1,22 @@
 import { defineConfig, type Plugin, type ViteDevServer } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { existsSync, readFileSync } from "node:fs";
+import { parseEnv } from "node:util";
 
 // Serves /api/* from the same web-standard handlers Vercel runs, so live AI
-// mode works under `npm run dev` when ANTHROPIC_API_KEY is set.
+// mode works under `npm run dev` with a key (GROQ_API_KEY etc.) in app/.env.local.
+// Server keys in that file are copied into process.env and win over stale ones.
 function localApi(): Plugin {
   return {
     name: "chhat-local-api",
     configureServer(server: ViteDevServer) {
+      const envFile = new URL("./.env.local", import.meta.url);
+      if (existsSync(envFile)) {
+        for (const [k, val] of Object.entries(parseEnv(readFileSync(envFile, "utf8")))) {
+          if (!k.startsWith("VITE_")) process.env[k] = val;
+        }
+      }
       server.middlewares.use(async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
         const url = req.url ?? "";
         const match = url.match(/^\/api\/(health|agent|extract)\b/);

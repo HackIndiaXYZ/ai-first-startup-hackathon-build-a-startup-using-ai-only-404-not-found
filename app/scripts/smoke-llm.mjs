@@ -4,12 +4,16 @@
 //
 //   npm run smoke:llm
 import { build } from "esbuild";
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { parseEnv } from "node:util";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
+// Keys in app/.env.local win over stale ones left in the terminal.
+const envFile = join(root, ".env.local");
+if (existsSync(envFile)) Object.assign(process.env, parseEnv(readFileSync(envFile, "utf8")));
 const dir = mkdtempSync(join(tmpdir(), "chhat-smoke-"));
 const out = join(dir, "llm.mjs");
 await build({
